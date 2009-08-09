@@ -2,13 +2,9 @@ package org.openconfig;
 
 import org.openconfig.core.ConfiguratorProxy;
 import org.openconfig.core.EnvironmentResolver;
-import org.openconfig.core.OpenConfigContext;
-import org.openconfig.core.bean.LowercasePropertyNormalizer;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.core.bean.ProxyInvocationHandler;
 import org.openconfig.core.bean.ConfiguratorProxyInvocationHandler;
-import org.openconfig.configurators.MapConfigurator;
-import org.openconfig.factory.impl.ConfiguratorFactoryImpl;
 import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.OpenConfigModule;
 import com.google.inject.Guice;

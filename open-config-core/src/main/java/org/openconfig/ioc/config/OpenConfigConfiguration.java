@@ -5,6 +5,8 @@ package org.openconfig.ioc.config;
  */
 public interface OpenConfigConfiguration {
 
+    boolean accepts(String file);
+
     void process(String file) throws Exception;
 
     boolean hasClass(String alias);
