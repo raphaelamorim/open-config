@@ -3,9 +3,14 @@ package org.openconfig.factory.impl;
 import org.openconfig.factory.ConfiguratorFactory;
 import static org.openconfig.ObjectFactory.getInstance;
 import org.openconfig.core.ConfiguratorProxy;
+import org.openconfig.lifecyce.EventListener;
+import org.openconfig.Configurator;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.LinkedList;
+import static java.util.Arrays.asList;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -19,10 +24,12 @@ public class ConfiguratorFactoryImpl implements ConfiguratorFactory {
 
     private static final Logger LOGGER = Logger.getLogger(ConfiguratorFactoryImpl.class);
 
+    protected List<EventListener> sharedEventListeners = new LinkedList<EventListener>();
+
     /**
-     * @see ConfiguratorFactory#newInstance(Class, boolean);
+     * @see ConfiguratorFactory#(Class, boolean, EventListener)
      */
-    public <T> T newInstance(final Class clazz, final boolean alias) throws IllegalAccessException, InstantiationException {
+    public <T> T newInstance(final Class clazz, final boolean prefix, EventListener... eventListeners) throws IllegalAccessException, InstantiationException {
         Enhancer enhancer = new Enhancer();
 
         if (clazz.isInterface()) {
@@ -40,18 +47,27 @@ public class ConfiguratorFactoryImpl implements ConfiguratorFactory {
 
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
-                ConfiguratorProxy proxy = getInstance().newConfiguratorProxy(clazz, alias);
+                ConfiguratorProxy proxy = getInstance().newConfiguratorProxy(clazz, prefix);
                 return proxy.intercept(source, method, arguments, methodProxy);
             }
         });
         return (T) enhancer.create();
     }
 
+    public void addGlobalListeners(EventListener... eventListeners) {
+        sharedEventListeners.addAll(asList(eventListeners));
+    }
+
+
+    public Configurator newInstance(EventListener... eventListeners) throws IllegalAccessException, InstantiationException {
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
     /**
-     * @see ConfiguratorFactory#newInstance(Class);
+     * 
      */
-    public <T> T newInstance(final Class clazz) throws IllegalAccessException, InstantiationException {
-        return (T) newInstance(clazz, true);
+    public <T> T newInstance(final Class clazz, EventListener... eventListeners) throws IllegalAccessException, InstantiationException {
+        return (T) newInstance(clazz, true, eventListeners);
     }
     
 }
