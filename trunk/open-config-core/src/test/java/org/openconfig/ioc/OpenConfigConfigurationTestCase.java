@@ -1,10 +1,9 @@
 package org.openconfig.ioc;
 
-import junit.framework.TestCase;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
+
+import junit.framework.TestCase;
 
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
@@ -14,11 +13,11 @@ import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
  */
 public class OpenConfigConfigurationTestCase extends TestCase {
 
-    private List<OpenConfigConfiguration> configurationManagers = new LinkedList<OpenConfigConfiguration>();
+    private LinkedHashMap<String, OpenConfigConfiguration> configurationManagers = new LinkedHashMap<String, OpenConfigConfiguration>();
 
     @Override
     protected void setUp() throws Exception {
-        configurationManagers.add(new PropertiesOpenConfigConfiguration());
+        configurationManagers.put(ConfigurationLocator.XML_FILE, new PropertiesOpenConfigConfiguration());
     }
 
     public void testBasic() throws IOException {
