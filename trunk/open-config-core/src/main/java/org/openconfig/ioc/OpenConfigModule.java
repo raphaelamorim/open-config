@@ -1,22 +1,20 @@
 package org.openconfig.ioc;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
-import org.openconfig.core.bean.PropertyNormalizer;
-import org.openconfig.core.bean.LowercasePropertyNormalizer;
-import org.openconfig.core.OpenConfigContext;
-import org.openconfig.core.BasicOpenConfigContext;
-import org.openconfig.core.EnvironmentResolver;
-import org.openconfig.core.SystemPropertyEnvironmentResolver;
-import org.openconfig.factory.impl.ConfiguratorFactoryImpl;
-import org.openconfig.factory.ConfiguratorFactory;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.openconfig.MutableConfigurator;
+import org.openconfig.core.EnvironmentResolver;
+import org.openconfig.core.OpenConfigContext;
+import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
-import org.openconfig.configurators.MapConfigurator;
+import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
 
-import java.util.List;
-import java.util.LinkedList;
+import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 /**
  * This class is used to initialize Guice with the ability to override
@@ -29,6 +27,7 @@ import java.util.LinkedList;
  * </ol>
  *
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 @SuppressWarnings("unchecked")
 public class OpenConfigModule extends AbstractModule {
@@ -67,8 +66,9 @@ public class OpenConfigModule extends AbstractModule {
      * Builds the OpenConfigConfiguration consumers.
      */
     private void processConfigurationFiles() {
-        List<OpenConfigConfiguration> configurationManagers = new LinkedList<OpenConfigConfiguration>();
-        configurationManagers.add(new PropertiesOpenConfigConfiguration());
+        LinkedHashMap<String, OpenConfigConfiguration> configurationManagers = new LinkedHashMap<String, OpenConfigConfiguration>();
+        configurationManagers.put(ConfigurationLocator.PROPERTIES_FILE, new PropertiesOpenConfigConfiguration());
+        configurationManagers.put(ConfigurationLocator.XML_FILE, new XmlOpenConfigConfiguration());
         configurationLocator = new ConfigurationLocator(configurationManagers);
     }
 
