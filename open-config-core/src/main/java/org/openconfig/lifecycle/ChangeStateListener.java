@@ -1,4 +1,4 @@
-package org.openconfig.lifecyce;
+package org.openconfig.lifecycle;
 
 /**
  * This custom listener handles the change events that are emits from the

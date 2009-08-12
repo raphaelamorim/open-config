@@ -1,4 +1,4 @@
-package org.openconfig.lifecyce;
+package org.openconfig.lifecycle;
 
 import org.openconfig.providers.ast.Node;
 
