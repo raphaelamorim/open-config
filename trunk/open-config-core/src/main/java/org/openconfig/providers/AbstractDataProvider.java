@@ -1,8 +1,8 @@
 package org.openconfig.providers;
 
 import org.openconfig.providers.ast.Node;
-import org.openconfig.lifecyce.ChangeStateListener;
-import org.openconfig.lifecyce.ChangeStateEvent;
+import org.openconfig.lifecycle.ChangeStateListener;
+import org.openconfig.lifecycle.ChangeStateEvent;
 
 import java.util.Map;
 import java.util.HashMap;
