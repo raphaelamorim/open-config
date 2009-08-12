@@ -7,7 +7,7 @@ import java.util.Set;
  *
  * @author Richard L. Burton III
  */
-public class ComplexNode extends Node {
+public class ComplexNode extends Node<Object> {
 
     private Set<Node> children;
 
@@ -22,6 +22,18 @@ public class ComplexNode extends Node {
 
     public void addChild(Node node) {
         children.add(node);
+    }
+
+    public void setValue(Object child) {
+        if (child instanceof Node) {
+            if (children.contains(child)) {
+                for(Node node : children){
+                    node.setValue(child);
+                }
+            }
+        }else{
+            throw new UnsupportedOperationException("Unsupported operation for appending dynamically created SimpleNode objects.");
+        }
     }
 
     @Override

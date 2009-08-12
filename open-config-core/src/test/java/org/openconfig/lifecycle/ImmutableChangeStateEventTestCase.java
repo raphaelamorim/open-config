@@ -1,7 +1,7 @@
 package org.openconfig.lifecycle;
 
 import junit.framework.TestCase;
-import org.openconfig.lifecyce.ImmutableChangeStateEvent;
+import org.openconfig.lifecycle.ImmutableChangeStateEvent;
 import org.openconfig.providers.ast.*;
 
 import java.util.Set;

@@ -1,12 +1,9 @@
 package org.openconfig.lifecycle;
 
-import org.openconfig.providers.ast.Node;
-import org.openconfig.providers.ast.ComplexNode;
-import org.openconfig.providers.ast.SimpleNode;
+import org.openconfig.providers.ast.*;
 
 import java.util.Set;
-import java.util.Stack;
-import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 
 /**
  * Defines an immutable implementation of the ChangeStateEvent.
@@ -17,51 +14,33 @@ public class ImmutableChangeStateEvent implements ChangeStateEvent {
 
     private Set<Node> changeState;
 
-    public ImmutableChangeStateEvent(Set<Node> changeState) {
-        this.changeState = changeState;
+    private Set<String> changedPaths;
+
+    private NodeManager nodeFinder = new NodeManager();
+
+    public ImmutableChangeStateEvent(Set<Node> changeState, Set<String> paths) {
+        this.changeState = unmodifiableSet(changeState);
+        this.changedPaths = unmodifiableSet(paths);
     }
 
+    public ImmutableChangeStateEvent(Set<Node> changeState) {
+        this.changeState = unmodifiableSet(changeState);
+        this.changedPaths = EMPTY_SET;
+    }
 
     public Set<Node> getChangeState() {
         return changeState;
+    }
+
+    public Set<String> getChangedPaths() {
+        return changedPaths;
     }
 
     /**
      * @complex
      */
     public Node find(String property) {
-        String[] path = reverse(property.split("\\."));
-        Stack<String> stack = new Stack<String>();
-        stack.addAll(asList(path));
-        return search(stack, changeState);
+        return nodeFinder.find(property, changeState);
     }
 
-    protected Node search(Stack<String> stack, Set<Node> ast) {
-        for (Node node : ast) {
-            String name = stack.peek();
-            String nodeName = node.getName();
-            if (!stack.isEmpty() && nodeName.equals(name)) {
-                stack.pop();
-                if (node instanceof ComplexNode) {
-                    if (!stack.isEmpty()) {
-                        return search(stack, ((ComplexNode) node).getChildren());
-                    } else {
-                        return node;
-                    }
-                } else if (node instanceof SimpleNode) {
-                    return node;
-                }
-            }
-        }
-        return null;
-    }
-
-    private String[] reverse(String[] elements) {
-        String[] reverseOrder = new String[elements.length];
-        int index = 0;
-        for (int i = elements.length - 1; i >= 0; i--) {
-            reverseOrder[index++] = elements[i];
-        }
-        return reverseOrder;
-    }
 }
