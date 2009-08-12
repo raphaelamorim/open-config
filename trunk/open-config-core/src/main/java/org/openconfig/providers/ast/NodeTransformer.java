@@ -16,11 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author Richard L. Burton III
  */
-public class NodeTransformer implements Transformer<Object, Node> {
+public class NodeTransformer implements Transformer<Object, ComplexNode> {
 
     private static final Set<String> EXCLUDE_NAMES = new HashSet<String>(asList("class"));
 
-    public Node transform(Object bean) {
+    public ComplexNode transform(Object bean) {
         if (bean != null) {
             return transform(bean, bean.getClass().getSimpleName());
         } else {
@@ -29,8 +29,8 @@ public class NodeTransformer implements Transformer<Object, Node> {
 
     }
 
-    protected Node transform(Object bean, String name) {
-        Node node = null;
+    protected ComplexNode transform(Object bean, String name) {
+        ComplexNode node = null;
 
         if (bean != null) {
             Set<Node> attributes = new HashSet<Node>();

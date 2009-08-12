@@ -11,6 +11,12 @@ import java.util.Set;
  */
 public interface ChangeStateEvent {
 
+    /** A set of strings that represent the full path of the method invocation
+     * that triggered the change in the node. e.g., person.child.name
+     * @return A set of node paths that were changed.
+     */
+    Set<String> getChangedPaths();
+    
     /**
      * Returns a Set of the properties that were changed.
      * @return The names of the properties that were changed.

@@ -4,10 +4,7 @@ import org.openconfig.providers.ast.Node;
 import org.openconfig.lifecycle.ChangeStateListener;
 import org.openconfig.lifecycle.ChangeStateEvent;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -32,6 +29,10 @@ public class AbstractDataProvider implements DataProvider {
     }
 
     public void onEvent(ChangeStateEvent event) {
+        Set<Node> changedNodes = event.getChangeState();
+        for(Node node : changedNodes){
+            cache.containsKey(node.getName());
+        }
         for(ChangeStateListener listener : listeners){
             listener.onEvent(event);
         }

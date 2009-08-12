@@ -36,4 +36,7 @@ public abstract class Node<T> {
     public String toString() {
         return "name='" + name + '\'';
     }
+
+    public abstract void setValue(T value);
+
 }
