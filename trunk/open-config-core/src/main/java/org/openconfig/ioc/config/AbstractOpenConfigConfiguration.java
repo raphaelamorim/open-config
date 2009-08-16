@@ -14,8 +14,13 @@ public abstract class AbstractOpenConfigConfiguration implements OpenConfigConfi
         return extentionPoints.containsKey(alias);
     }
 
-    public Class getClass(String name) {
+    
+    @SuppressWarnings("unchecked")
+	public Class getClass(String name) {
         String clazz = extentionPoints.get(name);
+        if(clazz == null) {
+        	return null;
+        }
         try {
             return Class.forName(clazz);
         } catch (ClassNotFoundException cnfe) {

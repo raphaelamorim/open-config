@@ -9,7 +9,7 @@ public class XmlOpenConfigConfiguration extends AbstractOpenConfigConfiguration 
         return file.endsWith(".xml");
     }
 
-    public void process(String file) throws Exception {
+    public void process(String file) {
 
     }
 

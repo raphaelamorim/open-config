@@ -5,11 +5,17 @@ package org.openconfig.ioc.config;
  */
 public interface OpenConfigConfiguration {
 
-    boolean accepts(String file);
-
-    void process(String file) throws Exception;
+    void process(String file);
 
     boolean hasClass(String alias);
 
-    Class getClass(String name);
+    // TODO Add link to list of mapping names
+    /**
+     * Loads and gets the extension point with the corresponding mapping name. For a list of valid mapping names, look at TODO
+     *
+     *
+     * @param name
+     * @return returns null if the extension point could not be found
+     */
+    Class<?> getClass(String name);
 }
