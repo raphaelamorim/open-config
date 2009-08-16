@@ -9,8 +9,6 @@ import org.openconfig.event.ChangeStateListener;
  */
 public interface DataProvider extends EventListener<ChangeStateEvent> {
 
-    void addChangeStateListeners(ChangeStateListener... changeListener);
-
     Object getValue(String name);
     
 }

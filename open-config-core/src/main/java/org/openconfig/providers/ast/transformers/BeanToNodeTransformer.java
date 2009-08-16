@@ -1,6 +1,9 @@
-package org.openconfig.providers.ast;
+package org.openconfig.providers.ast.transformers;
 
-import org.openconfig.core.Transformer;
+import org.openconfig.providers.ast.transformers.Transformer;
+import org.openconfig.providers.ast.ComplexNode;
+import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.SimpleNode;
 
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;

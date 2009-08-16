@@ -19,7 +19,7 @@ public class AggregatorOpenConfigConfiguration extends AbstractOpenConfigConfigu
         throw new UnsupportedOperationException("This is wrong... there should be a 'central' view of the aggregated configuration values.");
     }
 
-    public void process(String file) throws Exception {
+    public void process(String file) {
         throw new UnsupportedOperationException("This is wrong... there should be a 'central' view of the aggregated configuration values.");
     }
 }

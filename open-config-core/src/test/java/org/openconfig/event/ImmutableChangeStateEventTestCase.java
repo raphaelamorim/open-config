@@ -3,6 +3,7 @@ package org.openconfig.event;
 import junit.framework.TestCase;
 import org.openconfig.event.ImmutableChangeStateEvent;
 import org.openconfig.providers.ast.*;
+import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
 
 import java.util.Set;
 import java.util.HashSet;
