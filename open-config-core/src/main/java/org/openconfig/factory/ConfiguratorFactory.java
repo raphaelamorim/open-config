@@ -4,20 +4,14 @@ import org.openconfig.event.EventListener;
 import org.openconfig.Configurator;
 
 /**
+ *
+ *
  * @author Richard L. Burton III
  */
 public interface ConfiguratorFactory {
 
     /**
-     * This method adds an array of listeners that will be used whenever
-     * a new instance is created.
-     *
-     * @param eventListeners An array of EventListeners to add.
-     */
-    void addGlobalListeners(EventListener... eventListeners);
-
-
-    /**
+     * Creates a configurator
      * 
      * @param eventListeners
      * @return
@@ -46,7 +40,7 @@ public interface ConfiguratorFactory {
      *
      * @param clazz          The interface or class to proxy.
      * @param <T>            A proxy instance of the class provided.
-     * @param prefix         A boolean that tells OpenConfig if it should usee the Class#getSimpleName() as a prefix.
+     * @param prefix         A boolean that tells OpenConfig if it should use the Class#getSimpleName() as a prefix.
      * @param eventListeners
      * @return A proxy instance of the class provided.
      * @throws IllegalAccessException
