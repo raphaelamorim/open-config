@@ -23,6 +23,8 @@ public interface ChangeStateEvent {
      */
     Set<Node> getChangeState();
 
+    Set<Node> getState();
+
     Node find(String property);
 
 }
