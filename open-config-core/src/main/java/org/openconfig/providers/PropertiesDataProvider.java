@@ -1,5 +1,8 @@
 package org.openconfig.providers;
 
+import com.google.inject.name.Named;
+import com.google.inject.Inject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +27,8 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
     /**
      * @param propertiesFile
      */
+    @Inject
+    @Named(value="PropertiesDataProvider.properties")
     public void setPropertiesFile(File propertiesFile) {
         this.propertiesFile = propertiesFile;
         lastModified = propertiesFile.lastModified();
