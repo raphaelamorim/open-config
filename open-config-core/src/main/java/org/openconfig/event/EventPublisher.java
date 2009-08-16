@@ -7,5 +7,10 @@ package org.openconfig.event;
  */
 public interface EventPublisher {
 
-     void publishEvent(ChangeStateEvent event);
+    /**
+     * Publishes the events to the listeners registered through {@link org.openconfig.factory.ConfiguratorFactory}.
+     *
+     * @param event the event to publish
+     */
+    void publishEvent(ChangeStateEvent event);
 }
