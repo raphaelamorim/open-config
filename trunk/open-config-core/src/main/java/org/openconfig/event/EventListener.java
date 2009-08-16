@@ -4,8 +4,10 @@ package org.openconfig.event;
  * Defines the contract for all event listeners.
  *
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
-public interface EventListener<T> {
+// Temporarily make T extend ChangeStateEvent
+public interface EventListener<T extends ChangeStateEvent> {
 
     /**
      * This method will get triggered upon receiving of an event from
