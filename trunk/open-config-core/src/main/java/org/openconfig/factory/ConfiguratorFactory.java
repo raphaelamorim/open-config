@@ -1,6 +1,6 @@
 package org.openconfig.factory;
 
-import org.openconfig.lifecycle.EventListener;
+import org.openconfig.event.EventListener;
 import org.openconfig.Configurator;
 
 /**

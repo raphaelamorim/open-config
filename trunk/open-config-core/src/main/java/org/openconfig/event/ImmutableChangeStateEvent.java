@@ -1,4 +1,4 @@
-package org.openconfig.lifecycle;
+package org.openconfig.event;
 
 import org.openconfig.providers.ast.*;
 

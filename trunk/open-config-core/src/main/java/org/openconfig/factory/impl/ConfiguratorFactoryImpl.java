@@ -3,7 +3,7 @@ package org.openconfig.factory.impl;
 import org.openconfig.factory.ConfiguratorFactory;
 import static org.openconfig.ObjectFactory.getInstance;
 import org.openconfig.core.ConfiguratorProxy;
-import org.openconfig.lifecycle.EventListener;
+import org.openconfig.event.EventListener;
 import org.openconfig.Configurator;
 import org.apache.log4j.Logger;
 
