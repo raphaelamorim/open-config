@@ -1,10 +1,9 @@
 package org.openconfig;
 
-import junit.framework.TestCase;
 import static org.openconfig.ObjectFactory.getInstance;
-import org.openconfig.factory.ConfiguratorFactory;
+import junit.framework.TestCase;
 
-import java.util.prefs.Preferences;
+import org.openconfig.factory.ConfiguratorFactory;
 
 /**
  * @author Richard L. Burton III

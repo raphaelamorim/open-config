@@ -1,8 +1,9 @@
 package org.openconfig.ioc.config;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -14,9 +15,18 @@ public class PropertiesOpenConfigConfiguration extends AbstractOpenConfigConfigu
         return file.endsWith(".properties");
     }
 
-    public void process(String file) throws Exception {
+    @SuppressWarnings("unchecked")
+	public void process(String file) {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(file));
+        try {
+			InputStream stream = getClass().getClassLoader().getResourceAsStream(file);
+			if(stream == null) {
+				throw new RuntimeException("Could not load the file: "+file + " from the classpath");
+			}
+			properties.load(stream);
+		}catch (IOException e) {
+			throw new RuntimeException("Could not load file: "+file, e);
+		}
         Set set = properties.entrySet();
         for (Object entryObject : set) {
             Map.Entry<String, String> entry = (Map.Entry<String, String>) entryObject;
