@@ -14,7 +14,7 @@ public class ImmutableChangeStateEventTestCase extends TestCase {
 
     private Set<Node> changeState;
 
-    private NodeTransformer transformer = new NodeTransformer();
+    private BeanToNodeTransformer transformer = new BeanToNodeTransformer();
 
     public void testFindAttribute() {
         changeState.add(transformer.transform(new Person("Richard Burton", 30)));

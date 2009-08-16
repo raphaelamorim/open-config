@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class NodeTransformerTestCase extends TestCase {
 
     public void testBasic() throws Exception {
-        NodeTransformer transformer = new NodeTransformer();
+        BeanToNodeTransformer transformer = new BeanToNodeTransformer();
         Node node = transformer.transform(new Person());
         assertEquals("Person", node.getName());
     }

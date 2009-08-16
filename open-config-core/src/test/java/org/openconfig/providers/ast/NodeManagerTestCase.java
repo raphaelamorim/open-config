@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class NodeManagerTestCase extends TestCase {
 
-    private NodeTransformer transformer = new NodeTransformer();
+    private BeanToNodeTransformer transformer = new BeanToNodeTransformer();
 
     private NodeManager nodeManager = new NodeManager();
 

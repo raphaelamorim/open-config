@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author Richard L. Burton III
  */
-public class NodeTransformer implements Transformer<Object, ComplexNode> {
+public class BeanToNodeTransformer implements Transformer<Object, ComplexNode> {
 
     private static final Set<String> EXCLUDE_NAMES = new HashSet<String>(asList("class"));
 
