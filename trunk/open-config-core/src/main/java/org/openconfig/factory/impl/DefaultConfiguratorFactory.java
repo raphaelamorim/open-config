@@ -8,9 +8,6 @@ import org.openconfig.Configurator;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.LinkedList;
-import static java.util.Arrays.asList;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -20,11 +17,9 @@ import net.sf.cglib.proxy.MethodProxy;
  * @author Richard L. Burton III
  */
 @SuppressWarnings("unchecked")
-public class ConfiguratorFactoryImpl implements ConfiguratorFactory {
+public class DefaultConfiguratorFactory implements ConfiguratorFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(ConfiguratorFactoryImpl.class);
-
-    protected List<EventListener> sharedEventListeners = new LinkedList<EventListener>();
+    private static final Logger LOGGER = Logger.getLogger(DefaultConfiguratorFactory.class);
 
     /**
      * @see ConfiguratorFactory#(Class, boolean, EventListener)
@@ -54,13 +49,9 @@ public class ConfiguratorFactoryImpl implements ConfiguratorFactory {
         return (T) enhancer.create();
     }
 
-    public void addGlobalListeners(EventListener... eventListeners) {
-        sharedEventListeners.addAll(asList(eventListeners));
-    }
-
 
     public Configurator newInstance(EventListener... eventListeners) throws IllegalAccessException, InstantiationException {
-        throw new UnsupportedOperationException("Not yet implemented!");
+        return newInstance(Configurator.class, eventListeners);
     }
 
     /**

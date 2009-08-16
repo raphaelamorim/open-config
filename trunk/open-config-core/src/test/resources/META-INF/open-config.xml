@@ -6,7 +6,7 @@
     <bean id="MutableConfigurator"
           class="org.openconfig.configurators.MapConfigurator"/>
     <bean id="ConfiguratorFactory"
-          class="org.openconfig.factory.impl.ConfiguratorFactoryImpl"/>
+          class="org.openconfig.factory.impl.DefaultConfiguratorFactory"/>
     <bean id="EnvironmentResolver"
           class="org.openconfig.core.SystemPropertyEnvironmentResolver"/>
 </beans>
