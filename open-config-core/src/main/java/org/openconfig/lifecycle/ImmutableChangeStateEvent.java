@@ -14,13 +14,16 @@ public class ImmutableChangeStateEvent implements ChangeStateEvent {
 
     private Set<Node> changeState;
 
+    private Set<Node> state;
+
     private Set<String> changedPaths;
 
     private NodeManager nodeFinder = new NodeManager();
 
-    public ImmutableChangeStateEvent(Set<Node> changeState, Set<String> paths) {
+    public ImmutableChangeStateEvent(Set<Node> changeState, Set<Node> state, Set<String> paths) {
         this.changeState = unmodifiableSet(changeState);
         this.changedPaths = unmodifiableSet(paths);
+        this.state = unmodifiableSet(state);
     }
 
     public ImmutableChangeStateEvent(Set<Node> changeState) {
@@ -34,6 +37,10 @@ public class ImmutableChangeStateEvent implements ChangeStateEvent {
 
     public Set<String> getChangedPaths() {
         return changedPaths;
+    }
+
+    public Set<Node> getState(){
+        return state;
     }
 
     /**
