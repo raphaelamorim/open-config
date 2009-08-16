@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
+
 /**
  * @author Richard L. Burton III
  */
