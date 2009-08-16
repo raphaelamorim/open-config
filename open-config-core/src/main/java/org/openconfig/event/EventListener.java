@@ -1,4 +1,4 @@
-package org.openconfig.lifecycle;
+package org.openconfig.event;
 
 /**
  * Defines the contract for all event listeners.

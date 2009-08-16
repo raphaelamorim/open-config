@@ -1,8 +1,8 @@
 package org.openconfig.providers;
 
-import org.openconfig.lifecycle.EventListener;
-import org.openconfig.lifecycle.ChangeStateEvent;
-import org.openconfig.lifecycle.ChangeStateListener;
+import org.openconfig.event.EventListener;
+import org.openconfig.event.ChangeStateEvent;
+import org.openconfig.event.ChangeStateListener;
 
 /**
  * @author Richard L. Burton III

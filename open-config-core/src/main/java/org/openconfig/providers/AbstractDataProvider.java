@@ -2,9 +2,9 @@ package org.openconfig.providers;
 
 import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.NodeManager;
-import org.openconfig.lifecycle.ChangeStateListener;
-import org.openconfig.lifecycle.ChangeStateEvent;
-import org.openconfig.lifecycle.ImmutableChangeStateEvent;
+import org.openconfig.event.ChangeStateListener;
+import org.openconfig.event.ChangeStateEvent;
+import org.openconfig.event.ImmutableChangeStateEvent;
 
 import java.util.*;
 import static java.util.Arrays.asList;
