@@ -7,6 +7,7 @@ import org.openconfig.core.bean.ProxyInvocationHandler;
 import org.openconfig.core.bean.ConfiguratorProxyInvocationHandler;
 import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.OpenConfigModule;
+import org.openconfig.event.EventPublisher;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -15,6 +16,7 @@ import com.google.inject.Injector;
  * will be used to abstract the construction specific concert types of classes.
  *
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 public class ObjectFactory {
 
@@ -30,12 +32,13 @@ public class ObjectFactory {
         return INSTANCE;
     }
 
-    public ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias) {
+    public ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
+
         MutableConfigurator configurator = injector.getInstance(MutableConfigurator.class);
         PropertyNormalizer propertyNormalizer = injector.getInstance(PropertyNormalizer.class);
 
         // TODO: Move this into Guice
-        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias);
+        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias, eventPublisher);
         ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
         returnHandler.setMutableConfigurator(configurator);
         proxy.setPropertyNormalizer(propertyNormalizer);

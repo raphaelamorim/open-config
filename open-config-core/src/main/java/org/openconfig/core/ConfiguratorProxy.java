@@ -8,6 +8,7 @@ import static java.util.regex.Pattern.compile;
 import static org.openconfig.core.Accessor.*;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.core.bean.ProxyInvocationHandler;
+import org.openconfig.event.EventPublisher;
 import org.apache.log4j.Logger;
 import static org.apache.log4j.Logger.getLogger;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -23,6 +24,7 @@ import net.sf.cglib.proxy.MethodProxy;
  * 3. The ProxyInvocationHandler that will fullfill the request.
  *
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 public class ConfiguratorProxy implements PropertyNormalizerable, MethodInterceptor {
 
@@ -54,15 +56,19 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
      */
     private ProxyInvocationHandler proxyInvocationHandler;
 
+    private final EventPublisher eventPublisher;
+
     private String interfaceName;
 
-    private Class configuratorInterface;
+    private final Class configuratorInterface;
 
-    private boolean alias;
+    private final boolean alias;
 
-    public ConfiguratorProxy(Class configuratorInterface, boolean alias) {
+    public ConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
         this.configuratorInterface = configuratorInterface;
         this.alias = alias;
+        this.eventPublisher = eventPublisher;
+        
         if (alias) {
             interfaceName = configuratorInterface.getSimpleName();
         }

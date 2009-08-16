@@ -4,7 +4,10 @@ import org.openconfig.factory.ConfiguratorFactory;
 import static org.openconfig.ObjectFactory.getInstance;
 import org.openconfig.core.ConfiguratorProxy;
 import org.openconfig.event.EventListener;
+import org.openconfig.event.EventPublisher;
+import org.openconfig.event.DefaultEventPublisher;
 import org.openconfig.Configurator;
+import org.openconfig.providers.DataProvider;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -15,6 +18,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 @SuppressWarnings("unchecked")
 public class DefaultConfiguratorFactory implements ConfiguratorFactory {
@@ -40,13 +44,41 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
             enhancer.setSuperclass(clazz);
         }
 
+        EventPublisher eventPublisher = createEventPublisher(eventListeners);
+        DataProvider dataProvider = createAndInitializeDataProvider();
+
+        final ConfiguratorProxy proxy = getInstance().newConfiguratorProxy(clazz, prefix, eventPublisher);
+
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
-                ConfiguratorProxy proxy = getInstance().newConfiguratorProxy(clazz, prefix);
-                return proxy.intercept(source, method, arguments, methodProxy);
+               return proxy.intercept(source, method, arguments, methodProxy);
             }
         });
         return (T) enhancer.create();
+    }
+
+    /**
+     * Uses the OpenConfig-config to create and initialize the data provider.
+     *
+     * @return
+     */
+    private DataProvider createAndInitializeDataProvider() {
+         throw new UnsupportedOperationException("Method not coded yet");
+    }
+
+    /**
+     * Creates an event publisher which publishes events for the given listeners
+     *
+     * @param eventListeners
+     * @return
+     */
+    private EventPublisher createEventPublisher(EventListener[] eventListeners) {
+        EventListener[] listeners = eventListeners;
+        if(listeners == null) {
+            listeners = new EventListener[0];
+        }
+
+        return new DefaultEventPublisher(listeners);
     }
 
 
