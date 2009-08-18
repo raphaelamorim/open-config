@@ -9,10 +9,12 @@ import static org.openconfig.core.Accessor.*;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.core.bean.ProxyInvocationHandler;
 import org.openconfig.event.EventPublisher;
+import org.openconfig.providers.DataProvider;
 import org.apache.log4j.Logger;
 import static org.apache.log4j.Logger.getLogger;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import com.google.inject.Inject;
 
 /**
  * The ConfiguratorProxy class handles the interception of method invocations on the
@@ -63,6 +65,9 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     private final Class configuratorInterface;
 
     private final boolean alias;
+
+    @Inject
+    private DataProvider dataProvider;
 
     public ConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
         this.configuratorInterface = configuratorInterface;
@@ -139,4 +144,9 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     public boolean isAliased() {
         return alias;
     }
+
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+    }
+
 }

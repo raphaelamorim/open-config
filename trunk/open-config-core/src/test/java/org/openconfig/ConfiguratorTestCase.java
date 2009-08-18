@@ -14,7 +14,7 @@ public class ConfiguratorTestCase extends TestCase {
 
     private MyConfigurator configurator;
 
-    public void testBasic() throws Exception {
+    public void testNamingConvention() throws Exception {
         configurator = factory.newInstance(MyConfigurator.class);
         assertEquals("MyConfigurator.name", configurator.getName());
         assertEquals("MyConfigurator.age", configurator.getAge());

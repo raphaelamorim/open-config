@@ -15,9 +15,10 @@ public class JmxServerTestCase extends TestCase {
 
     private ApplicationContext context;
 
+    // TODO: This isn't used right now at all.. it was for testing..
     public void testNothing() throws Exception {
-        JmxClient client = new JmxClient(null, null);
-        client.jmx();
+//        JmxClient client = new JmxClient(null, null);
+//        client.jmx();
     }
 
     @Override

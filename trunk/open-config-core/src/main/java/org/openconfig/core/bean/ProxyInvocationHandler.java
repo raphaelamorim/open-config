@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * @author Richard L. Burton III
  */
-public interface ProxyInvocationHandler extends MutableConfiguratorable {
+public interface ProxyInvocationHandler {
 
     /**
      * This method is invoked to handle the invocation of a method on the proxied
