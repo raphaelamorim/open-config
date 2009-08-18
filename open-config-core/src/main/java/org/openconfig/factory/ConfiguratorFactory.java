@@ -4,21 +4,17 @@ import org.openconfig.event.EventListener;
 import org.openconfig.Configurator;
 
 /**
- *
- *
  * @author Richard L. Burton III
  */
 public interface ConfiguratorFactory {
 
     /**
      * Creates a configurator
-     * 
+     *
      * @param eventListeners
      * @return
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    Configurator newInstance(EventListener... eventListeners) throws IllegalAccessException, InstantiationException;
+    Configurator newInstance(EventListener... eventListeners);
 
 
     /**
@@ -32,7 +28,7 @@ public interface ConfiguratorFactory {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    <T> T newInstance(Class clazz, EventListener... eventListeners) throws IllegalAccessException, InstantiationException;
+    <T> T newInstance(Class clazz, EventListener... eventListeners);
 
     /**
      * Creates a proxy of the provide class that abstracts the <tt>Configurator</tt> API from the developers code base.
@@ -46,5 +42,5 @@ public interface ConfiguratorFactory {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    <T> T newInstance(Class clazz, boolean prefix, EventListener... eventListeners) throws IllegalAccessException, InstantiationException;
+    <T> T newInstance(Class clazz, boolean prefix, EventListener... eventListeners);
 }

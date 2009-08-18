@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.openconfig.core.ConfiguratorProxy;
 import org.openconfig.core.Accessor;
 import static org.openconfig.core.Accessor.GETTER;
+import org.openconfig.MutableConfigurator;
+import org.openconfig.providers.DataProvider;
 
 import java.lang.reflect.Method;
 
@@ -16,11 +18,13 @@ import net.sf.cglib.proxy.Enhancer;
  *
  * @author Richard L. Burton III
  */
-public class ConfiguratorProxyInvocationHandler extends AbstractProxyInvocationHandler {
+public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandler {
 
     private Logger LOGGER = Logger.getLogger(ConfiguratorProxyInvocationHandler.class);
 
     private ConfiguratorProxy proxy;
+
+    private DataProvider dataProvider;
 
     public ConfiguratorProxyInvocationHandler(ConfiguratorProxy proxy) {
         this.proxy = proxy;
@@ -43,12 +47,13 @@ public class ConfiguratorProxyInvocationHandler extends AbstractProxyInvocationH
                 enhancer.setCallback(proxy);
                 return enhancer.create();
             } else {
-                return getValue(proxy.toHierarchy());
+                return dataProvider.getValue(proxy.toHierarchy());
             }
         } else {
-            setValue(property, arguments);
+            //dataProvider.setValue(property, arguments);
+            throw new UnsupportedOperationException("This logic hasn't been implemented yet.");
         }
-        return null;
+//        return null;
     }
 
     protected boolean isSupported(Class clazz) {
@@ -60,5 +65,9 @@ public class ConfiguratorProxyInvocationHandler extends AbstractProxyInvocationH
             throw new UnsupportedOperationException("Returning an Annotation isn't unsupported.");
         }
         return true;
+    }
+
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
     }
 }

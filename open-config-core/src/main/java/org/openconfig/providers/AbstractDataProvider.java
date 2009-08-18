@@ -14,7 +14,7 @@ public abstract class AbstractDataProvider implements DataProvider {
 
     private Set<Node> cache = new HashSet<Node>();
 
-    private NodeManager nodeFinder = new NodeManager();
+    protected NodeManager nodeFinder = new NodeManager();
 
     protected EventPublisher eventPublisher;
 

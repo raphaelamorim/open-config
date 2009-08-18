@@ -1,10 +1,11 @@
 package org.openconfig.ioc;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.openconfig.MutableConfigurator;
+import org.openconfig.event.EventPublisher;
+import org.openconfig.providers.DataProvider;
+import org.openconfig.providers.CompositeDataProvider;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.bean.PropertyNormalizer;
@@ -12,9 +13,10 @@ import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
 import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import static org.openconfig.ioc.ConfigurationLocator.*;
+import com.google.inject.*;
+import com.google.inject.binder.AnnotatedBindingBuilder;
+import com.google.inject.binder.ScopedBindingBuilder;
 
 /**
  * This class is used to initialize Guice with the ability to override
@@ -35,6 +37,8 @@ public class OpenConfigModule extends AbstractModule {
     private ConfigurationLocator configurationLocator;
 
     private OpenConfigConfiguration openConfigConfiguration;
+
+    private static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
 
     protected void configure() {
         processConfigurationFiles();
@@ -57,9 +61,16 @@ public class OpenConfigModule extends AbstractModule {
                 .to(getProviderClass(ConfiguratorFactory.class))
                 .in(Singleton.class);
 
-        bind(MutableConfigurator.class)
-                .to(getProviderClass(MutableConfigurator.class));
+        bind(EventPublisher.class)
+                .to(getProviderClass(EventPublisher.class));
 
+        if(isInLocalDevelopment()){
+            bind(DataProvider.class)
+                    .to(CompositeDataProvider.class);
+        }else{
+            bind(DataProvider.class)
+                .toInstance(getDataProvider());
+        }
     }
 
     /**
@@ -67,13 +78,31 @@ public class OpenConfigModule extends AbstractModule {
      */
     private void processConfigurationFiles() {
         LinkedHashMap<String, OpenConfigConfiguration> configurationManagers = new LinkedHashMap<String, OpenConfigConfiguration>();
-        configurationManagers.put(ConfigurationLocator.PROPERTIES_FILE, new PropertiesOpenConfigConfiguration());
-        configurationManagers.put(ConfigurationLocator.XML_FILE, new XmlOpenConfigConfiguration());
+        configurationManagers.put(PROPERTIES_FILE, new PropertiesOpenConfigConfiguration());
+        configurationManagers.put(XML_FILE, new XmlOpenConfigConfiguration());
         configurationLocator = new ConfigurationLocator(configurationManagers);
     }
 
     protected Class getProviderClass(Class clazz) {
         return openConfigConfiguration.getClass(clazz.getSimpleName());
+    }
+
+    public DataProvider getDataProvider() {
+        Class dataProviderClass = getProviderClass(DataProvider.class);
+        try {
+            DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
+            dataProvider.initialize(null); // todo: How to pass the OpenConfigContext?
+            return dataProvider;
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException("Class failed to get created.");
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Class failed to get created.");
+        }
+    }
+
+    protected boolean isInLocalDevelopment(){
+        String developmentMode = System.getProperty(OPEN_CONFIG_DEVELOPMENT_MODE);
+        return Boolean.getBoolean(developmentMode);
     }
 
 }

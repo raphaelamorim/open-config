@@ -13,4 +13,12 @@ public interface EventPublisher {
      * @param event the event to publish
      */
     void publishEvent(ChangeStateEvent event);
+
+    /**
+     * Defines a method for adding listeners which will be notified when events are
+     * emitted.
+     * @todo Find a better way to handle this..
+     * @param eventListeners
+     */
+    void addListeners(EventListener... eventListeners);
 }

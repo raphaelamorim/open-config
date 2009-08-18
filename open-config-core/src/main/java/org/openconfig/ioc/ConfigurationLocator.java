@@ -25,7 +25,9 @@ public class ConfigurationLocator {
     public static final String PROPERTIES_FILE = "properties";
 
     private final LinkedHashMap<String, OpenConfigConfiguration> configurationManagers;
+
     private OpenConfigConfiguration activeOpenConfigConfiguration;
+
     private final OpenConfigConfiguration defaultOpenConfigConfiguration;
 
     public ConfigurationLocator(LinkedHashMap<String, OpenConfigConfiguration> configurationManagers) {
@@ -45,22 +47,29 @@ public class ConfigurationLocator {
     public void locate() {
         ClassLoader classLoader = getClass().getClassLoader();
 
+        OpenConfigConfiguration customConfiguration = null;
+
         for (String extension : configurationManagers.keySet()) {
             String fileName = CONFIGURATION_NAME + '.' + extension;
 			URL url = classLoader.getResource(fileName);
             if(url == null) {
-                LOGGER.debug("Could not find OpenConfig configuration file: "+fileName);
-            }
-            else {
-                LOGGER.debug("Using OpenConfig configuration file: "+fileName);
-                OpenConfigConfiguration config = process(fileName);
-                LOGGER.debug("Loading OpenConfig default configuration file: "+DEFAULT_OPENCONFIG_CONFIG_FILE);
-                defaultOpenConfigConfiguration.process(DEFAULT_OPENCONFIG_CONFIG_FILE);
-                activeOpenConfigConfiguration = new MergingOpenConfigConfiguration(config, defaultOpenConfigConfiguration);
-                return;
+                LOGGER.debug("Could not find OpenConfig configuration file: " + fileName);
+            } else {
+                LOGGER.debug("Using OpenConfig configuration file: " + fileName);
+                customConfiguration = process(fileName);
+                break;
             }
         }
-        throw new IllegalStateException("Could not find any OpenConfig configuration files: ");
+
+
+        LOGGER.debug("Loading OpenConfig default configuration file: "+DEFAULT_OPENCONFIG_CONFIG_FILE);
+        defaultOpenConfigConfiguration.process(DEFAULT_OPENCONFIG_CONFIG_FILE);
+
+        if(customConfiguration != null){
+            activeOpenConfigConfiguration = new MergingOpenConfigConfiguration(customConfiguration, defaultOpenConfigConfiguration);
+        }else{
+            activeOpenConfigConfiguration = defaultOpenConfigConfiguration;
+        }
     }
 
     protected OpenConfigConfiguration process(String file) {

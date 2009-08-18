@@ -8,6 +8,9 @@ import org.openconfig.core.bean.ConfiguratorProxyInvocationHandler;
 import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.OpenConfigModule;
 import org.openconfig.event.EventPublisher;
+import org.openconfig.event.EventListener;
+import org.openconfig.providers.DataProvider;
+import org.openconfig.providers.CompositeDataProvider;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -17,6 +20,7 @@ import com.google.inject.Injector;
  *
  * @author Richard L. Burton III
  * @author Dushyanth (Dee) Inguva
+ * @depreciated
  */
 public class ObjectFactory {
 
@@ -32,15 +36,33 @@ public class ObjectFactory {
         return INSTANCE;
     }
 
-    public ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
+    /**
+     * @param configuratorInterface
+     * @param alias
+     * @param eventListeners
+     * @return
+     * @todo refactor to improve the object creation by Guice.
+     */
+    public ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventListener... eventListeners) {
 
-        MutableConfigurator configurator = injector.getInstance(MutableConfigurator.class);
+        DataProvider dataProvider = injector.getInstance(DataProvider.class);
+
+        if (dataProvider instanceof CompositeDataProvider) {
+            CompositeDataProvider cdp = (CompositeDataProvider) dataProvider;
+            String name = configuratorInterface.getName();
+            if (cdp.missingDataProvider(name)) {
+                dataProvider.initialize(null); // todo: How to obtain the OpenConfigContext?
+                cdp.addDataProvider(name, dataProvider);
+            }
+        }
+
         PropertyNormalizer propertyNormalizer = injector.getInstance(PropertyNormalizer.class);
+        EventPublisher eventPublisher = injector.getInstance(EventPublisher.class);
+        eventPublisher.addListeners(eventListeners);
 
-        // TODO: Move this into Guice
         ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias, eventPublisher);
         ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
-        returnHandler.setMutableConfigurator(configurator);
+        proxy.setDataProvider(dataProvider);
         proxy.setPropertyNormalizer(propertyNormalizer);
         proxy.setProxyInvocationHandler(returnHandler);
         return proxy;
