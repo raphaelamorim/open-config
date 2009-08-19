@@ -12,26 +12,26 @@ import static java.util.Collections.*;
  */
 public class ImmutableChangeStateEvent implements ChangeStateEvent {
 
-    private Set<Node> changeState;
+    private ComplexNode changeState;
 
-    private Set<Node> state;
+    private ComplexNode root;
 
     private Set<String> changedPaths;
 
     private NodeManager nodeFinder = new NodeManager();
 
-    public ImmutableChangeStateEvent(Set<Node> changeState, Set<Node> state, Set<String> paths) {
-        this.changeState = unmodifiableSet(changeState);
+    public ImmutableChangeStateEvent(ComplexNode changeState, ComplexNode root, Set<String> paths) {
+        this.changeState = changeState;
         this.changedPaths = unmodifiableSet(paths);
-        this.state = unmodifiableSet(state);
+        this.root = root;
     }
 
-    public ImmutableChangeStateEvent(Set<Node> changeState) {
-        this.changeState = unmodifiableSet(changeState);
+    public ImmutableChangeStateEvent(ComplexNode changeState) {
+        this.changeState = changeState;
         this.changedPaths = EMPTY_SET;
     }
 
-    public Set<Node> getChangeState() {
+    public ComplexNode getChangeState() {
         return changeState;
     }
 
@@ -39,8 +39,8 @@ public class ImmutableChangeStateEvent implements ChangeStateEvent {
         return changedPaths;
     }
 
-    public Set<Node> getState(){
-        return state;
+    public ComplexNode getState(){
+        return root;
     }
 
     /**

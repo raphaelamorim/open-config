@@ -1,6 +1,7 @@
 package org.openconfig.event;
 
 import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.ComplexNode;
 
 import java.util.Set;
 
@@ -13,11 +14,11 @@ public class NullChangeStateEvent implements ChangeStateEvent{
         return null;
     }
 
-    public Set<Node> getChangeState() {
+    public ComplexNode getChangeState() {
         return null;
     }
 
-    public Set<Node> getState() {
+    public ComplexNode getState() {
         return null;
     }
 
