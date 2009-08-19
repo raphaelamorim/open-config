@@ -2,6 +2,8 @@ package org.openconfig;
 
 import org.openconfig.core.ConfiguratorProxy;
 import org.openconfig.core.EnvironmentResolver;
+import org.openconfig.core.BasicOpenConfigContext;
+import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.core.bean.ProxyInvocationHandler;
 import org.openconfig.core.bean.ConfiguratorProxyInvocationHandler;
@@ -11,8 +13,11 @@ import org.openconfig.event.EventPublisher;
 import org.openconfig.event.EventListener;
 import org.openconfig.providers.DataProvider;
 import org.openconfig.providers.CompositeDataProvider;
+import org.openconfig.providers.PropertiesDataProvider;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import static java.util.Collections.singletonMap;
 
 /**
  * Currently, there is no IoC container being used, so this ObjectFactory
@@ -51,8 +56,10 @@ public class ObjectFactory {
             CompositeDataProvider cdp = (CompositeDataProvider) dataProvider;
             String name = configuratorInterface.getName();
             if (cdp.missingDataProvider(name)) {
-                dataProvider.initialize(null); // todo: How to obtain the OpenConfigContext?
-                cdp.addDataProvider(name, dataProvider);
+                DataProvider propertiesDataProvider = new PropertiesDataProvider(); // TODO: Remove this out somehow.
+                OpenConfigContext context = new BasicOpenConfigContext(singletonMap("interface", configuratorInterface.getSimpleName()));
+                propertiesDataProvider.initialize(context);
+                cdp.addDataProvider(name, propertiesDataProvider);
             }
         }
 

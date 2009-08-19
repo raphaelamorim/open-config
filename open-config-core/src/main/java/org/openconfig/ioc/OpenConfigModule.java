@@ -8,6 +8,7 @@ import org.openconfig.providers.DataProvider;
 import org.openconfig.providers.CompositeDataProvider;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
+import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
@@ -91,7 +92,7 @@ public class OpenConfigModule extends AbstractModule {
         Class dataProviderClass = getProviderClass(DataProvider.class);
         try {
             DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
-            dataProvider.initialize(null); // todo: How to pass the OpenConfigContext?
+            dataProvider.initialize(new BasicOpenConfigContext());
             return dataProvider;
         } catch (InstantiationException e) {
             throw new IllegalArgumentException("Class failed to get created.");
@@ -102,7 +103,7 @@ public class OpenConfigModule extends AbstractModule {
 
     protected boolean isInLocalDevelopment(){
         String developmentMode = System.getProperty(OPEN_CONFIG_DEVELOPMENT_MODE);
-        return Boolean.getBoolean(developmentMode);
+        return Boolean.parseBoolean(developmentMode);
     }
 
 }

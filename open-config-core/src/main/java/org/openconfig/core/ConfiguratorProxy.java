@@ -149,4 +149,7 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         this.dataProvider = dataProvider;
     }
 
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
 }

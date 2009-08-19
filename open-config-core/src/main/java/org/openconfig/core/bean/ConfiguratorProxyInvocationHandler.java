@@ -24,8 +24,6 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
 
     private ConfiguratorProxy proxy;
 
-    private DataProvider dataProvider;
-
     public ConfiguratorProxyInvocationHandler(ConfiguratorProxy proxy) {
         this.proxy = proxy;
     }
@@ -47,10 +45,10 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
                 enhancer.setCallback(proxy);
                 return enhancer.create();
             } else {
-                return dataProvider.getValue(proxy.toHierarchy());
+                return proxy.getDataProvider().getValue(proxy.toHierarchy());
             }
         } else {
-            //dataProvider.setValue(property, arguments);
+            //proxy.getDataProvider().setValue(property, arguments);
             throw new UnsupportedOperationException("This logic hasn't been implemented yet.");
         }
 //        return null;
@@ -66,8 +64,5 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         }
         return true;
     }
-
-    public void setDataProvider(DataProvider dataProvider) {
-        this.dataProvider = dataProvider;
-    }
+    
 }
