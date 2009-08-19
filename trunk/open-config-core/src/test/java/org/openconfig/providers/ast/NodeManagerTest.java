@@ -10,7 +10,7 @@ import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
 /**
  * @author Richard L. Burton III
  */
-public class NodeManagerTestCase extends TestCase {
+public class NodeManagerTest extends TestCase {
 
     private BeanToNodeTransformer transformer = new BeanToNodeTransformer();
 
@@ -18,28 +18,24 @@ public class NodeManagerTestCase extends TestCase {
 
     public void testFindNode() {
         ComplexNode complexNode = transformer.transform(new Person());
-        Set<Node> nodes = toNodeSet(complexNode);
-        SimpleNode node = (SimpleNode) nodeManager.find("Person.child.name", nodes);
+        SimpleNode node = (SimpleNode) nodeManager.find("child.name", complexNode);
         assertNotNull(node);
-        assertEquals("Dushyanth Inguva", node.getValue());
     }
 
     public void testSetValue() {
         ComplexNode complexNode = transformer.transform(new Person());
-        Set<Node> nodes = toNodeSet(complexNode);
-        nodeManager.setValue(nodes, "Person.name", "James");
-        SimpleNode child = (SimpleNode) getChild(complexNode.getChildren(), "name");
+        nodeManager.setValue(complexNode, "name", "James");
+        SimpleNode child = (SimpleNode) complexNode.getChild("name");
         assertNotNull(child);
         assertEquals("James", child.getValue());
     }
 
     public void testSetChildValue() {
         ComplexNode complexNode = transformer.transform(new Person());
-        Set<Node> nodes = toNodeSet(complexNode);
-        nodeManager.setValue(nodes, "Person.child.name", "King Richard");
-        ComplexNode child = (ComplexNode) getChild(complexNode.getChildren(), "child");
+        nodeManager.setValue(complexNode, "child.name", "King Richard");
+        ComplexNode child = (ComplexNode) complexNode.getChild("child");
         assertNotNull(child);
-        SimpleNode simpleChild = (SimpleNode) getChild(child.getChildren(), "name");
+        SimpleNode simpleChild = (SimpleNode) child.getChild("name");
         assertEquals("King Richard", simpleChild.getValue());
     }
 
@@ -50,12 +46,6 @@ public class NodeManagerTestCase extends TestCase {
             }
         }
         return null;
-    }
-
-    protected Set<Node> toNodeSet(ComplexNode complexNode) {
-        Set<Node> nodes = new HashSet<Node>();
-        nodes.add(complexNode);
-        return nodes;
     }
 
 }

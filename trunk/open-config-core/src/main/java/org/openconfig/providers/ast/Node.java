@@ -1,5 +1,7 @@
 package org.openconfig.providers.ast;
 
+import org.openconfig.providers.NodeVisitorContext;
+
 /**
  * @author Richard L. Burton III
  */
@@ -38,5 +40,7 @@ public abstract class Node<T> {
     }
 
     public abstract void setValue(T value);
+
+    public abstract <J> J accept(NodeVisitor<J, NodeVisitorContext> visitor, NodeVisitorContext context);
 
 }

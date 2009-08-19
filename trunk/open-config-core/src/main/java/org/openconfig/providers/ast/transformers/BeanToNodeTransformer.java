@@ -9,9 +9,7 @@ import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.beans.IntrospectionException;
 import static java.beans.Introspector.getBeanInfo;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Collection;
+import java.util.*;
 import static java.util.Arrays.asList;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +34,7 @@ public class BeanToNodeTransformer implements Transformer<Object, ComplexNode> {
         ComplexNode node = null;
 
         if (bean != null) {
-            Set<Node> attributes = new HashSet<Node>();
+            Map<String, Node> attributes = new HashMap<String, Node>();
             node = new ComplexNode(name, attributes);
 
             if (Collection.class.isAssignableFrom(bean.getClass())) {
@@ -55,18 +53,18 @@ public class BeanToNodeTransformer implements Transformer<Object, ComplexNode> {
         return node;
     }
 
-    public void toNode(Object bean, Set<Node> attributes) {
+    public void toNode(Object bean, Map<String, Node> attributes) {
         try {
             BeanInfo info = getBeanInfo(bean.getClass());
             for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
                 if (!EXCLUDE_NAMES.contains(pd.getName())) {
                     if (pd.getPropertyType().isPrimitive() || pd.getPropertyType().equals(String.class)) {
                         Node attribute = new SimpleNode(pd.getName(), readProperty(pd, bean));
-                        attributes.add(attribute);
+                        attributes.put(pd.getName(), attribute);
                     } else {
                         Node child = transform(readProperty(pd, bean), pd.getName());
                         if (child != null) {
-                            attributes.add(child);
+                            attributes.put(pd.getName(), child);
                         }
                     }
                 }

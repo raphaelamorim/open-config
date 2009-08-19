@@ -1,15 +1,21 @@
 package org.openconfig.providers.ast;
 
+import org.openconfig.providers.NodeVisitorContext;
+
 /**
  * @author Richard L. Burton III
  */
-public class SimpleNode extends Node {
+public class SimpleNode extends Node<Object> {
 
     private Object value;
 
     public SimpleNode(String name, Object value) {
-        super(name);
+        this(name);
         this.value = value;
+    }
+
+    public SimpleNode(String name) {
+        super(name);
     }
 
     public Object getValue() {
@@ -20,10 +26,18 @@ public class SimpleNode extends Node {
         this.value = value;
     }
 
+    public Object accept(NodeVisitor visitor) {
+        return null;
+    }
+
     @Override
     public String toString() {
         return "SimpleNode{" + super.toString() + ", " +
                 "value=" + value +
                 '}';
+    }
+
+    public  <J> J accept(NodeVisitor<J, NodeVisitorContext> visitor, NodeVisitorContext nodeVisitorContext) {
+        return visitor.visitSimpleNode(nodeVisitorContext, this);
     }
 }
