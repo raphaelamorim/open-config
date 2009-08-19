@@ -1,11 +1,15 @@
 package org.openconfig.providers.ast;
 
-import java.util.Set;
-import java.util.Stack;
+import org.openconfig.providers.NodeVisitorContext;
+import org.openconfig.providers.ast.search.ASTSearchVisitor;
+import org.openconfig.providers.ast.search.ASTSearchVisitorContext;
+
 import static java.util.Arrays.asList;
+import java.util.Stack;
 
 /**
  * A NodeManager allows you to manage a set of nodes.
+ *
  * @author Richard L. Burton III
  */
 public class NodeManager {
@@ -14,51 +18,52 @@ public class NodeManager {
 
     /**
      * This method finds a value for a given property path within a set of nodes.
+     *
      * @param property The path to locate the node for.
-     * @param tree The set of nodes to search.
+     * @param tree     The set of nodes to search.
      * @return The node that matches the path.
      */
-    public Node find(String property, Set<Node> tree) {
+    public Node find(String property, ComplexNode tree) {
         String[] path = reverse(property.split(PATH_DELIMITOR));
         Stack<String> stack = new Stack<String>();
         stack.addAll(asList(path));
-        return search(stack, tree);
+        return search(property, stack, tree, false);
     }
 
     /**
      * This method allows you to set a value for a given path.
-     * @param nodes The nodes to search.
+     *
+     * @param root    The nodes to search.
      * @param property The path of the node.
-     * @param value the value of the node.
+     * @param value    the value of the node.
      */
     @SuppressWarnings("unchecked")
-    public void setValue(Set<Node> nodes, String property, Object value){
-        Node node = find(property, nodes);
-        if(node != null){
+    public void setValue(ComplexNode root, String property, Object value) {
+        Node node = find(property, root);
+        if (node != null) {
             node.setValue(value);
-        }else{
+        } else {
             throw new UnsupportedOperationException("This operation is not yet supported for null nodes.");
         }
     }
 
-    protected Node search(Stack<String> stack, Set<Node> ast) {
-        for (Node node : ast) {
-            String name = stack.peek();
-            String nodeName = node.getName();
-            if (!stack.isEmpty() && nodeName.equals(name)) {
-                stack.pop();
-                if (node instanceof ComplexNode) {
-                    if (!stack.isEmpty()) {
-                        return search(stack, ((ComplexNode) node).getChildren());
-                    } else {
-                        return node;
-                    }
-                } else if (node instanceof SimpleNode) {
-                    return node;
-                }
-            }
-        }
-        return null;
+    /**
+     * Searches for node that matches the stack.
+     *
+     * @param property Used for debugging messages
+     * @param stack    Used to locate the node
+     * @param rootNode the root node to searc from
+     * @param create   if true, the node is created if it is not found
+     * @return the located node
+     * @throws IllegalArgumentException if 
+     */
+    protected Node search(String property, Stack<String> stack, Node rootNode, boolean create) {
+        ASTSearchVisitor searchVisitor = new ASTSearchVisitor();
+
+        ASTSearchVisitorContext nodeVisitorContext = new ASTSearchVisitorContext(property, stack, create);
+        // TODO why do I need a cast here?
+        Node searchedNode = (Node)rootNode.accept(searchVisitor, nodeVisitorContext);
+        return searchedNode;
     }
 
     private String[] reverse(String[] elements) {
