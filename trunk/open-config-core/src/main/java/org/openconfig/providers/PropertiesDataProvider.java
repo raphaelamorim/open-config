@@ -20,6 +20,8 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
 
     private long lastModified;
 
+    protected OpenConfigContext openConfigContext;
+
     public PropertiesDataProvider() {
     }
 
@@ -31,10 +33,16 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
         throw new UnsupportedOperationException("Not yet implemented!");
     }
 
+    /**
+     * TODO: Use the Classpath to locate the configuration file.
+     * TODO: Find a better way to know the parameter name..
+     * @param context
+     */
     public void initialize(OpenConfigContext context) {
-        throw new UnsupportedOperationException("Not yet implemented!");
+        openConfigContext = context;
+        String configurationFile = context.getParameter("interface");
+        file = new File(configurationFile + '.' + FILE_TYPE);
     }
-
 
     protected void close(Closeable closeable) {
         try {

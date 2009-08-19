@@ -1,8 +1,8 @@
 package org.openconfig.providers;
 
 import org.openconfig.event.ChangeStateEvent;
-import org.openconfig.event.EventPublisher;
 import org.openconfig.core.OpenConfigContext;
+import static org.openconfig.util.Assert.*;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +29,10 @@ public class CompositeDataProvider implements DataProvider {
         String path = key[PROPERTY_PATH_INDEX];
         LOGGER.debug("Locating DataProvider for " + configurator + " and property " + property);
         DataProvider provider = providers.get(configurator);
+        notNull(provider, "Unable to find provider for %s Configurator interface!", configurator);
+        if(provider == null)
+            throw new RuntimeException("");
+        
         return provider.getValue(path);
 
     }
