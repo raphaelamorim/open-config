@@ -2,6 +2,7 @@ package org.openconfig.providers;
 
 import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.NodeManager;
+import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.event.EventPublisher;
 
@@ -12,21 +13,21 @@ import java.util.*;
  */
 public abstract class AbstractDataProvider implements DataProvider {
 
-    private Set<Node> cache = new HashSet<Node>();
+    private ComplexNode root = new ComplexNode("root");
 
     protected NodeManager nodeFinder = new NodeManager();
 
     protected EventPublisher eventPublisher;
 
     public Object getValue(String name) {
-        return nodeFinder.find(name, cache);
+        return nodeFinder.find(name, root);
     }
 
     /**
      * @see org.openconfig.event.EventListener
      */
     public void onEvent(ChangeStateEvent event) {
-        cache = event.getState();
+        root = event.getState();
     }
 
     public void setEventPublisher(EventPublisher eventPublisher) {

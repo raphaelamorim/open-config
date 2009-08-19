@@ -1,24 +1,23 @@
 package org.openconfig.event;
 
 import junit.framework.TestCase;
-import org.openconfig.event.ImmutableChangeStateEvent;
-import org.openconfig.providers.ast.*;
+import org.openconfig.providers.ast.ComplexNode;
+import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.Person;
+import org.openconfig.providers.ast.SimpleNode;
 import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
-
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * @author Richard L. Burton III
  */
 public class ImmutableChangeStateEventTestCase extends TestCase {
 
-    private Set<Node> changeState;
+    private ComplexNode changeState;
 
     private BeanToNodeTransformer transformer = new BeanToNodeTransformer();
 
     public void testFindAttribute() {
-        changeState.add(transformer.transform(new Person("Richard Burton", 30)));
+        changeState.addChild(transformer.transform(new Person("Richard Burton", 30)));
         ImmutableChangeStateEvent event = new ImmutableChangeStateEvent(changeState);
         Node ageNode = event.find("Person.age");
         assertEquals("age", ageNode.getName());
@@ -27,7 +26,7 @@ public class ImmutableChangeStateEventTestCase extends TestCase {
 
     public void testFindChild() {
         Person person = new Person();
-        changeState.add(transformer.transform(person));
+        changeState.addChild(transformer.transform(person));
 
         ImmutableChangeStateEvent event = new ImmutableChangeStateEvent(changeState);
         Node node = event.find("Person.child.age");
@@ -42,7 +41,7 @@ public class ImmutableChangeStateEventTestCase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        changeState = new HashSet<Node>();
+        changeState = new ComplexNode("root");
     }
 
 }

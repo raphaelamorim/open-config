@@ -1,6 +1,7 @@
 package org.openconfig.event;
 
 import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.ComplexNode;
 
 import java.util.Set;
 
@@ -21,9 +22,9 @@ public interface ChangeStateEvent {
      * Returns a Set of the properties that were changed.
      * @return The names of the properties that were changed.
      */
-    Set<Node> getChangeState();
+    ComplexNode getChangeState();
 
-    Set<Node> getState();
+    ComplexNode getState();
 
     Node find(String property);
 
