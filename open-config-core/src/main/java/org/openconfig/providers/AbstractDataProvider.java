@@ -3,6 +3,7 @@ package org.openconfig.providers;
 import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.NodeManager;
 import org.openconfig.providers.ast.ComplexNode;
+import org.openconfig.providers.ast.SimpleNode;
 import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.event.EventPublisher;
 
@@ -20,7 +21,12 @@ public abstract class AbstractDataProvider implements DataProvider {
     protected EventPublisher eventPublisher;
 
     public Object getValue(String name) {
-        return nodeFinder.find(name, root);
+        return ((SimpleNode)nodeFinder.find(name, root)).getValue();
+    }
+
+    protected void setRoot(ComplexNode root) {
+        // TODO use an AtomicReference here?
+        this.root = root;
     }
 
     /**

@@ -24,10 +24,14 @@ public class NodeManager {
      * @return The node that matches the path.
      */
     public Node find(String property, ComplexNode tree) {
+        return find(property, tree, false);
+    }
+    
+    public Node find(String property, ComplexNode tree, boolean create) {
         String[] path = reverse(property.split(PATH_DELIMITOR));
         Stack<String> stack = new Stack<String>();
         stack.addAll(asList(path));
-        return search(property, stack, tree, false);
+        return search(property, stack, tree, create);
     }
 
     /**
@@ -39,7 +43,11 @@ public class NodeManager {
      */
     @SuppressWarnings("unchecked")
     public void setValue(ComplexNode root, String property, Object value) {
-        Node node = find(property, root);
+        setValue(root, property, value, false);
+    }
+
+    public void setValue(ComplexNode root, String property, Object value, boolean create) {
+        Node node = find(property, root, create);
         if (node != null) {
             node.setValue(value);
         } else {

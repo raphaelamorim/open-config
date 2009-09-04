@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 public class CompositeDataProvider implements DataProvider {
 
@@ -65,7 +66,7 @@ public class CompositeDataProvider implements DataProvider {
     }
 
     public void addDataProvider(String interfaceClass, final DataProvider dataProvider) {
-        providers.putIfAbsent(interfaceClass, dataProvider);
+        providers.putIfAbsent(interfaceClass    , dataProvider);
     }
 
     public boolean missingDataProvider(String interfaceClass) {
