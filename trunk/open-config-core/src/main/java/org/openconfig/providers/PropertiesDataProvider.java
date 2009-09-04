@@ -67,7 +67,7 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
         String configurationFile = context.getParameter("interface");
         Assert.hasLength(configurationFile, "Could not get parameter 'interface' from context");
         URL configurationFileURL = getClass().getClassLoader().getResource(configurationFile + '.' + FILE_TYPE);
-        Assert.notNull(configurationFileURL, "Cannot find the properties file: %s in the classpath", configurationFile);
+        Assert.notNull(configurationFileURL, "Cannot find the properties file: '%s.properties' in the root level of the classpath.", configurationFile);
         file = new File(configurationFileURL.getFile());
     }
 

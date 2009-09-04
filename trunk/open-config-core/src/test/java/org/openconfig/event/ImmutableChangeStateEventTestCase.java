@@ -5,7 +5,7 @@ import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.Person;
 import org.openconfig.providers.ast.SimpleNode;
-import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
+import org.openconfig.transformers.BeanToNodeTransformer;
 
 /**
  * @author Richard L. Burton III

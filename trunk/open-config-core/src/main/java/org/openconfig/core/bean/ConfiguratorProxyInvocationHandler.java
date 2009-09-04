@@ -6,6 +6,7 @@ import org.openconfig.core.Accessor;
 import org.openconfig.core.InvocationContext;
 import org.openconfig.core.DatatypeProxy;
 import static org.openconfig.core.Accessor.GETTER;
+import org.openconfig.transformers.Transformer;
 
 import java.lang.reflect.Method;
 
@@ -24,6 +25,9 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
 
     private ConfiguratorProxy proxy;
 
+    // todo: Inject this later and define an interface.
+    private DataTypeManager dataTypeManager = new DataTypeManager();
+    
     public ConfiguratorProxyInvocationHandler(ConfiguratorProxy proxy) {
         this.proxy = proxy;
     }
@@ -45,8 +49,11 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
                 DatatypeProxy datatypeProxy = new DatatypeProxy(this, clazz, proxy.getPropertyNormalizer(), property);
                 enhancer.setCallback(datatypeProxy);
                 return enhancer.create();
-            } else {                        
-                return proxy.getDataProvider().getValue(property);
+            } else {
+                Transformer transformer = dataTypeManager.findTransformer(clazz);
+                Object returnvalue = proxy.getDataProvider().getValue(property);
+                Object value = transformer.transform(returnvalue.toString()); // todo: How to handle the object-to-string?
+                return value;
             }
         } else {
             //proxy.getDataProvider().setValue(property, arguments);

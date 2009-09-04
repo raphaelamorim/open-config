@@ -1,9 +1,9 @@
 package org.openconfig.web;
 
 import static org.openconfig.ObjectFactory.getInstance;
+import org.openconfig.Environment;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
-import org.openconfig.Environment;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;

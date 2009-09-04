@@ -1,7 +1,7 @@
-package org.openconfig.providers.ast.transformers;
+package org.openconfig.transformers;
 
 import junit.framework.TestCase;
-import org.openconfig.providers.ast.transformers.BeanToNodeTransformer;
+import org.openconfig.transformers.BeanToNodeTransformer;
 import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.Person;
 
