@@ -1,11 +1,15 @@
 package org.openconfig.providers;
 
-import java.io.IOException;
-import java.io.Closeable;
-import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.openconfig.core.OpenConfigContext;
+import org.openconfig.providers.ast.ComplexNode;
+import org.openconfig.providers.ast.NodeManager;
+import org.openconfig.util.Assert;
+
+import java.io.*;
+import java.net.URL;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Richard L. Burton III
@@ -26,22 +30,45 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
     }
 
     public boolean requiresReloading() {
+        Assert.isTrue(file.lastModified() != 0, "Could not locate file: " + file.getAbsolutePath());
         return lastModified != file.lastModified();
     }
 
     public void reload() {
-        throw new UnsupportedOperationException("Not yet implemented!");
+        ComplexNode root = new ComplexNode("root");
+        Properties properties = new Properties();
+        try {
+            properties.load(new BufferedInputStream(new FileInputStream(file)));
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to access properties file: " + file.getAbsolutePath());
+        }
+
+        NodeManager nodeManager = new NodeManager();
+        for (Map.Entry entry : properties.entrySet()) {
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+            if (value != null) {
+                value = value.trim();
+            }
+
+            nodeManager.setValue(root, key, value, true);
+        }
+
+        setRoot(root);
     }
 
     /**
-     * TODO: Use the Classpath to locate the configuration file.
-     * TODO: Find a better way to know the parameter name..
+     * Uses the classpath to load the configuration file
+     *
      * @param context
      */
     public void initialize(OpenConfigContext context) {
         openConfigContext = context;
         String configurationFile = context.getParameter("interface");
-        file = new File(configurationFile + '.' + FILE_TYPE);
+        Assert.hasLength(configurationFile, "Could not get parameter 'interface' from context");
+        URL configurationFileURL = getClass().getClassLoader().getResource(configurationFile + '.' + FILE_TYPE);
+        Assert.notNull(configurationFileURL, "Cannot find the properties file: %s in the classpath", configurationFile);
+        file = new File(configurationFileURL.getFile());
     }
 
     protected void close(Closeable closeable) {

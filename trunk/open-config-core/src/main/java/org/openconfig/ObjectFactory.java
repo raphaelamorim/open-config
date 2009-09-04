@@ -54,7 +54,7 @@ public class ObjectFactory {
 
         if (dataProvider instanceof CompositeDataProvider) {
             CompositeDataProvider cdp = (CompositeDataProvider) dataProvider;
-            String name = configuratorInterface.getName();
+            String name = configuratorInterface.getSimpleName();
             if (cdp.missingDataProvider(name)) {
                 DataProvider propertiesDataProvider = new PropertiesDataProvider(); // TODO: Remove this out somehow.
                 OpenConfigContext context = new BasicOpenConfigContext(singletonMap("interface", configuratorInterface.getSimpleName()));

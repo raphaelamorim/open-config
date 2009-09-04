@@ -48,11 +48,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     private boolean initialized = false;
 
     /**
-     * Preserves the method invocation in a string representation.
-     */
-    private StringBuilder hierarchy = new StringBuilder();
-
-    /**
      * The class that handles the method invocations and delegates the work
      * off to the Configurator.
      */
@@ -80,6 +75,7 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     }
 
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
+        InvocationContext invocationContext = new InvocationContext(configuratorInterface);
         String name = method.getName();
         String property;
         Matcher matcher;
@@ -99,34 +95,11 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         if (matcher.find()) {
             property = matcher.group(PROPERTY_NAME_INDEX);
             property = propertyNormalizer.normalize(property);
-            handleHierarchy(property);
-            LOGGER.debug("Method invocation hierarchy " + hierarchy);
-            return proxyInvocationHandler.handle(method, property, arguments, accessor);
+            invocationContext.addMethod(method);
+            return proxyInvocationHandler.handle(invocationContext, method, configuratorInterface.getSimpleName() + "." + property, arguments, accessor);
         }
 
         throw new MethodInvocationException(source, method);
-    }
-
-    protected void handleHierarchy(String property) {
-        if (initialized) {
-            hierarchy.append(HIERARCHY_DELIMITOR);
-        } else {
-            initialized = true;
-            if (alias) {
-                hierarchy.append(interfaceName).append(HIERARCHY_DELIMITOR);
-            }
-        }
-        hierarchy.append(property);
-    }
-
-    /**
-     * Returns a string representation of the method invocation hierarchy. An example of this
-     * would person.getChild().getName() would return 'person.child.name'.
-     *
-     * @return String representation of the method invocation hierarchy.
-     */
-    public String toHierarchy() {
-        return hierarchy.toString();
     }
 
     public void setPropertyNormalizer(PropertyNormalizer propertyNormalizer) {
@@ -151,5 +124,9 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     public DataProvider getDataProvider() {
         return dataProvider;
+    }
+
+    public PropertyNormalizer getPropertyNormalizer() {
+        return propertyNormalizer;
     }
 }

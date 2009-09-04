@@ -39,7 +39,7 @@ public class OpenConfigModule extends AbstractModule {
 
     private OpenConfigConfiguration openConfigConfiguration;
 
-    private static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
+    public static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
 
     protected void configure() {
         processConfigurationFiles();

@@ -10,3 +10,4 @@ import org.openconfig.Configurator;
 public interface Configuratorable {
     void setConfigurator(Configurator configurator);
 }
+

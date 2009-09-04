@@ -3,9 +3,9 @@ package org.openconfig.core.bean;
 import org.apache.log4j.Logger;
 import org.openconfig.core.ConfiguratorProxy;
 import org.openconfig.core.Accessor;
+import org.openconfig.core.InvocationContext;
+import org.openconfig.core.DatatypeProxy;
 import static org.openconfig.core.Accessor.GETTER;
-import org.openconfig.MutableConfigurator;
-import org.openconfig.providers.DataProvider;
 
 import java.lang.reflect.Method;
 
@@ -33,7 +33,7 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         return isSupported(clazz) && !clazz.isPrimitive() && clazz != String.class;
     }
 
-    public Object handle(Method method, String property, Object[] arguments, Accessor accessor) {
+    public Object handle(InvocationContext invocationContext, Method method, String property, Object[] arguments, Accessor accessor) {
         Class clazz = method.getReturnType();
         if (accessor == GETTER) {
             if (shouldProxy(method)) {
@@ -42,17 +42,18 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
                 }
                 Enhancer enhancer = new Enhancer();
                 enhancer.setSuperclass(clazz);
-                enhancer.setCallback(proxy);
+                DatatypeProxy datatypeProxy = new DatatypeProxy(this, clazz, proxy.getPropertyNormalizer(), property);
+                enhancer.setCallback(datatypeProxy);
                 return enhancer.create();
-            } else {
-                return proxy.getDataProvider().getValue(proxy.toHierarchy());
+            } else {                        
+                return proxy.getDataProvider().getValue(property);
             }
         } else {
             //proxy.getDataProvider().setValue(property, arguments);
             throw new UnsupportedOperationException("This logic hasn't been implemented yet.");
         }
-//        return null;
     }
+
 
     protected boolean isSupported(Class clazz) {
         if (clazz.isArray()) {
