@@ -29,15 +29,4 @@ public class ConfiguratorTestCase extends TestCase {
         assertEquals("SpringBreakAccident", configurator.getPerson().getChild().getName());
         assertEquals("James Bond", configurator.getPerson().getName());
     }
-
-    public void ztestNoAlias() throws Exception{
-        configurator = factory.newInstance(MyConfigurator.class, false);
-        assertEquals("Bond", configurator.getName());
-        assertEquals("45", configurator.getAge());
-        assertEquals("age2", configurator.getAge2());
-        assertEquals("person.child.name", configurator.getPerson().getChild().getName());
-        assertEquals("person.name", configurator.getPerson().getName());
-    }
-
-
 }
