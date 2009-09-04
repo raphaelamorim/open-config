@@ -1,4 +1,4 @@
-package org.openconfig.providers.ast.transformers;
+package org.openconfig.transformers;
 
 import org.openconfig.providers.ast.ComplexNode;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class MapToNodeTransformer implements Transformer<Map<String, String>, ComplexNode>{
 
-    public ComplexNode transform(Map<String, String> source) throws Exception {
+    public ComplexNode transform(Map<String, String> source)  {
 
         ComplexNode root = new ComplexNode("root");
         for(Map.Entry<String, String> mapping: source.entrySet()) {

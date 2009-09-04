@@ -8,8 +8,8 @@ import org.openconfig.core.Person;
 public interface MyConfigurator {
 
     String getName();
-    String getAge();
-    String getAge2();
+    int getAge();
+    int getAge2();
     void setName(String name);
     Person getPerson();
 
