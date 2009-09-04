@@ -37,10 +37,14 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
     public void reload() {
         ComplexNode root = new ComplexNode("root");
         Properties properties = new Properties();
+        FileInputStream fileInputStream = null;
         try {
-            properties.load(new BufferedInputStream(new FileInputStream(file)));
+            fileInputStream = new FileInputStream(file);
+            properties.load(new BufferedInputStream(fileInputStream));
         } catch (IOException e) {
             throw new RuntimeException("Unable to access properties file: " + file.getAbsolutePath());
+        }finally{
+            close(fileInputStream);
         }
 
         NodeManager nodeManager = new NodeManager();

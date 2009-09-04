@@ -7,7 +7,7 @@ package org.openconfig.transformers;
 public class StringToCharacterTransformer implements Transformer<String, Character>{
     public Character transform(String source) {
         if( source.length() == 1){
-            return new Character(source.charAt(0));
+            return source.charAt(0);
         }
         throw new IllegalArgumentException("The provided string isn't a single Character.");
     }

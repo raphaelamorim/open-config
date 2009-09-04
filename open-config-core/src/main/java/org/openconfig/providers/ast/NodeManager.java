@@ -14,7 +14,7 @@ import java.util.Stack;
  */
 public class NodeManager {
 
-    public static String PATH_DELIMITOR = "\\.";
+    public static final String PATH_DELIMITOR = "\\.";
 
     /**
      * This method finds a value for a given property path within a set of nodes.
