@@ -40,6 +40,7 @@ public class OpenConfigModule extends AbstractModule {
     private OpenConfigConfiguration openConfigConfiguration;
 
     public static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
+    public static final String OPEN_CONFIG_DEVELOPMENT_FILE = "openconfig.app.config";
 
     protected void configure() {
         processConfigurationFiles();
@@ -92,8 +93,8 @@ public class OpenConfigModule extends AbstractModule {
         Class dataProviderClass = getProviderClass(DataProvider.class);
         try {
             DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
-            dataProvider.initialize(new BasicOpenConfigContext());
-            return dataProvider;
+            //dataProvider.initialize(new BasicOpenConfigContext());
+            throw new UnsupportedOperationException("Not coded yet");
         } catch (InstantiationException e) {
             throw new IllegalArgumentException("Class failed to get created.");
         } catch (IllegalAccessException e) {

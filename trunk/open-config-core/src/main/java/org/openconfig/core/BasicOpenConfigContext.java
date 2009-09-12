@@ -10,12 +10,12 @@ public class BasicOpenConfigContext implements OpenConfigContext{
 
     private Map<String, String> parameters;
 
-    public BasicOpenConfigContext(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public BasicOpenConfigContext() {
+        this(Collections.EMPTY_MAP);
     }
 
-    public BasicOpenConfigContext() {
-        this.parameters = Collections.EMPTY_MAP;
+    public BasicOpenConfigContext(Map<String, String> parameters) {
+        this.parameters = parameters;
     }
 
     public String getParameter(String name) {
