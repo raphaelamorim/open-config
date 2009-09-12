@@ -7,6 +7,7 @@ import org.openconfig.event.EventListener;
 import org.openconfig.event.EventPublisher;
 import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.Configurator;
+import org.openconfig.util.Assert;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -55,13 +56,14 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
     }
 
     public Configurator newInstance(EventListener... eventListeners) {
-        return newInstance(Configurator.class, eventListeners);
+        return getInstance().newDefaultConfigurator(eventListeners);
     }
 
     /**
      * 
      */
     public <T> T newInstance(final Class clazz, EventListener... eventListeners){
+        Assert.isTrue(clazz != Configurator.class, "Use the method newInstance(EventListener... eventListeners) to obtain a configurator based on OpenConfig's Configurator");
         return (T) newInstance(clazz, true, eventListeners);
     }
     

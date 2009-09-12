@@ -2,6 +2,7 @@ package org.openconfig.providers;
 
 import org.apache.log4j.Logger;
 import org.openconfig.core.OpenConfigContext;
+import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_FILE;
 import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.providers.ast.NodeManager;
 import org.openconfig.util.Assert;
@@ -68,10 +69,18 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
      */
     public void initialize(OpenConfigContext context) {
         openConfigContext = context;
-        String configurationFile = context.getParameter("interface");
-        Assert.hasLength(configurationFile, "Could not get parameter 'interface' from context");
-        URL configurationFileURL = getClass().getClassLoader().getResource(configurationFile + '.' + FILE_TYPE);
-        Assert.notNull(configurationFileURL, "Cannot find the properties file: '%s.properties' in the root level of the classpath.", configurationFile);
+        String configurationName = context.getParameter("interface");
+
+        Assert.hasLength(configurationName, "Could not get parameter 'interface' from context");
+        String configurationFileName = configurationName + '.' + FILE_TYPE;
+        String customConfigFile = System.getProperty(OPEN_CONFIG_DEVELOPMENT_FILE);
+        // TODO check if we are in local development mode
+        if (customConfigFile != null) {
+            LOGGER.info("Using custom application configuration file specified by system property:" + OPEN_CONFIG_DEVELOPMENT_FILE + " config file name: " + customConfigFile);
+            configurationFileName = customConfigFile;
+        }
+        URL configurationFileURL = getClass().getClassLoader().getResource(configurationFileName);
+        Assert.notNull(configurationFileURL, "Cannot find the properties file: %s in the classpath", configurationFileName);
         file = new File(configurationFileURL.getFile());
     }
 
