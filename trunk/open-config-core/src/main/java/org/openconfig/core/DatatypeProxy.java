@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import static org.apache.log4j.Logger.getLogger;
 
 /**
+ * TODO: Should this class and ConfiguratorProxy extend a common base class? There's a lot of duplication of code here..
  * @author Dushyanth (Dee) Inguva
  */
    public class DatatypeProxy implements MethodInterceptor {
@@ -26,8 +27,6 @@ import static org.apache.log4j.Logger.getLogger;
     private static final Logger LOGGER = getLogger(ConfiguratorProxy.class);
 
     private static final int PROPERTY_NAME_INDEX = 2;
-
-    private static final char HIERARCHY_DELIMITOR = '.';
 
     private static final Pattern GET_PROPERTY_REGEX = compile("(get+)(.*)");
 
@@ -44,17 +43,6 @@ import static org.apache.log4j.Logger.getLogger;
         this.parentContext = parentContext;
     } 
 
-
-    /**
-     *
-     *
-     * @param source
-     * @param method
-     * @param arguments
-     * @param proxy
-     * @return
-     * @throws Throwable
-     */
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy proxy) throws Throwable {
         String name = method.getName();
         String property;
@@ -68,6 +56,8 @@ import static org.apache.log4j.Logger.getLogger;
             case SETTER:
                 matcher = SET_PROPERTY_REGEX.matcher(name);
                 break;
+            case TOSTRING:
+                return proxy.invokeSuper(source, arguments);
             default:
                 throw new MethodInvocationException(source, method);
         }

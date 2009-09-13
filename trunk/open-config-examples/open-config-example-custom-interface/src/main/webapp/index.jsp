@@ -2,7 +2,7 @@
 <%@ page import="org.openconfig.example.CustomInterface" %>
 <%@ page import="org.openconfig.factory.ConfiguratorFactory" %>
 <%
-    ConfiguratorFactory cf = new DefaultConfiguratorFactory();;
+    ConfiguratorFactory cf = new DefaultConfiguratorFactory();
     CustomInterface configurator = cf.newInstance(CustomInterface.class);
 %>
 <html>
@@ -33,6 +33,14 @@
         </td>
         <td>
             <%= configurator.getAdministrator().getId() %>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            configurator.getAdministrator()
+        </td>
+        <td>
+            <%= configurator.getAdministrator() %>
         </td>
     </tr>
     <tr>
