@@ -24,14 +24,15 @@ import java.net.URL;
 /**
  * This DataProvider constructs an AST node from an XML configuration file allowing
  * for developers to express their configuration in an XML format.
- *
+ * <p/>
  * <configurator>
- *  <person age="12" name="burton">
- *      <child age="14" name="Dushy"/>
- *  </person>
- *  <age>12</age>
+ * <person age="12" name="burton">
+ * <child age="14" name="Dushy"/>
+ * </person>
+ * <age>12</age>
  * </configurator>
  * <p/>
+ *
  * @author Richard L. Burton III - SmartCode LLC
  */
 public class XmlDataProvider extends AbstractReloadableDataProvider {
@@ -85,10 +86,10 @@ public class XmlDataProvider extends AbstractReloadableDataProvider {
                 for (int i = 0; i < attrs.getLength(); i++) {
                     Attr attribute = (Attr) attrs.item(i);
                     complexNode.addChild(new SimpleNode(attribute.getName(), attribute.getValue()));
-                    NodeList list = node.getChildNodes();
-                    if (list.getLength() > 0) {
-                        build(complexNode, list);
-                    }
+                }
+                NodeList list = node.getChildNodes();
+                if (list.getLength() > 0) {
+                    build(complexNode, list);
                 }
                 root.addChild(complexNode);
             } else if (node instanceof Element && nodeName != null) {
@@ -108,7 +109,7 @@ public class XmlDataProvider extends AbstractReloadableDataProvider {
         String configurationFile = context.getParameter("interface");
         Assert.hasLength(configurationFile, "Could not get parameter 'interface' from context. If you're in Development Mode, please set the -Dopenconfig.dev=true");
         URL configurationFileURL = getClass().getClassLoader().getResource(configurationFile + '.' + FILE_TYPE);
-        Assert.notNull(configurationFileURL, "Cannot find the properties file: '%s.properties' in the root level of the classpath.", configurationFile);
+        Assert.notNull(configurationFileURL, "Cannot find the properties file: '%s.xml' in the root level of the classpath.", configurationFile);
         file = new File(configurationFileURL.getFile());
     }
 

@@ -12,24 +12,50 @@ import org.openconfig.providers.ast.ComplexNode;
  */
 public class XmlDataProviderTest extends TestCase {
 
-    public void testBasic() {
-        OpenConfigContext context = new OpenConfigContext(){
+    private XmlDataProvider dataProvider;
+
+
+    private NodeManager nodeManager = new NodeManager();
+
+    public void testNested() {
+        ComplexNode root = configure("xml-test");
+        assertEquals("Burton", "person.name", root);
+        assertEquals("SmartCode LLC", "person.company.name", root);
+        assertEquals("Dushy", "person.coworker.name", root);
+        assertEquals("30", "person.coworker.age", root);
+        assertEquals("richard", "name", root);
+    }
+
+    public void testComplexPerson() {
+        ComplexNode root = configure("person");
+        assertEquals("Burton", "person.name", root);
+        assertEquals("30", "person.age", root);
+        assertEquals("SmartCode", "person.company.name", root);
+        assertEquals("Dushy", "person.company.person.name", root);
+        assertEquals("30", "person.company.person.age", root);
+    }
+
+    protected void assertEquals(String expected, String property, ComplexNode root) {
+        assertEquals(expected, ((SimpleNode) nodeManager.find(property, root)).getValue());
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        dataProvider = new XmlDataProvider();
+    }
+
+    protected ComplexNode configure(final String config) {
+        OpenConfigContext context = new OpenConfigContext() {
             public String getParameter(String name) {
-                return "xml-test";
+                return "org/openconfig/providers/" + config;
             }
 
             public String getEnvironmentProperty(String name) {
                 return null;
             }
         };
-        XmlDataProvider dataProvider = new XmlDataProvider();
         dataProvider.initialize(context);
         dataProvider.reload();
-
-        ComplexNode root = dataProvider.getRoot();
-        NodeManager nodeManager  = new NodeManager();
-        assertEquals("Burton", ((SimpleNode)nodeManager.find("person.name", root)).getValue());
-        assertEquals("richard", ((SimpleNode)nodeManager.find("name", root)).getValue());
-
+        return dataProvider.getRoot();
     }
 }
