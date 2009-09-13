@@ -7,12 +7,18 @@ package org.openconfig.util;
  */
 public class Assert {
 
-    // TODO javadoc me
-    public static boolean isTrue(boolean condition, String message, Object... placeholderValues) {
+    /**
+     * A simple assert.
+     *
+     * @param condition
+     * @param message The message can contain placeholder values that need to be substituted
+     * @param placeholderValues the placeholder values that will be substituted if the condition is false
+     * @throws IllegalArgumentException if the condition is false
+     */
+    public static void isTrue(boolean condition, String message, Object... placeholderValues) {
         if (!condition) {
             throw new IllegalArgumentException("AssertionFailed:" + String.format(message, placeholderValues));
         }
-        return true;
     }
 
     /**
@@ -23,11 +29,10 @@ public class Assert {
      * @param placeholderValues
      * @return
      */
-    public static boolean notNull(Object nonNullObject, String message, Object... placeholderValues) {
+    public static void notNull(Object nonNullObject, String message, Object... placeholderValues) {
         if (nonNullObject == null) {
             throw new IllegalArgumentException("AssertionFailed:" + String.format(message, placeholderValues));
         }
-        return true;
     }
 
     /**
@@ -39,7 +44,8 @@ public class Assert {
      * @return
      * @throws IllegalArgumentException if aString is null, empty or contains just white spaces
      */
-    public static boolean hasLength(String aString, String message, Object... placeholderValues) {
-        return isTrue(aString != null, message, placeholderValues) && isTrue(aString.trim().length() > 0, message, placeholderValues) ;
+    public static void hasLength(String aString, String message, Object... placeholderValues) {
+        isTrue(aString != null, message, placeholderValues);
+        isTrue(aString.trim().length() > 0, message, placeholderValues) ;
     }
 }

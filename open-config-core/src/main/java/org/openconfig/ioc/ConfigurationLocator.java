@@ -18,10 +18,15 @@ public class ConfigurationLocator {
 
     private static final Logger LOGGER = getLogger(ConfigurationLocator.class);
 
+    /**
+     * The configuration file used to customize how openconfig works.
+     */
     private static final String DEFAULT_OPENCONFIG_CONFIG_FILE = "org/openconfig/ioc/config/open-config.properties";
+
     public static final String CONFIGURATION_NAME = "open-config";
 
     public static final String XML_FILE = "xml";
+
     public static final String PROPERTIES_FILE = "properties";
 
     private final LinkedHashMap<String, OpenConfigConfiguration> configurationManagers;
@@ -60,7 +65,6 @@ public class ConfigurationLocator {
                 break;
             }
         }
-
 
         LOGGER.debug("Loading OpenConfig default configuration file: "+DEFAULT_OPENCONFIG_CONFIG_FILE);
         defaultOpenConfigConfiguration.process(DEFAULT_OPENCONFIG_CONFIG_FILE);
