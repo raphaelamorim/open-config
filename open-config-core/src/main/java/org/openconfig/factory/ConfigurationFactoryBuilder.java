@@ -1,13 +1,14 @@
 package org.openconfig.factory;
 
-import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.BasicOpenConfigContext;
+import org.openconfig.core.OpenConfigContext;
+import org.openconfig.core.EnvironmentResolver;
+import org.openconfig.ioc.ConfigurationLocator;
+import static org.openconfig.ioc.ConfigurationLocator.PROPERTIES_FILE;
+import static org.openconfig.ioc.ConfigurationLocator.XML_FILE;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
 import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
-import static org.openconfig.ioc.ConfigurationLocator.PROPERTIES_FILE;
-import static org.openconfig.ioc.ConfigurationLocator.XML_FILE;
-import org.openconfig.ioc.ConfigurationLocator;
 import org.openconfig.providers.DataProvider;
 
 import java.util.LinkedHashMap;
@@ -17,7 +18,7 @@ import java.util.LinkedHashMap;
  */
 public class ConfigurationFactoryBuilder {
 
-    private Class environmentResolverClass;
+    private Class<EnvironmentResolver> environmentResolverClass;
 
     private OpenConfigContext openConfigContext;
 
@@ -25,14 +26,15 @@ public class ConfigurationFactoryBuilder {
 
     private OpenConfigConfiguration openConfigConfiguration;
 
-    public void setOpenConfigContext(OpenConfigContext openConfigContext) {
+    public ConfigurationFactoryBuilder setOpenConfigCotext(OpenConfigContext openConfigContext) {
         this.openConfigContext = openConfigContext;
+        return this;
     }
 
-    public void setEnvironmentResolverClass(Class environmentResolverClass) {
+    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<EnvironmentResolver> environmentResolverClass) {
         this.environmentResolverClass = environmentResolverClass;
+        return this;
     }
-
 
     public ConfiguratorFactory build() {
         processConfigurationFiles();
