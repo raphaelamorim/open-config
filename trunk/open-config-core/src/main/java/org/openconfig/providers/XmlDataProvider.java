@@ -4,7 +4,6 @@ import org.openconfig.core.OpenConfigContext;
 import org.openconfig.util.Assert;
 import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.providers.ast.NodeManager;
-import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.SimpleNode;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
@@ -18,7 +17,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * <configurator>

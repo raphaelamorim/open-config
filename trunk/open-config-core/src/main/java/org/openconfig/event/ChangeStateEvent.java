@@ -1,6 +1,6 @@
 package org.openconfig.event;
 
-import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.AbstractNode;
 import org.openconfig.providers.ast.ComplexNode;
 
 import java.util.Set;
@@ -26,6 +26,6 @@ public interface ChangeStateEvent {
 
     ComplexNode getState();
 
-    Node find(String property);
+    AbstractNode find(String property);
 
 }

@@ -38,8 +38,8 @@ public class NodeManagerTest extends TestCase {
         assertEquals("King Richard", simpleChild.getValue());
     }
 
-    protected Node getChild(Set<Node> children, String name) {
-        for (Node node : children) {
+    protected AbstractNode getChild(Set<AbstractNode> children, String name) {
+        for (AbstractNode node : children) {
             if (node.getName().equals(name)) {
                 return node;
             }

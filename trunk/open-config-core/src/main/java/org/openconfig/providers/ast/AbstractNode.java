@@ -5,11 +5,11 @@ import org.openconfig.providers.NodeVisitorContext;
 /**
  * @author Richard L. Burton III
  */
-public abstract class Node<T> {
+public abstract class AbstractNode<T> {
 
     protected String name;
 
-    public Node(String name) {
+    public AbstractNode(String name) {
         this.name = name;
     }
 
@@ -22,7 +22,7 @@ public abstract class Node<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Node node = (Node) o;
+        AbstractNode node = (AbstractNode) o;
 
         if (name != null ? !name.equals(node.name) : node.name != null) return false;
 

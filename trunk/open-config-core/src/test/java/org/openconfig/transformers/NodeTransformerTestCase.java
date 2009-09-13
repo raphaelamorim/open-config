@@ -2,7 +2,7 @@ package org.openconfig.transformers;
 
 import junit.framework.TestCase;
 import org.openconfig.transformers.BeanToNodeTransformer;
-import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.AbstractNode;
 import org.openconfig.providers.ast.Person;
 
 /**
@@ -12,7 +12,7 @@ public class NodeTransformerTestCase extends TestCase {
 
     public void testBasic() throws Exception {
         BeanToNodeTransformer transformer = new BeanToNodeTransformer();
-        Node node = transformer.transform(new Person());
+        AbstractNode node = transformer.transform(new Person());
         assertEquals("Person", node.getName());
     }
 }
