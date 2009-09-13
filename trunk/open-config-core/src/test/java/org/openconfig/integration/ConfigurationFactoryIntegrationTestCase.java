@@ -15,12 +15,13 @@ import org.openconfig.event.ChangeStateEvent;
  */
 public class ConfigurationFactoryIntegrationTestCase extends TestCase {
 
-    static {
+    private ConfiguratorFactory configurationFactory;
+
+    protected void setUp() {
         System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "true");
         System.setProperty(OPEN_CONFIG_DEVELOPMENT_FILE, "MyConfigurator.properties");
-
+        configurationFactory = new DefaultConfiguratorFactory();
     }
-    private ConfiguratorFactory configurationFactory = new DefaultConfiguratorFactory();
 
     public void testBasic() {
         Configurator configurator = configurationFactory.newInstance(new EventListener() {
@@ -30,6 +31,10 @@ public class ConfigurationFactoryIntegrationTestCase extends TestCase {
         });
 
         System.out.println("configurator.getValue(\"name\"); = " + configurator.getValue("name"));
+    }
 
+    protected void tearDown() {
+        System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "");
+        System.setProperty(OPEN_CONFIG_DEVELOPMENT_FILE, "");
     }
 }
