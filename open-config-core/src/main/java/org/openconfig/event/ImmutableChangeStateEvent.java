@@ -46,7 +46,7 @@ public class ImmutableChangeStateEvent implements ChangeStateEvent {
     /**
      * @complex
      */
-    public Node find(String property) {
+    public AbstractNode find(String property) {
         return nodeFinder.find(property, changeState);
     }
 

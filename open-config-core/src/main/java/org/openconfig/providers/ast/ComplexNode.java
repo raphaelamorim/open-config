@@ -2,7 +2,6 @@ package org.openconfig.providers.ast;
 
 import org.openconfig.providers.NodeVisitorContext;
 
-import java.util.Set;
 import java.util.Map;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,9 +11,9 @@ import java.util.HashMap;
  *
  * @author Richard L. Burton III
  */
-public class ComplexNode extends Node<Object> {
+public class ComplexNode extends AbstractNode<Object> {
 
-    private Map<String, Node> children = new HashMap<String,Node>();
+    private Map<String, AbstractNode> children = new HashMap<String, AbstractNode>();
 
     public static final String ROOT_NAME = "root";
 
@@ -23,10 +22,10 @@ public class ComplexNode extends Node<Object> {
     }
 
     public ComplexNode(String name) {
-        this(name, new HashMap<String, Node>());
+        this(name, new HashMap<String, AbstractNode>());
     }
 
-    public ComplexNode(String name, Map<String, Node> children) {
+    public ComplexNode(String name, Map<String, AbstractNode> children) {
         super(name);
         this.children = children;
     }
@@ -37,15 +36,15 @@ public class ComplexNode extends Node<Object> {
      * @param name
      * @return the child with the name, or null if none
      */
-    public Node getChild(String name) {
+    public AbstractNode getChild(String name) {
         return children.get(name);
     }
 
-    public Collection<Node> getChildren() {
+    public Collection<AbstractNode> getChildren() {
         return children.values();
     }
 
-    public void addChild(Node node) {
+    public void addChild(AbstractNode node) {
         children.put(node.getName(), node);
     }
 

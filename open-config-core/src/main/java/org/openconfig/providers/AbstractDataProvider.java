@@ -1,13 +1,10 @@
 package org.openconfig.providers;
 
-import org.openconfig.providers.ast.Node;
 import org.openconfig.providers.ast.NodeManager;
 import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.providers.ast.SimpleNode;
 import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.event.EventPublisher;
-
-import java.util.*;
 
 /**
  * @author Richard L. Burton III

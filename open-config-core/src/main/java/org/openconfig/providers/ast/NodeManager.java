@@ -1,6 +1,5 @@
 package org.openconfig.providers.ast;
 
-import org.openconfig.providers.NodeVisitorContext;
 import org.openconfig.providers.ast.search.ASTSearchVisitor;
 import org.openconfig.providers.ast.search.ASTSearchVisitorContext;
 
@@ -24,11 +23,11 @@ public class NodeManager {
      * @param tree     The set of nodes to search.
      * @return The node that matches the path.
      */
-    public Node find(String property, ComplexNode tree) {
+    public AbstractNode find(String property, ComplexNode tree) {
         return find(property, tree, false);
     }
     
-    public Node find(String property, ComplexNode tree, boolean create) {
+    public AbstractNode find(String property, ComplexNode tree, boolean create) {
         String[] path = reverse(property.split(PATH_DELIMITOR));
         Stack<String> stack = new Stack<String>();
         stack.addAll(asList(path));
@@ -48,7 +47,7 @@ public class NodeManager {
     }
 
     public void setValue(ComplexNode root, String property, Object value, boolean create) {
-        Node node = find(property, root, create);
+        AbstractNode node = find(property, root, create);
         if (node != null) {
             node.setValue(value);
         } else {
@@ -66,12 +65,12 @@ public class NodeManager {
      * @return the located node
      * @throws IllegalArgumentException if 
      */
-    protected Node search(String property, Stack<String> stack, Node rootNode, boolean create) {
+    protected AbstractNode search(String property, Stack<String> stack, AbstractNode rootNode, boolean create) {
         ASTSearchVisitor searchVisitor = new ASTSearchVisitor();
 
         ASTSearchVisitorContext nodeVisitorContext = new ASTSearchVisitorContext(property, stack, create);
         // TODO why do I need a cast here?
-        Node searchedNode = (Node)rootNode.accept(searchVisitor, nodeVisitorContext);
+        AbstractNode searchedNode = (AbstractNode)rootNode.accept(searchVisitor, nodeVisitorContext);
         return searchedNode;
     }
 

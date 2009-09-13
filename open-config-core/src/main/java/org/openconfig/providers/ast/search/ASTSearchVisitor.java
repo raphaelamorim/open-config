@@ -1,7 +1,7 @@
 package org.openconfig.providers.ast.search;
 
 import org.openconfig.providers.ast.ComplexNode;
-import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.AbstractNode;
 import org.openconfig.providers.ast.NodeVisitor;
 import org.openconfig.providers.ast.SimpleNode;
 import org.openconfig.util.Assert;
@@ -11,7 +11,7 @@ import org.openconfig.util.Assert;
  *
  * @author Dushyanth (Dee) Inguva
  */
-public class ASTSearchVisitor implements NodeVisitor<Node, ASTSearchVisitorContext> {
+public class ASTSearchVisitor implements NodeVisitor<AbstractNode, ASTSearchVisitorContext> {
 
 
     /**
@@ -20,7 +20,7 @@ public class ASTSearchVisitor implements NodeVisitor<Node, ASTSearchVisitorConte
      * @param node
      * @return
      */
-    public Node visitSimpleNode(ASTSearchVisitorContext context, SimpleNode node) {
+    public AbstractNode visitSimpleNode(ASTSearchVisitorContext context, SimpleNode node) {
         Assert.isTrue(context.size() == 0, "Unconsumed context node %s %s", node, context);
         Assert.notNull(node, "Cannot locate node for context: %s", context);
         return node;
@@ -33,13 +33,13 @@ public class ASTSearchVisitor implements NodeVisitor<Node, ASTSearchVisitorConte
      * @param node    the current complex node
      * @return
      */
-    public Node visitComplexNode(ASTSearchVisitorContext context, ComplexNode node) {
+    public AbstractNode visitComplexNode(ASTSearchVisitorContext context, ComplexNode node) {
 
         if (context.isEmpty()) {
             return node;
         }
         String childName = context.pop();
-        Node child = node.getChild(childName);
+        AbstractNode child = node.getChild(childName);
         if (child == null) {
 
             if (context.create) {
@@ -55,6 +55,6 @@ public class ASTSearchVisitor implements NodeVisitor<Node, ASTSearchVisitorConte
 
         }
         // TODO why do I need to cast here?
-        return (Node) child.accept(this, context);
+        return (AbstractNode) child.accept(this, context);
     }
 }

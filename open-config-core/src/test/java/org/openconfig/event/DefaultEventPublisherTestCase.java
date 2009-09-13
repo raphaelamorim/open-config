@@ -2,10 +2,6 @@ package org.openconfig.event;
 
 import junit.framework.TestCase;
 
-import java.util.Set;
-
-import org.openconfig.providers.ast.Node;
-
 /**
  * @author Richard L. Burton III
  */

@@ -5,7 +5,7 @@ import org.openconfig.providers.NodeVisitorContext;
 /**
  * @author Richard L. Burton III
  */
-public class SimpleNode extends Node<Object> {
+public class SimpleNode extends AbstractNode<Object> {
 
     private Object value;
 

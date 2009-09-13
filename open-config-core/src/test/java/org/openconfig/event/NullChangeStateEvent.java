@@ -1,6 +1,6 @@
 package org.openconfig.event;
 
-import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.AbstractNode;
 import org.openconfig.providers.ast.ComplexNode;
 
 import java.util.Set;
@@ -22,7 +22,7 @@ public class NullChangeStateEvent implements ChangeStateEvent{
         return null;
     }
 
-    public Node find(String property) {
+    public AbstractNode find(String property) {
         return null;
     }
 }

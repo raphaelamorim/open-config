@@ -2,7 +2,7 @@ package org.openconfig.transformers;
 
 import org.openconfig.transformers.Transformer;
 import org.openconfig.providers.ast.ComplexNode;
-import org.openconfig.providers.ast.Node;
+import org.openconfig.providers.ast.AbstractNode;
 import org.openconfig.providers.ast.SimpleNode;
 
 import java.beans.BeanInfo;
@@ -34,7 +34,7 @@ public class BeanToNodeTransformer implements Transformer<Object, ComplexNode> {
         ComplexNode node = null;
 
         if (bean != null) {
-            Map<String, Node> attributes = new HashMap<String, Node>();
+            Map<String, AbstractNode> attributes = new HashMap<String, AbstractNode>();
             node = new ComplexNode(name, attributes);
 
             if (Collection.class.isAssignableFrom(bean.getClass())) {
@@ -53,16 +53,16 @@ public class BeanToNodeTransformer implements Transformer<Object, ComplexNode> {
         return node;
     }
 
-    public void toNode(Object bean, Map<String, Node> attributes) {
+    public void toNode(Object bean, Map<String, AbstractNode> attributes) {
         try {
             BeanInfo info = getBeanInfo(bean.getClass());
             for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
                 if (!EXCLUDE_NAMES.contains(pd.getName())) {
                     if (pd.getPropertyType().isPrimitive() || pd.getPropertyType().equals(String.class)) {
-                        Node attribute = new SimpleNode(pd.getName(), readProperty(pd, bean));
+                        AbstractNode attribute = new SimpleNode(pd.getName(), readProperty(pd, bean));
                         attributes.put(pd.getName(), attribute);
                     } else {
-                        Node child = transform(readProperty(pd, bean), pd.getName());
+                        AbstractNode child = transform(readProperty(pd, bean), pd.getName());
                         if (child != null) {
                             attributes.put(pd.getName(), child);
                         }
