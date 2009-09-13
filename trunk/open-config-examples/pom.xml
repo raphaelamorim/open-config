@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+
+    <parent>
+        <groupId>org.openconfig</groupId>
+        <artifactId>open-config-pom</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>0.1</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openconfig</groupId>
+    <artifactId>open-config-examples</artifactId>
+    <version>0.1</version>
+
+    <name>OpenConfig Examples POM</name>
+    <packaging>pom</packaging>
+
+    <description>
+        This project contains all classes shared between the server and client.
+    </description>
+
+    <modules>
+        <module>open-config-example-web-configurator</module>
+        <module>open-config-example-custom-interface</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openconfig</groupId>
+            <artifactId>open-config-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <servlet-api.version>2.4</servlet-api.version>
+        <jsp-api.version>2.0</jsp-api.version>
+        <jstl.version>1.1.2</jstl.version>
+        <jsp-api.version>2.0</jsp-api.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>${jsp-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>${jstl.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
