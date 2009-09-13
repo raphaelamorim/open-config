@@ -18,6 +18,7 @@
         <module>open-config-client</module>
         <module>open-config-spring</module>
         <module>open-config-web</module>
+        <module>open-config-examples</module>
     </modules>
 
     <developers>
@@ -55,16 +56,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-	      <resource>
-	        <directory> src/main/resources </directory>
-	       <includes>
-          		<include> **/* </include>
-        	</includes>
-	      </resource>
-	    </resources>
-
-    </build>
+    </build>      
 
     <dependencies>
         <dependency>
@@ -101,4 +93,13 @@
             <version>2.5.6</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>guice-maven</id>
+            <name>guice maven</name>
+            <url>http://guice-maven.googlecode.com/svn/trunk</url>
+        </repository>
+    </repositories>
+    
 </project>

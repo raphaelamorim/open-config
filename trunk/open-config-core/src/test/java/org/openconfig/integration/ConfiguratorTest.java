@@ -5,6 +5,7 @@ import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.factory.impl.DefaultConfiguratorFactory;
 import org.openconfig.integration.configurators.PrimitiveConfiguration;
 import org.openconfig.integration.configurators.Person;
+import org.openconfig.integration.configurators.DayOfWeek;
 import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE;
 
 /**
@@ -24,6 +25,7 @@ public class ConfiguratorTest extends TestCase {
         assertNotNull(admin);
         assertEquals("Richard", admin.getName());
         assertEquals(30, admin.getAge());
+        assertEquals(DayOfWeek.Sun, admin.getDayOfWeek());
     }
 
     @Override

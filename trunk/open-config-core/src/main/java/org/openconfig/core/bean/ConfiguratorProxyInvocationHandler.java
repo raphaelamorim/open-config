@@ -7,6 +7,7 @@ import org.openconfig.core.InvocationContext;
 import org.openconfig.core.DatatypeProxy;
 import static org.openconfig.core.Accessor.GETTER;
 import org.openconfig.transformers.Transformer;
+import org.openconfig.transformers.EnumValue;
 
 import java.lang.reflect.Method;
 
@@ -27,14 +28,14 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
 
     // todo: Inject this later and define an interface.
     private DataTypeManager dataTypeManager = new DataTypeManager();
-    
+
     public ConfiguratorProxyInvocationHandler(ConfiguratorProxy proxy) {
         this.proxy = proxy;
     }
 
     public boolean shouldProxy(Method method) {
         Class clazz = method.getReturnType();
-        return isSupported(clazz) && !clazz.isPrimitive() && clazz != String.class;
+        return isSupported(clazz) && !clazz.isPrimitive() && clazz != String.class && !clazz.isEnum();
     }
 
     public Object handle(InvocationContext invocationContext, Method method, String property, Object[] arguments, Accessor accessor) {
@@ -50,10 +51,16 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
                 enhancer.setCallback(datatypeProxy);
                 return enhancer.create();
             } else {
-                Transformer transformer = dataTypeManager.findTransformer(clazz);
+                // In the case of Enums, a wrapper EnumValue is created to
+                // encapsulate all the required data for the transformer.
                 Object returnvalue = proxy.getDataProvider().getValue(property);
-                Object value = transformer.transform(returnvalue.toString()); // todo: How to handle the object-to-string?
-                return value;
+                if (clazz.isEnum()) {
+                    returnvalue = new EnumValue(clazz, returnvalue);
+                    clazz = EnumValue.class;
+                }
+
+                Transformer transformer = dataTypeManager.findTransformer(clazz);
+                return transformer.transform(returnvalue);
             }
         } else {
             //proxy.getDataProvider().setValue(property, arguments);
@@ -61,16 +68,13 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         }
     }
 
-
     protected boolean isSupported(Class clazz) {
         if (clazz.isArray()) {
             throw new UnsupportedOperationException("Returning an Array isn't unsupported.");
-        } else if (clazz.isEnum()) { // TODO: Supporting Enums should be easy.
-            throw new UnsupportedOperationException("Returning an Enum isn't unsupported.");
         } else if (clazz.isAnnotation()) {
             throw new UnsupportedOperationException("Returning an Annotation isn't unsupported.");
         }
         return true;
     }
-    
+
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   <openconfig:configurator id="myConfigurator"
+                            class="org.apache.MyConfigurator"/>
+
+   <openconfig:configurator id="myConfigurator" class="org.apache.MyConfigurator">
+        <property name="eventListeners">
+            <list>
+                <value>org.apache.listeners.MyEventListener</value>
+                <value ref="beanId"/>
+            </list>
+        </property>
+    </openconfig:configurator>
+
+    <openconfig:provider class="org.apache.providers.PropertiesProvider"/>
+
+-->
+<xsd:schema xmlns="http://www.mycompany.com/schema/openconfig"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://www.mycompany.com/schema/openconfig"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:element name="configurator">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="class" type="xsd:string" use="required"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

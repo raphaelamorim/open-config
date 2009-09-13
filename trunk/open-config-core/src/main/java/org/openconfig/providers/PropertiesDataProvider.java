@@ -36,7 +36,7 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
     }
 
     public void reload() {
-        ComplexNode root = new ComplexNode("root");
+        ComplexNode root = new ComplexNode();
         Properties properties = new Properties();
         FileInputStream fileInputStream = null;
         try {

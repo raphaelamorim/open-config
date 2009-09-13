@@ -9,11 +9,17 @@ public class Person {
 
     private int age;
 
+    private DayOfWeek dayOfWeek;
+
     public int getAge() {
         return age;
     }
 
     public String getName() {
         return name;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 }

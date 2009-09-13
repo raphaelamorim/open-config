@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<configurator>
+    <name>richard</name>
+    <person age="30" name="Burton">
+        <company name="SmartCode LLC"/>
+        <coworker name="Dushy" age="30"/>
+    </person>
+</configurator>

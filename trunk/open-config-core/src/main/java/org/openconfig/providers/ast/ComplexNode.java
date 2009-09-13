@@ -14,8 +14,13 @@ import java.util.HashMap;
  */
 public class ComplexNode extends Node<Object> {
 
-    private Map<String, Node> children;
+    private Map<String, Node> children = new HashMap<String,Node>();
 
+    public static final String ROOT_NAME = "root";
+
+    public ComplexNode() {
+        super(ROOT_NAME);
+    }
 
     public ComplexNode(String name) {
         this(name, new HashMap<String, Node>());
