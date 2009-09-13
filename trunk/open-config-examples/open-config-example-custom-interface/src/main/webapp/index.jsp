@@ -37,10 +37,10 @@
     </tr>
     <tr>
         <td>
-            configurator.getAdministrator()
+            configurator.getAdministrator().toString()
         </td>
         <td>
-            <%= configurator.getAdministrator() %>
+            <%= configurator.getAdministrator().toString() %>
         </td>
     </tr>
     <tr>
