@@ -10,6 +10,11 @@ import org.openconfig.transformers.Transformer;
 import org.openconfig.transformers.EnumValue;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
 
 import net.sf.cglib.proxy.Enhancer;
 
@@ -35,7 +40,11 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
 
     public boolean shouldProxy(Method method) {
         Class clazz = method.getReturnType();
-        return isSupported(clazz) && !clazz.isPrimitive() && clazz != String.class && !clazz.isEnum();
+        return isSupported(clazz) && !clazz.isPrimitive() && isNotFinal(clazz) && !clazz.isEnum();
+    }
+
+    private boolean isNotFinal(Class clazz) {
+        return !Modifier.isFinal(clazz.getModifiers());
     }
 
     public Object handle(InvocationContext invocationContext, Method method, String property, Object[] arguments, Accessor accessor) {

@@ -93,8 +93,8 @@ public class OpenConfigModule extends AbstractModule {
         Class dataProviderClass = getProviderClass(DataProvider.class);
         try {
             DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
-            //dataProvider.initialize(new BasicOpenConfigContext());
-            throw new UnsupportedOperationException("Not coded yet");
+            dataProvider.initialize(new BasicOpenConfigContext());
+            return dataProvider;
         } catch (InstantiationException e) {
             throw new IllegalArgumentException("Class failed to get created.");
         } catch (IllegalAccessException e) {
