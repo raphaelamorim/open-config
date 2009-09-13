@@ -8,15 +8,18 @@ public enum Accessor {
     
     SETTER,
     GETTER,
+    TOSTRING,
     UNKNOWN;
 
     public static Accessor getAccessor(String property) {
         if (property.startsWith("get")) {
-            return Accessor.GETTER;
+            return GETTER;
         } else if (property.startsWith("set")) {
-            return Accessor.SETTER;
+            return SETTER;
+        } else if (property.equals("toString")){
+            return TOSTRING;
         } else {
-            return Accessor.UNKNOWN;
+            return UNKNOWN;
         }
     }
 

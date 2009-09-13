@@ -34,18 +34,11 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     private static final int PROPERTY_NAME_INDEX = 2;
 
-    private static final char HIERARCHY_DELIMITOR = '.';
-
     private static final Pattern GET_PROPERTY_REGEX = compile("(get+)(.*)");
 
     private static final Pattern SET_PROPERTY_REGEX = compile("(set+)(.*)");
 
     private PropertyNormalizer propertyNormalizer;
-
-    /**
-     * A boolean to identify if the method hierarchy has been started.
-     */
-    private boolean initialized = false;
 
     /**
      * The class that handles the method invocations and delegates the work
@@ -64,6 +57,12 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     @Inject
     private DataProvider dataProvider;
 
+    /**
+     * TODO: Implement logic to handle event publishing.
+     * @param configuratorInterface
+     * @param alias
+     * @param eventPublisher
+     */
     public ConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
         this.configuratorInterface = configuratorInterface;
         this.alias = alias;
@@ -88,6 +87,8 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
             case SETTER:
                 matcher = SET_PROPERTY_REGEX.matcher(name);
                 break;
+            case TOSTRING:
+                return methodProxy.invokeSuper(source, arguments);
             default:
                 throw new MethodInvocationException(source, method);
         }

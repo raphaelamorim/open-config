@@ -24,4 +24,12 @@ public class Administrator {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Administrator{" +
+                "name='" + getName() + '\'' +
+                ", id=" + getId() +
+                '}';
+    }
 }
