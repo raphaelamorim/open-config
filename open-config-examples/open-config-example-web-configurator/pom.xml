@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.openconfig</groupId>
+        <artifactId>open-config-examples</artifactId>
+        <version>0.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openconfig</groupId>
+    <artifactId>open-config-example-web-configurator</artifactId>
+    <version>0.1</version>
+
+    <name>OpenConfig Example Web</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+           <groupId>javax.servlet</groupId>
+           <artifactId>jstl</artifactId>
+           <scope>runtime</scope>
+         </dependency>
+         <dependency>
+           <groupId>taglibs</groupId>
+           <artifactId>standard</artifactId>
+           <scope>runtime</scope>
+         </dependency>
+
+
+    </dependencies>
+</project>

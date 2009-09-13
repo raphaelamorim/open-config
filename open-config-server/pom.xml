@@ -23,29 +23,6 @@
         This project contains classes for the server side application.
     </description>
 
-    <developers>
-        <developer>
-            <name>Richard L. Burton III</name>
-            <organization>SmartCode LLC</organization>
-            <id>rburton</id>
-            <email>rburton@codehaus.org</email>
-            <roles>
-                <role>Project Manager</role>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Dushyanth Inguva</name>
-            <organization>SmartCode LLC</organization>
-            <id>dinguva</id>
-            <email>dushyanth.inguva@gmail.com</email>
-            <roles>
-                <role>Project Manager</role>
-                <role>Developer</role>
-            </roles>
-        </developer>
-    </developers>
-
     <build>
         <plugins>
             <plugin>

@@ -28,6 +28,7 @@ public class DataTypeManager {
         register(new StringToFloatTransformer(), Float.class, float.class);
         register(new StringToCharacterTransformer(), Character.class, float.class);
         register(new StringToLongTransformer(), Long.class, long.class);
+        register(new StringToEnumTransformer(), EnumValue.class);
     }
 
     public Transformer findTransformer(Class type){
