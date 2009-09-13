@@ -7,7 +7,7 @@ package org.openconfig.core;
  *
  * @author Richard L. Burton III
  */
-public interface OpenConfigContext {
+public interface OpenConfigContext extends java.io.Serializable{
 
     String getParameter(String name);
     

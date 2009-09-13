@@ -3,29 +3,35 @@ package org.openconfig.providers;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.util.Assert;
 import org.openconfig.providers.ast.ComplexNode;
-import org.openconfig.providers.ast.NodeManager;
 import org.openconfig.providers.ast.SimpleNode;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URL;
 
 /**
- * <configurator>
- * <person age="12" name="burton">
- * <child age="14" name="Dushy"/>
- * </person>
- * <age>12</age>
- * </configurator>
+ * This DataProvider constructs an AST node from an XML configuration file allowing
+ * for developers to express their configuration in an XML format.
  *
+ * <configurator>
+ *  <person age="12" name="burton">
+ *      <child age="14" name="Dushy"/>
+ *  </person>
+ *  <age>12</age>
+ * </configurator>
+ * <p/>
  * @author Richard L. Burton III - SmartCode LLC
  */
 public class XmlDataProvider extends AbstractReloadableDataProvider {
@@ -47,81 +53,49 @@ public class XmlDataProvider extends AbstractReloadableDataProvider {
             fileInputStream = new FileInputStream(file);
             parse(root, fileInputStream);
         } catch (IOException e) {
-            throw new RuntimeException("Unable to access properties file: " + file.getAbsolutePath());
+            throw new RuntimeException("Unable to access XML file: " + file.getAbsolutePath());
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e);
         } catch (SAXException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             close(fileInputStream);
         }
-
-        NodeManager nodeManager = new NodeManager();
-//        for (Map.Entry entry : null.entrySet()) {
-//            String key = (String) entry.getKey();
-//            String value = (String) entry.getValue();
-//            if (value != null) {
-//                value = value.trim();
-//            }
-//
-//            nodeManager.setValue(root, key, value, true);
-//        }
-
         setRoot(root);
     }
 
-    public void parse(ComplexNode root, InputStream input) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document dom = db.parse(input);
-
-        Element rootNode = dom.getDocumentElement();
-        NodeManager nodeManager = new NodeManager();
-        NodeList nodeList = rootNode.getChildNodes();
-        iterate(nodeManager, nodeList, root);
-        System.out.println("root = " + root);
-
+    protected void parse(ComplexNode root, InputStream input) throws Exception {
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setIgnoringElementContentWhitespace(true);
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
+        Document xmlDoc = builder.parse(input);
+        build(root, xmlDoc.getDocumentElement().getChildNodes());
     }
 
-    protected void iterate(NodeManager nodeManager, NodeList nodeList, ComplexNode root) {
-        if (nodeList != null && nodeList.getLength() > 0) {
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                org.w3c.dom.Node node = nodeList.item(i);
-                if (!isSimpleNode(node)) {
-                    processNode(nodeManager, root, nodeList.item(i));
-                } else {
-                    ComplexNode cpn = new ComplexNode(node.getNodeName());
-                    NamedNodeMap nnm = node.getAttributes();
-                    if (nnm != null) {
-                        for (int a = 0; a < nnm.getLength(); a++) {
-                            org.w3c.dom.Node attribute = nnm.item(a);
-                            SimpleNode attributeNode = new SimpleNode(attribute.getNodeName());
-                            attributeNode.setValue(attribute.getNodeValue());
-                            cpn.setValue(attributeNode);
-                        }
+    private void build(ComplexNode root, NodeList nodes) {
+        for (int n = 0; n < nodes.getLength(); n++) {
+            Node node = nodes.item(n);
+            String nodeName = node.getNodeName();
+
+            if (node instanceof Element && node.hasAttributes()) {
+                ComplexNode complexNode = new ComplexNode(nodeName);
+                NamedNodeMap attrs = node.getAttributes();
+                for (int i = 0; i < attrs.getLength(); i++) {
+                    Attr attribute = (Attr) attrs.item(i);
+                    complexNode.addChild(new SimpleNode(attribute.getName(), attribute.getValue()));
+                    NodeList list = node.getChildNodes();
+                    if (list.getLength() > 0) {
+                        build(complexNode, list);
                     }
-                    nodeManager.setValue(root, node.getNodeName(), node.getNodeValue(), true);
                 }
+                root.addChild(complexNode);
+            } else if (node instanceof Element && nodeName != null) {
+                SimpleNode attributeNode = new SimpleNode(nodeName, node.getTextContent());
+                root.addChild(attributeNode);
             }
         }
-    }
-
-    protected void processNode(NodeManager nodeManager, ComplexNode root, org.w3c.dom.Node element) {
-        String key = element.getNodeName();
-        if (isSimpleNode(element)) {
-            nodeManager.setValue(root, key, element.getNodeValue(), true);
-        } else {
-            ComplexNode complexNode = new ComplexNode(key);
-            NodeList nodeList = element.getChildNodes();
-            nodeManager.setValue(root, key, complexNode, true);
-            iterate(nodeManager, nodeList, complexNode);
-        }
-    }
-
-    protected boolean isSimpleNode(org.w3c.dom.Node element) {
-        String value = element.getNodeValue();
-        NamedNodeMap attributes = element.getAttributes();
-        return attributes == null || attributes.getLength() == 0 && (element.getChildNodes().getLength() == 0 || element.getChildNodes().item(0).getNodeType() == org.w3c.dom.Node.TEXT_NODE);
     }
 
     public boolean requiresReloading() {

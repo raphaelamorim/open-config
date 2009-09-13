@@ -21,6 +21,10 @@ public abstract class AbstractDataProvider implements DataProvider {
         return ((SimpleNode)nodeFinder.find(name, root)).getValue();
     }
 
+    public ComplexNode getRoot() {
+        return root;
+    }
+
     protected void setRoot(ComplexNode root) {
         // TODO use an AtomicReference here?
         this.root = root;

@@ -32,7 +32,6 @@ public class ComplexNode extends AbstractNode<Object> {
 
     /**
      *
-     *
      * @param name
      * @return the child with the name, or null if none
      */
@@ -50,15 +49,6 @@ public class ComplexNode extends AbstractNode<Object> {
 
     public void setValue(Object child) {
         throw new UnsupportedOperationException("Not coded yet");
-//        if (child instanceof Node) {
-//            if (children.containsKey(((Node)child).getName())) {
-//                for(Node node : children){
-//                    node.setValue(child);
-//                }
-//            }
-//        }else{
-//            throw new UnsupportedOperationException("Unsupported operation for appending dynamically created SimpleNode objects.");
-//        }
     }
 
     public <J> J accept(NodeVisitor<J, NodeVisitorContext> visitor, NodeVisitorContext nodeVisitorContext) {
@@ -70,9 +60,6 @@ public class ComplexNode extends AbstractNode<Object> {
         StringBuilder builder = new StringBuilder("ComplexNode(name: \'")
                 .append(getName()).append("\')\n\t");
         builder.append("attributes: (\n\t");
-//        for (Node node : children) {
-//            builder.append(node).append("\n\t");
-//        }
         builder.append("\t)");
         return builder.toString();
     }
