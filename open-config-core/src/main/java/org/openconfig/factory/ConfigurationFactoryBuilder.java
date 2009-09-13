@@ -3,6 +3,7 @@ package org.openconfig.factory;
 import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.EnvironmentResolver;
+import org.openconfig.core.SystemPropertyEnvironmentResolver;
 import org.openconfig.ioc.ConfigurationLocator;
 import static org.openconfig.ioc.ConfigurationLocator.PROPERTIES_FILE;
 import static org.openconfig.ioc.ConfigurationLocator.XML_FILE;
@@ -18,7 +19,7 @@ import java.util.LinkedHashMap;
  */
 public class ConfigurationFactoryBuilder {
 
-    private Class<EnvironmentResolver> environmentResolverClass;
+    private Class<? extends EnvironmentResolver> environmentResolverClass = SystemPropertyEnvironmentResolver.class;
 
     private OpenConfigContext openConfigContext;
 
@@ -31,7 +32,7 @@ public class ConfigurationFactoryBuilder {
         return this;
     }
 
-    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<EnvironmentResolver> environmentResolverClass) {
+    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<? extends EnvironmentResolver> environmentResolverClass) {
         this.environmentResolverClass = environmentResolverClass;
         return this;
     }
@@ -57,7 +58,7 @@ public class ConfigurationFactoryBuilder {
         return openConfigConfiguration.getClass(clazz.getSimpleName());
     }
 
-    public DataProvider getDataProvider() {
+    protected DataProvider getDataProvider() {
         Class dataProviderClass = getProviderClass(DataProvider.class);
         try {
             DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
