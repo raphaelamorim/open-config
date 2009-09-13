@@ -12,7 +12,6 @@ public interface DataProvider extends EventListener<ChangeStateEvent>, Initializ
 
     Object getValue(String name);
 
-
     boolean requiresReloading();
 
     void reload();

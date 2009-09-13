@@ -11,6 +11,7 @@ import java.util.Stack;
  * A NodeManager allows you to manage a set of nodes.
  *
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
 public class NodeManager {
 
