@@ -3,6 +3,10 @@
 
 <web-app>
 
+    <listener>
+        <listener-class>org.openconfig.example.context.OpenConfigServletContext</listener-class>
+    </listener>
+    
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
