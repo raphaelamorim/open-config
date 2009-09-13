@@ -18,7 +18,8 @@
         <module>open-config-client</module>
         <module>open-config-spring</module>
         <module>open-config-web</module>
-        <module>open-config-examples</module>
+        <module>open-config-examples/open-config-example-custom-interface</module>
+        <module>open-config-examples/open-config-example-web-configurator</module>
     </modules>
 
     <developers>
