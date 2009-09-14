@@ -1,6 +1,7 @@
 package org.openconfig;
 
 import org.apache.log4j.Logger;
+import org.openconfig.util.Assert;
 
 /**
  * This class models the environment in which OpenConfig is running in.
@@ -14,21 +15,24 @@ public class Environment implements java.io.Serializable {
     public static final String LOCAL_ENVIRONMENT = "local";
 
     public static final Environment LOCAL = new Environment(LOCAL_ENVIRONMENT);
-    
+
     private final String name;
 
     public Environment(String name) {
-        if (name == null || name.trim().equals("")) {
-            this.name = LOCAL_ENVIRONMENT;
-            LOGGER.warn("No environment was provided; Using the default.");
-        } else {
-            this.name = name;
-        }
+        Assert.hasLength(name, "Unable to determine openconfig environment");
+        this.name = name;
         LOGGER.info("The active environment for OpenConfig is " + name);
     }
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return true if the current environment is local (development), false otherwise
+     */
+    public boolean isLocal() {
+        return this.equals(LOCAL);
     }
 
     @Override

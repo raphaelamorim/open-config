@@ -1,11 +1,11 @@
 package org.openconfig;
 
-import static org.openconfig.ObjectFactory.getInstance;
 import junit.framework.TestCase;
-
-import static  org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE;
-
+import static org.openconfig.Environment.LOCAL_ENVIRONMENT;
+import static org.openconfig.core.SystemPropertyEnvironmentResolver.DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE;
+import org.openconfig.factory.ConfigurationFactoryBuilder;
 import org.openconfig.factory.ConfiguratorFactory;
+import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE;
 
 /**
  * @author Richard L. Burton III
@@ -13,13 +13,23 @@ import org.openconfig.factory.ConfiguratorFactory;
 public class ConfiguratorTestCase extends TestCase {
 
     static {
-        // TODO remove this hack
-       System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "true");
+        System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "true");
     }
 
-    private ConfiguratorFactory factory = getInstance().newConfiguratorFactory();
+    private ConfiguratorFactory factory;
 
     private MyConfigurator configurator;
+
+    @Override
+    public void setUp() {
+        System.setProperty(DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE, LOCAL_ENVIRONMENT);
+        factory = new ConfigurationFactoryBuilder().build();
+    }
+
+    @Override
+    public void tearDown() {
+        System.setProperty(DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE, "");
+    }
 
     public void testNamingConvention() throws Exception {
         configurator = factory.newInstance(MyConfigurator.class);
@@ -30,7 +40,7 @@ public class ConfiguratorTestCase extends TestCase {
         assertEquals("James Bond", configurator.getPerson().getName());
     }
 
-    public void ztestNoAlias() throws Exception{
+    public void ztestNoAlias() throws Exception {
         configurator = factory.newInstance(MyConfigurator.class, false);
         assertEquals("Bond", configurator.getName());
         assertEquals(45, configurator.getAge());

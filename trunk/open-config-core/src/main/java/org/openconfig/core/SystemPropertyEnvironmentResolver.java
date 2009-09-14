@@ -7,7 +7,9 @@ import org.openconfig.Environment;
  */
 public class SystemPropertyEnvironmentResolver implements EnvironmentResolver {
 
-    private String variable = "environment";
+    public static final String DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE = "environment";
+
+    private String variable = DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE;
 
     public Environment resolve(OpenConfigContext context) {
         return new Environment(context.getEnvironmentProperty(variable));

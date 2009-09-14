@@ -1,20 +1,24 @@
 package org.openconfig.factory.impl;
 
-import org.openconfig.factory.ConfiguratorFactory;
-import static org.openconfig.ObjectFactory.getInstance;
-import org.openconfig.core.ConfiguratorProxy;
-import org.openconfig.event.EventListener;
-import org.openconfig.event.EventPublisher;
-import org.openconfig.event.ChangeStateEvent;
-import org.openconfig.Configurator;
-import org.openconfig.util.Assert;
-import org.apache.log4j.Logger;
-
-import java.lang.reflect.Method;
-
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.log4j.Logger;
+import org.openconfig.Configurator;
+import org.openconfig.core.ConfiguratorProxy;
+import org.openconfig.core.DataProviderToConfiguratorAdapter;
+import org.openconfig.core.bean.ConfiguratorProxyInvocationHandler;
+import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.core.bean.ProxyInvocationHandler;
+import org.openconfig.event.EventListener;
+import org.openconfig.event.EventPublisher;
+import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.providers.DataProvider;
+import org.openconfig.util.Assert;
+
+import java.lang.reflect.Method;
 
 /**
  * @author Richard L. Burton III
@@ -25,10 +29,26 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultConfiguratorFactory.class);
 
+    @Inject
+    private Injector injector;
+
+    @Inject
+    private DataProvider dataProvider;
+
+    @Inject
+    EventPublisher eventPublisher;
+
+    @Inject
+    PropertyNormalizer propertyNormalizer;
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
+    }
+
     /**
      * @see ConfiguratorFactory#(Class, boolean, EventListener)
      */
-    public <T> T newInstance(final Class clazz, final boolean prefix, EventListener... eventListeners){
+    public <T> T newInstance(final Class clazz, final boolean prefix, EventListener... eventListeners) {
         Enhancer enhancer = new Enhancer();
 
         if (clazz.isInterface()) {
@@ -45,26 +65,35 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
         }
 
 
-        final ConfiguratorProxy proxy = getInstance().newConfiguratorProxy(clazz, prefix, eventListeners);
+        final ConfiguratorProxy proxy = newConfiguratorProxy(clazz, prefix, eventListeners);
 
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
-               return proxy.intercept(source, method, arguments, methodProxy);
+                return proxy.intercept(source, method, arguments, methodProxy);
             }
         });
         return (T) enhancer.create();
     }
 
     public Configurator newInstance(EventListener... eventListeners) {
-        return getInstance().newDefaultConfigurator(eventListeners);
+        return new DataProviderToConfiguratorAdapter(dataProvider);
     }
 
     /**
-     * 
+     *
      */
-    public <T> T newInstance(final Class clazz, EventListener... eventListeners){
+    public <T> T newInstance(final Class clazz, EventListener... eventListeners) {
         Assert.isTrue(clazz != Configurator.class, "Use the method newInstance(EventListener... eventListeners) to obtain a configurator based on OpenConfig's Configurator");
         return (T) newInstance(clazz, true, eventListeners);
     }
-    
+
+    private ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventListener... eventListeners) {
+        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias, eventPublisher);
+        ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
+        proxy.setDataProvider(dataProvider);
+        proxy.setPropertyNormalizer(propertyNormalizer);
+        proxy.setProxyInvocationHandler(returnHandler);
+        return proxy;
+    }
+
 }
