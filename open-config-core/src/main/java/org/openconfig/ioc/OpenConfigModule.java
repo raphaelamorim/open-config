@@ -1,23 +1,13 @@
 package org.openconfig.ioc;
 
-import java.util.LinkedHashMap;
-
-import org.openconfig.MutableConfigurator;
-import org.openconfig.event.EventPublisher;
-import org.openconfig.providers.DataProvider;
-import org.openconfig.providers.CompositeDataProvider;
+import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
-import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.event.EventPublisher;
 import org.openconfig.factory.ConfiguratorFactory;
-import org.openconfig.ioc.config.OpenConfigConfiguration;
-import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
-import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
-import static org.openconfig.ioc.ConfigurationLocator.*;
-import com.google.inject.*;
-import com.google.inject.binder.AnnotatedBindingBuilder;
-import com.google.inject.binder.ScopedBindingBuilder;
+import org.openconfig.providers.DataProvider;
 
 /**
  * This class is used to initialize Guice with the ability to override
@@ -35,76 +25,64 @@ import com.google.inject.binder.ScopedBindingBuilder;
 @SuppressWarnings("unchecked")
 public class OpenConfigModule extends AbstractModule {
 
-    private ConfigurationLocator configurationLocator;
-
-    private OpenConfigConfiguration openConfigConfiguration;
-
     public static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
+
     public static final String OPEN_CONFIG_DEVELOPMENT_FILE = "openconfig.app.config";
 
+    private OpenConfigContext openConfigContext;
+
+    private EnvironmentResolver environmentResolver;
+
+    private Class<? extends ConfiguratorFactory> configuratorFactoryClass;
+
+    private Class<? extends PropertyNormalizer> propertyNormalizerClass;
+    private Class<? extends EventPublisher> eventPublisherClass;
+    private DataProvider dataProvider;
+
     protected void configure() {
-        processConfigurationFiles();
-        configurationLocator.locate();
-        openConfigConfiguration = configurationLocator.getOpenConfigConfiguration();
 
         bind(PropertyNormalizer.class)
-                .to(getProviderClass(PropertyNormalizer.class))
+                .to(propertyNormalizerClass)
                 .in(Singleton.class);
 
         bind(OpenConfigContext.class)
-                .to(getProviderClass(OpenConfigContext.class))
-                .in(Singleton.class);
+                .toInstance(openConfigContext);
 
         bind(EnvironmentResolver.class)
-                .to(getProviderClass(EnvironmentResolver.class))
-                .in(Singleton.class);
+                .toInstance(environmentResolver);
 
         bind(ConfiguratorFactory.class)
-                .to(getProviderClass(ConfiguratorFactory.class))
-                .in(Singleton.class);
+                .to(configuratorFactoryClass);
 
         bind(EventPublisher.class)
-                .to(getProviderClass(EventPublisher.class));
+                .to(eventPublisherClass)
+                .in(Singleton.class);
 
-        if(isInLocalDevelopment()){
-            bind(DataProvider.class)
-                    .to(CompositeDataProvider.class);
-        }else{
-            bind(DataProvider.class)
-                .toInstance(getDataProvider());
-        }
+        bind(DataProvider.class)
+                .toInstance(dataProvider);
     }
 
-    /**
-     * Builds the OpenConfigConfiguration consumers.
-     */
-    private void processConfigurationFiles() {
-        LinkedHashMap<String, OpenConfigConfiguration> configurationManagers = new LinkedHashMap<String, OpenConfigConfiguration>();
-        configurationManagers.put(PROPERTIES_FILE, new PropertiesOpenConfigConfiguration());
-        configurationManagers.put(XML_FILE, new XmlOpenConfigConfiguration());
-        configurationLocator = new ConfigurationLocator(configurationManagers);
+    public void setOpenConfigContext(OpenConfigContext openConfigContext) {
+        this.openConfigContext = openConfigContext;
     }
 
-    protected Class getProviderClass(Class clazz) {
-        return openConfigConfiguration.getClass(clazz.getSimpleName());
+    public void setEnvironmentResolver(EnvironmentResolver environmentResolver) {
+        this.environmentResolver = environmentResolver;
     }
 
-    public DataProvider getDataProvider() {
-        Class dataProviderClass = getProviderClass(DataProvider.class);
-        try {
-            DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
-            dataProvider.initialize(new BasicOpenConfigContext());
-            return dataProvider;
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException("Class failed to get created.");
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Class failed to get created.");
-        }
+    public void setConfiguratorFactoryClass(Class<? extends ConfiguratorFactory> configuratorFactoryClass) {
+        this.configuratorFactoryClass = configuratorFactoryClass;
     }
 
-    protected boolean isInLocalDevelopment(){
-        String developmentMode = System.getProperty(OPEN_CONFIG_DEVELOPMENT_MODE);
-        return Boolean.parseBoolean(developmentMode);
+    public void setPropertyNormalizerClass(Class<? extends PropertyNormalizer> propertyNormalizerClass) {
+        this.propertyNormalizerClass = propertyNormalizerClass;
     }
 
+    public void setEventPublisherClass(Class<? extends EventPublisher> eventPublisherClass) {
+        this.eventPublisherClass = eventPublisherClass;
+    }
+
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+    }
 }

@@ -1,15 +1,22 @@
 package org.openconfig.factory;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.openconfig.Environment;
 import org.openconfig.core.BasicOpenConfigContext;
-import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.EnvironmentResolver;
+import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.SystemPropertyEnvironmentResolver;
+import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.event.EventPublisher;
 import org.openconfig.ioc.ConfigurationLocator;
 import static org.openconfig.ioc.ConfigurationLocator.PROPERTIES_FILE;
 import static org.openconfig.ioc.ConfigurationLocator.XML_FILE;
+import org.openconfig.ioc.OpenConfigModule;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
 import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
+import org.openconfig.providers.CompositeDataProvider;
 import org.openconfig.providers.DataProvider;
 
 import java.util.LinkedHashMap;
@@ -27,21 +34,79 @@ public class ConfigurationFactoryBuilder {
 
     private OpenConfigConfiguration openConfigConfiguration;
 
-    public ConfigurationFactoryBuilder setOpenConfigCotext(OpenConfigContext openConfigContext) {
+    /**
+     * Sets the open config context.
+     *
+     * (Optional: an empty OpenConfigContext is created by default)
+     *
+     * @param openConfigContext the OpenConfigContext to set
+     * @return this object in trying to be a good builder
+     */
+    public ConfigurationFactoryBuilder setOpenConfigContext(OpenConfigContext openConfigContext) {
         this.openConfigContext = openConfigContext;
         return this;
     }
 
-    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<? extends EnvironmentResolver> environmentResolverClass) {
+    /**
+     * Sets the open config context.
+     *
+     * (Optional: {@link org.openconfig.core.SystemPropertyEnvironmentResolver} is used by default)
+     *
+     * @param environmentResolverClass the environmentResolverClass to use
+     * @return this object in trying to be a good builder
+     */    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<? extends EnvironmentResolver> environmentResolverClass) {
         this.environmentResolverClass = environmentResolverClass;
         return this;
     }
 
+    /**
+     * @return the created ConfiguratorFactory
+     */
     public ConfiguratorFactory build() {
         processConfigurationFiles();
         configurationLocator.locate();
         openConfigConfiguration = configurationLocator.getOpenConfigConfiguration();
-        throw new UnsupportedOperationException("Method not coded yet");
+
+        OpenConfigModule openConfigModule = createOpenConfigModule();
+
+        Injector injector = Guice.createInjector(openConfigModule);
+        return injector.getInstance(ConfiguratorFactory.class);
+    }
+
+    /**
+     * Creates the openconfig module that is used to configure guice.
+     *
+     * @return the guice module
+     */
+    // TODO do we need a guice builder?
+    private OpenConfigModule createOpenConfigModule() {
+        OpenConfigModule openConfigModule = new OpenConfigModule();
+        openConfigModule.setEventPublisherClass(getProviderClass(EventPublisher.class));
+        openConfigModule.setPropertyNormalizerClass(getProviderClass(PropertyNormalizer.class));
+        EnvironmentResolver resolver = createInstance(environmentResolverClass);
+        openConfigModule.setEnvironmentResolver(resolver);
+
+        if (openConfigContext == null) {
+            setOpenConfigContext(createInstance(getProviderClass(OpenConfigContext.class)));
+        }
+        openConfigModule.setOpenConfigContext(openConfigContext);
+
+        Environment environment = resolver.resolve(openConfigContext);
+
+        openConfigModule.setDataProvider(createDataProvider(environment));
+
+        openConfigModule.setConfiguratorFactoryClass(getProviderClass(ConfiguratorFactory.class));
+        return openConfigModule;
+    }
+
+    private <T> T createInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException("Could not instantiate class: " + clazz, e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Could not instantiate class: " + clazz, e);
+        }
     }
 
     /**
@@ -54,20 +119,21 @@ public class ConfigurationFactoryBuilder {
         configurationLocator = new ConfigurationLocator(configurationManagers);
     }
 
-    protected Class getProviderClass(Class clazz) {
-        return openConfigConfiguration.getClass(clazz.getSimpleName());
+    protected <T> Class<? extends T> getProviderClass(Class<T> clazz) {
+        return (Class<? extends T>) openConfigConfiguration.getClass(clazz.getSimpleName());
     }
 
-    protected DataProvider getDataProvider() {
-        Class dataProviderClass = getProviderClass(DataProvider.class);
-        try {
-            DataProvider dataProvider = (DataProvider) dataProviderClass.newInstance();
-            dataProvider.initialize(new BasicOpenConfigContext());
-            return dataProvider;
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException("Class failed to get created.");
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Class failed to get created.");
+    protected DataProvider createDataProvider(Environment environment) {
+
+        Class<? extends DataProvider> dataProviderClass;
+        if (environment.isLocal()) {
+            dataProviderClass = CompositeDataProvider.class;
+        } else {
+            dataProviderClass = getProviderClass(DataProvider.class);
         }
+
+        DataProvider dataProvider = createInstance(dataProviderClass);
+        dataProvider.initialize(new BasicOpenConfigContext());
+        return dataProvider;
     }
 }

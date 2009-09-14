@@ -34,39 +34,6 @@ public class ObjectFactory {
         injector = Guice.createInjector(new OpenConfigModule());
     }
 
-    public static ObjectFactory getInstance() {
-        return INSTANCE;
-    }
-
-    public Configurator newDefaultConfigurator(EventListener... eventListeners) {
-        DataProvider dataProvider = getDataProvider(Configurator.class.getSimpleName());
-        EventPublisher eventPublisher = createEventPublisher(eventListeners);
-        Configurator returnValue = new DataProviderToConfiguratorAdapter(dataProvider);
-        return returnValue;
-    }
-
-    /**
-     * @param configuratorInterface
-     * @param alias
-     * @param eventListeners
-     * @return
-     * @todo refactor to improve the object creation by Guice.
-     */
-    public ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventListener... eventListeners) {
-
-        DataProvider dataProvider = getDataProvider(configuratorInterface.getSimpleName());
-
-        PropertyNormalizer propertyNormalizer = injector.getInstance(PropertyNormalizer.class);
-        EventPublisher eventPublisher = createEventPublisher(eventListeners);
-
-        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias, eventPublisher);
-        ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
-        proxy.setDataProvider(dataProvider);
-        proxy.setPropertyNormalizer(propertyNormalizer);
-        proxy.setProxyInvocationHandler(returnHandler);
-        return proxy;
-    }
-
     private EventPublisher createEventPublisher(EventListener[] eventListeners) {
         EventPublisher eventPublisher = injector.getInstance(EventPublisher.class);
         eventPublisher.addListeners(eventListeners);
@@ -88,20 +55,12 @@ public class ObjectFactory {
         return dataProvider;
     }
 
-    public ConfiguratorFactory newConfiguratorFactory() {
+   private ConfiguratorFactory newConfiguratorFactory() {
         return injector.getInstance(ConfiguratorFactory.class);
     }
 
-    public <T> T construct(String clazzName) {
-        try {
-            Class clazz = Class.forName(clazzName);
-            return (T) clazz.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public EnvironmentResolver getDefaultEnvironmentResolver() {
+    private EnvironmentResolver getDefaultEnvironmentResolver() {
         return injector.getInstance(EnvironmentResolver.class);
     }
 }
