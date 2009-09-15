@@ -36,14 +36,10 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
     private DataProvider dataProvider;
 
     @Inject
-    EventPublisher eventPublisher;
+    private EventPublisher eventPublisher;
 
     @Inject
-    PropertyNormalizer propertyNormalizer;
-
-    public void setInjector(Injector injector) {
-        this.injector = injector;
-    }
+    private PropertyNormalizer propertyNormalizer;
 
     /**
      * @see ConfiguratorFactory#(Class, boolean, EventListener)
@@ -96,4 +92,19 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
         return proxy;
     }
 
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+    }
+
+    public void setEventPublisher(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
+
+    public void setPropertyNormalizer(PropertyNormalizer propertyNormalizer) {
+        this.propertyNormalizer = propertyNormalizer;
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
+    }
 }

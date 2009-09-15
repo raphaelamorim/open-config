@@ -3,7 +3,6 @@ package org.openconfig.factory;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.openconfig.Environment;
-import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.SystemPropertyEnvironmentResolver;
@@ -36,7 +35,7 @@ public class ConfigurationFactoryBuilder {
 
     /**
      * Sets the open config context.
-     *
+     * <p/>
      * (Optional: an empty OpenConfigContext is created by default)
      *
      * @param openConfigContext the OpenConfigContext to set
@@ -49,12 +48,13 @@ public class ConfigurationFactoryBuilder {
 
     /**
      * Sets the open config context.
-     *
+     * <p/>
      * (Optional: {@link org.openconfig.core.SystemPropertyEnvironmentResolver} is used by default)
      *
      * @param environmentResolverClass the environmentResolverClass to use
      * @return this object in trying to be a good builder
-     */    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<? extends EnvironmentResolver> environmentResolverClass) {
+     */
+    public ConfigurationFactoryBuilder setEnvironmentResolverClass(Class<? extends EnvironmentResolver> environmentResolverClass) {
         this.environmentResolverClass = environmentResolverClass;
         return this;
     }
@@ -83,6 +83,7 @@ public class ConfigurationFactoryBuilder {
         OpenConfigModule openConfigModule = new OpenConfigModule();
         openConfigModule.setEventPublisherClass(getProviderClass(EventPublisher.class));
         openConfigModule.setPropertyNormalizerClass(getProviderClass(PropertyNormalizer.class));
+        openConfigModule.setOpenConfigConfiguration(openConfigConfiguration);
         EnvironmentResolver resolver = createInstance(environmentResolverClass);
         openConfigModule.setEnvironmentResolver(resolver);
 
@@ -93,7 +94,7 @@ public class ConfigurationFactoryBuilder {
 
         Environment environment = resolver.resolve(openConfigContext);
 
-        openConfigModule.setDataProvider(createDataProvider(environment));
+        openConfigModule.setDataProviderClass(getDataProviderClass(environment));
 
         openConfigModule.setConfiguratorFactoryClass(getProviderClass(ConfiguratorFactory.class));
         return openConfigModule;
@@ -123,7 +124,13 @@ public class ConfigurationFactoryBuilder {
         return (Class<? extends T>) openConfigConfiguration.getClass(clazz.getSimpleName());
     }
 
-    protected DataProvider createDataProvider(Environment environment) {
+    /**
+     * Determines what data provider to use based on the environment.
+     *
+     * @param environment the current environment
+     * @return the data provider
+     */
+    protected Class<? extends DataProvider> getDataProviderClass(Environment environment) {
 
         Class<? extends DataProvider> dataProviderClass;
         if (environment.isLocal()) {
@@ -132,8 +139,6 @@ public class ConfigurationFactoryBuilder {
             dataProviderClass = getProviderClass(DataProvider.class);
         }
 
-        DataProvider dataProvider = createInstance(dataProviderClass);
-        dataProvider.initialize(new BasicOpenConfigContext());
-        return dataProvider;
+        return dataProviderClass;
     }
 }

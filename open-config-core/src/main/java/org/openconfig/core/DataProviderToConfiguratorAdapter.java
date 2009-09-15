@@ -11,7 +11,6 @@ import org.openconfig.providers.DataProvider;
  */
 public class DataProviderToConfiguratorAdapter implements Configurator {
 
-    @Inject
     private DataProvider dataProvider;
 
     private final String configuratorName = Configurator.class.getSimpleName();
