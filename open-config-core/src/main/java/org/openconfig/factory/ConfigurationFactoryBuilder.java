@@ -21,6 +21,7 @@ import org.openconfig.providers.DataProvider;
 import java.util.LinkedHashMap;
 
 /**
+ * TODO: Refactor this to ConfiguratorFactoryBuilder
  * @author Dushyanth (Dee) Inguva
  */
 public class ConfigurationFactoryBuilder {
@@ -75,10 +76,9 @@ public class ConfigurationFactoryBuilder {
 
     /**
      * Creates the openconfig module that is used to configure guice.
-     *
+     * TODO do we need a guice builder?
      * @return the guice module
      */
-    // TODO do we need a guice builder?
     private OpenConfigModule createOpenConfigModule() {
         OpenConfigModule openConfigModule = new OpenConfigModule();
         openConfigModule.setEventPublisherClass(getProviderClass(EventPublisher.class));

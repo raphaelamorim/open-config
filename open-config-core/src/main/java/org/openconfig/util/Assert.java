@@ -17,7 +17,7 @@ public class Assert {
      */
     public static void isTrue(boolean condition, String message, Object... placeholderValues) {
         if (!condition) {
-            throw new IllegalArgumentException("AssertionFailed:" + String.format(message, placeholderValues));
+            throw new IllegalArgumentException("AssertionFailed: " + String.format(message, placeholderValues));
         }
     }
 
@@ -31,7 +31,7 @@ public class Assert {
      */
     public static void notNull(Object nonNullObject, String message, Object... placeholderValues) {
         if (nonNullObject == null) {
-            throw new IllegalArgumentException("AssertionFailed:" + String.format(message, placeholderValues));
+            throw new IllegalArgumentException("AssertionFailed: " + String.format(message, placeholderValues));
         }
     }
 

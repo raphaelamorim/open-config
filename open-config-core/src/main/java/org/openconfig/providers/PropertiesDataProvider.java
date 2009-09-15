@@ -96,4 +96,11 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
         }
     }
 
+    @Override
+    public String toString() {
+        return "PropertiesDataProvider{" +
+                "file=" + file +
+                ", lastModified=" + lastModified +
+                '}';
+    }
 }

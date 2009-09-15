@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Collections;
 
 /**
+ * TODO: Rename to SystemOpenConfigContext?
  * @author Richard L. Burton III
  */
 public class BasicOpenConfigContext implements OpenConfigContext{
@@ -11,7 +12,7 @@ public class BasicOpenConfigContext implements OpenConfigContext{
     private Map<String, String> parameters;
 
     public BasicOpenConfigContext() {
-        this(Collections.EMPTY_MAP);
+        this(System.getenv());
     }
 
     public BasicOpenConfigContext(Map<String, String> parameters) {
@@ -20,10 +21,6 @@ public class BasicOpenConfigContext implements OpenConfigContext{
 
     public String getParameter(String name) {
         return parameters.get(name);
-    }
-
-    public String getEnvironmentProperty(String name) {
-        return System.getProperty(name);
     }
 
 }

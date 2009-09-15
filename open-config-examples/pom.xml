@@ -27,6 +27,7 @@
     <modules>
         <module>open-config-example-web-configurator</module>
         <module>open-config-example-custom-interface</module>
+        <module>open-config-example-commandline</module>
     </modules>
 
     <dependencies>
