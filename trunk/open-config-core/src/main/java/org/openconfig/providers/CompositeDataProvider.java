@@ -114,4 +114,10 @@ public class CompositeDataProvider implements DataProvider {
         return !providers.containsKey(interfaceClass);
     }
 
+    @Override
+    public String toString() {
+        return "CompositeDataProvider{" +
+                "providers=" + providers +
+                '}';
+    }
 }

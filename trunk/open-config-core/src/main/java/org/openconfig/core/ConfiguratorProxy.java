@@ -88,7 +88,7 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
                 matcher = SET_PROPERTY_REGEX.matcher(name);
                 break;
             case TOSTRING:
-                return methodProxy.invokeSuper(source, arguments);
+                return dataProvider.toString();
             default:
                 throw new MethodInvocationException(source, method);
         }

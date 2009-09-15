@@ -122,4 +122,11 @@ public class XmlDataProvider extends AbstractReloadableDataProvider {
         }
     }
 
+    @Override
+    public String toString() {
+        return "XmlDataProvider{" +
+                "file=" + file +
+                ", lastModified=" + lastModified +
+                '}';
+    }
 }

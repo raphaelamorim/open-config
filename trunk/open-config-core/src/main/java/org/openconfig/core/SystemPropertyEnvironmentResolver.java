@@ -7,6 +7,7 @@ import org.openconfig.Environment;
  */
 public class SystemPropertyEnvironmentResolver implements EnvironmentResolver {
 
+    // TODO: Rename to a shorter more reasonable length.. ENVIRONMENT_PARAMTER?
     public static final String DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE = "environment";
 
     private String variable = DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE;
