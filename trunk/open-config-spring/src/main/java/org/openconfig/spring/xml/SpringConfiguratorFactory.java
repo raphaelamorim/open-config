@@ -13,7 +13,7 @@ public class SpringConfiguratorFactory {
         this.clazz = clazz;
     }
     
-    public <T> T newInstance(){
-        return new DefaultConfiguratorFactory().newInstance(clazz);
-    }
+//    public <T> T newInstance(){
+//        return new DefaultConfiguratorFactory().newInstance(clazz);
+//    }
 }

@@ -1,53 +1,56 @@
 package org.openconfig.web;
 
-import static org.openconfig.ObjectFactory.getInstance;
-import org.openconfig.Environment;
+import static org.openconfig.web.WebConfiguratorFactoryUtils.*;
+
+import org.openconfig.factory.ConfigurationFactoryBuilder;
+import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
 /**
- * * The bootstrap class for OpenConfig within a web environment.
+ * The bootstrap class for OpenConfig within a web environment.
  *
+ * <ol>
+ *  <li>org.openconfig.environment_resolver - The fully qualified class name of a class that implements EnvironmentResolver</li>
+ * </ol>
+ * 
  * @author Richard L. Burton III
  */
+@SuppressWarnings("unchecked")
 public class OpenConfigBootstrapContextListener implements ServletContextListener {
+
+    private static final Logger LOG = Logger.getLogger(OpenConfigBootstrapContextListener.class);
 
     public static final String ENVIRONMENT_RESOLVER = "org.openconfig.environment_resolver";
 
-    private Environment environment;
-
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        ServletContext servletContext = servletContextEvent.getServletContext();
-        String environmentResolverClass = servletContext.getInitParameter(ENVIRONMENT_RESOLVER);
-        environmentResolverClass = cleanseString(environmentResolverClass);
-
-        EnvironmentResolver environmentResolver;
-
+        ServletContext servletContext       = servletContextEvent.getServletContext();
+        OpenConfigContext openConfigContext = new WebOpenConfigContext(servletContext);
+        String environmentResolverClass     = openConfigContext.getParameter(ENVIRONMENT_RESOLVER);
+        environmentResolverClass            = cleanseString(environmentResolverClass);
+        ConfigurationFactoryBuilder cfb     = new ConfigurationFactoryBuilder()
+                                              .setOpenConfigContext(openConfigContext);
+        
         if (environmentResolverClass != null) {
-            environmentResolver = getInstance().construct(environmentResolverClass);
-        } else {
-            environmentResolver = getInstance().getDefaultEnvironmentResolver();
+            try {
+                LOG.info("Using custom EnvironmentResolver '" + environmentResolverClass + "'.");
+                cfb.setEnvironmentResolverClass((Class<EnvironmentResolver>) Class.forName(environmentResolverClass));
+            } catch (ClassNotFoundException e) {
+                throw new IllegalArgumentException("Unable to load the class '" + environmentResolverClass + "'.");
+            }
         }
 
-        // TODO: Remove this inner class...
-        // TODO: How to pass around the active environment? CLEANLY
-        environment = environmentResolver.resolve(new OpenConfigContext() {
-            public String getParameter(String name) {
-                return System.getProperty(name);
-            }
-
-            public String getEnvironmentProperty(String name) {
-                return System.getProperty(name);
-            }
-        });
+        ConfiguratorFactory cf = cfb.build();
+        LOG.debug("Successfully created the ConfiguratorFactory.");
+        servletContext.setAttribute(CONFIGURATOR_FACTORY_KEY, cf);
     }
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
     }
 
     protected String cleanseString(String value) {
@@ -57,4 +60,5 @@ public class OpenConfigBootstrapContextListener implements ServletContextListene
             return value.trim();
         }
     }
+
 }

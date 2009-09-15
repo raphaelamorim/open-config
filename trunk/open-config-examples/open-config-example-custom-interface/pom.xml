@@ -26,16 +26,19 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-           <groupId>javax.servlet</groupId>
-           <artifactId>jstl</artifactId>
-           <scope>runtime</scope>
-         </dependency>
-         <dependency>
-           <groupId>taglibs</groupId>
-           <artifactId>standard</artifactId>
-           <scope>runtime</scope>
-         </dependency>
-
-
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openconfig</groupId>
+            <artifactId>open-config-web</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 </project>

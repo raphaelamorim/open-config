@@ -10,7 +10,5 @@ package org.openconfig.core;
 public interface OpenConfigContext extends java.io.Serializable{
 
     String getParameter(String name);
-    
-    String getEnvironmentProperty(String name);
 
 }
