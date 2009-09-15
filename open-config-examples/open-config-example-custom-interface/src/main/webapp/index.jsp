@@ -1,8 +1,8 @@
-<%@ page import="org.openconfig.factory.impl.DefaultConfiguratorFactory" %>
 <%@ page import="org.openconfig.example.CustomInterface" %>
 <%@ page import="org.openconfig.factory.ConfiguratorFactory" %>
+<%@ page import="org.openconfig.web.WebConfiguratorFactoryUtils" %>
 <%
-    ConfiguratorFactory cf = new DefaultConfiguratorFactory();
+    ConfiguratorFactory cf = WebConfiguratorFactoryUtils.getConfiguratorFactory(application);
     CustomInterface configurator = cf.newInstance(CustomInterface.class);
 %>
 <html>
