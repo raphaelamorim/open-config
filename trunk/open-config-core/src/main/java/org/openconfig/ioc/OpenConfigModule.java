@@ -7,6 +7,7 @@ import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.event.EventPublisher;
 import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.providers.DataProvider;
 
 /**
@@ -25,8 +26,6 @@ import org.openconfig.providers.DataProvider;
 @SuppressWarnings("unchecked")
 public class OpenConfigModule extends AbstractModule {
 
-    public static final String OPEN_CONFIG_DEVELOPMENT_MODE = "openconfig.dev";
-
     public static final String OPEN_CONFIG_DEVELOPMENT_FILE = "openconfig.app.config";
 
     private OpenConfigContext openConfigContext;
@@ -37,7 +36,9 @@ public class OpenConfigModule extends AbstractModule {
 
     private Class<? extends PropertyNormalizer> propertyNormalizerClass;
     private Class<? extends EventPublisher> eventPublisherClass;
-    private DataProvider dataProvider;
+
+    private OpenConfigConfiguration openConfigConfiguration;
+    private Class<? extends DataProvider> dataProviderClass;
 
     protected void configure() {
 
@@ -52,14 +53,16 @@ public class OpenConfigModule extends AbstractModule {
                 .toInstance(environmentResolver);
 
         bind(ConfiguratorFactory.class)
-                .to(configuratorFactoryClass);
+                .to(configuratorFactoryClass).in(Singleton.class);
 
         bind(EventPublisher.class)
                 .to(eventPublisherClass)
                 .in(Singleton.class);
 
         bind(DataProvider.class)
-                .toInstance(dataProvider);
+                .to(dataProviderClass).in(Singleton.class);
+
+        bind(OpenConfigConfiguration.class).toInstance(openConfigConfiguration);
     }
 
     public void setOpenConfigContext(OpenConfigContext openConfigContext) {
@@ -82,7 +85,11 @@ public class OpenConfigModule extends AbstractModule {
         this.eventPublisherClass = eventPublisherClass;
     }
 
-    public void setDataProvider(DataProvider dataProvider) {
-        this.dataProvider = dataProvider;
+    public void setDataProviderClass(Class<? extends DataProvider> dataProviderClass) {
+        this.dataProviderClass = dataProviderClass;
+    }
+
+    public void setOpenConfigConfiguration(OpenConfigConfiguration openConfigConfiguration) {
+        this.openConfigConfiguration = openConfigConfiguration;
     }
 }

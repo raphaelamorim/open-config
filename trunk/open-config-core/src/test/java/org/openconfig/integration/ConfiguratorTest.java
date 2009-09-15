@@ -2,21 +2,21 @@ package org.openconfig.integration;
 
 import junit.framework.TestCase;
 import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.factory.ConfigurationFactoryBuilder;
 import org.openconfig.factory.impl.DefaultConfiguratorFactory;
 import org.openconfig.integration.configurators.PrimitiveConfiguration;
 import org.openconfig.integration.configurators.Person;
 import org.openconfig.integration.configurators.DayOfWeek;
-import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE;
+import org.openconfig.junit.LocalTestCase;
 
 /**
  * @author Richard L. Burton III - SmartCode LLC
  */
-public class ConfiguratorTest extends TestCase {
+public class ConfiguratorTest extends LocalTestCase {
 
     private ConfiguratorFactory configuratorFactory;
 
     public void testConfiguratorInterfacedBackedByProperties(){
-        System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "true");
         PrimitiveConfiguration configurator = configuratorFactory.newInstance(PrimitiveConfiguration.class);
         assertEquals("Richard", configurator.getName());
         assertEquals(30, configurator.getAge());
@@ -29,7 +29,7 @@ public class ConfiguratorTest extends TestCase {
     }
 
     @Override
-    protected void setUp() throws Exception {
-        configuratorFactory = new DefaultConfiguratorFactory();
+    protected void doSetUp() throws Exception {
+        configuratorFactory = new ConfigurationFactoryBuilder().build();
     }
 }

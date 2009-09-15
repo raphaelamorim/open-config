@@ -1,15 +1,18 @@
 package org.openconfig.providers;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import org.apache.log4j.Logger;
-import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.BasicOpenConfigContext;
+import org.openconfig.core.OpenConfigContext;
 import org.openconfig.event.ChangeStateEvent;
+import org.openconfig.ioc.config.OpenConfigConfiguration;
 import static org.openconfig.util.Assert.notNull;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Richard L. Burton III
@@ -26,6 +29,12 @@ public class CompositeDataProvider implements DataProvider {
     public static final int CONFIGURATOR_INDEX = 0;
 
     public static final int PROPERTY_PATH_INDEX = 1;
+
+    @Inject
+    private OpenConfigConfiguration openConfigConfiguration;
+
+    @Inject
+    private Injector injector;
 
     public Object getValue(String property) {
         String[] key = property.split("\\.", MAX_NUMBER_OF_ELEMENTS);
@@ -54,13 +63,20 @@ public class CompositeDataProvider implements DataProvider {
         }
     }
 
-    // Temp
+    /**
+     * Creates the data provider.
+     *
+     * @param interfaceName the interface name which will be used to load the corresponding configuration file
+     * @return an initialized data provider
+     */
     private DataProvider createDataProvider(String interfaceName) {
-        PropertiesDataProvider returnValue = new PropertiesDataProvider();
+        // TODO change openConfigConfiguration to be strongly typed
+        Class<? extends DataProvider> dataProviderClass = (Class<? extends DataProvider>) openConfigConfiguration.getClass("DataProvider");
+        DataProvider dataProvider = injector.getInstance(dataProviderClass);
         Map<String, String> temp = new HashMap<String, String>();
         temp.put("interface", interfaceName);
-        returnValue.initialize(new BasicOpenConfigContext(temp));
-        return returnValue;
+        dataProvider.initialize(new BasicOpenConfigContext(temp));
+        return dataProvider;
     }
 
     public void onEvent(ChangeStateEvent event) {

@@ -1,40 +1,32 @@
 package org.openconfig.integration;
 
-import junit.framework.TestCase;
-import org.openconfig.factory.ConfiguratorFactory;
-import org.openconfig.factory.impl.DefaultConfiguratorFactory;
 import org.openconfig.Configurator;
-import org.openconfig.ioc.OpenConfigModule;
-import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE;
+import org.openconfig.factory.ConfigurationFactoryBuilder;
+import org.openconfig.factory.ConfiguratorFactory;
 import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_FILE;
-import org.openconfig.event.EventListener;
-import org.openconfig.event.ChangeStateEvent;
+import org.openconfig.junit.LocalTestCase;
 
 /**
  * @author Richard L. Burton III
+ * @author Dushyanth (Dee) Inguva
  */
-public class ConfigurationFactoryIntegrationTestCase extends TestCase {
+public class ConfigurationFactoryIntegrationTestCase extends LocalTestCase {
 
     private ConfiguratorFactory configurationFactory;
 
-    protected void setUp() {
-        System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "true");
-        System.setProperty(OPEN_CONFIG_DEVELOPMENT_FILE, "MyConfigurator.properties");
-        configurationFactory = new DefaultConfiguratorFactory();
+    @Override
+    protected void doSetUp() {
+        configurationFactory = new ConfigurationFactoryBuilder().build();
     }
 
     public void testBasic() {
-        Configurator configurator = configurationFactory.newInstance(new EventListener() {
-            public void onEvent(ChangeStateEvent event) {
-                System.out.println("ConfigurationFactoryIntegrationTestCase.onEvent");
-            }
-        });
+        Configurator configurator = configurationFactory.newInstance();
 
-        System.out.println("configurator.getValue(\"name\"); = " + configurator.getValue("name"));
+        assertEquals("SmartCode", configurator.getValue("company"));
     }
 
-    protected void tearDown() {
-        System.setProperty(OPEN_CONFIG_DEVELOPMENT_MODE, "");
+    @Override
+    protected void doTearDown() {
         System.setProperty(OPEN_CONFIG_DEVELOPMENT_FILE, "");
     }
 }
