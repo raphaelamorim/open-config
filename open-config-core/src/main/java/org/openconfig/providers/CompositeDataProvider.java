@@ -7,7 +7,9 @@ import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.InvocationContext;
 import org.openconfig.event.ChangeStateEvent;
+import org.openconfig.event.EventListener;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
+import org.openconfig.util.Assert;
 import static org.openconfig.util.Assert.notNull;
 
 import java.util.HashMap;
@@ -30,6 +32,8 @@ public class CompositeDataProvider implements DataProvider {
     public static final int CONFIGURATOR_INDEX = 0;
 
     public static final int PROPERTY_PATH_INDEX = 1;
+
+    private Map<String, EventListener[]> configuratorToEventListenerMap = new HashMap<String, EventListener[]>();
 
     @Inject
     private OpenConfigConfiguration openConfigConfiguration;
@@ -78,12 +82,6 @@ public class CompositeDataProvider implements DataProvider {
         return dataProvider;
     }
 
-    public void onEvent(ChangeStateEvent event) {
-        for (DataProvider dataProvider : providers.values()) {
-            dataProvider.onEvent(event);
-        }
-    }
-
     public boolean requiresReloading() {
         for (DataProvider dataProvider : providers.values()) {
             if (dataProvider.requiresReloading()) {
@@ -107,10 +105,19 @@ public class CompositeDataProvider implements DataProvider {
 
     public void addDataProvider(String interfaceClass, final DataProvider dataProvider) {
         providers.putIfAbsent(interfaceClass, dataProvider);
+        if(configuratorToEventListenerMap.containsKey(interfaceClass)) {
+            dataProvider.registerEventListeners(interfaceClass, configuratorToEventListenerMap.get(interfaceClass));
+        }
     }
 
-    public boolean missingDataProvider(String interfaceClass) {
+    private boolean missingDataProvider(String interfaceClass) {
         return !providers.containsKey(interfaceClass);
+    }
+
+    public void registerEventListeners(String configurator, EventListener... eventListeners) {
+        Assert.isTrue(!configuratorToEventListenerMap.containsKey(configurator), "EventListeners are already configured for the " +
+                "configurator: %s");
+        configuratorToEventListenerMap.put(configurator, eventListeners);
     }
 
     @Override

@@ -36,6 +36,7 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
     }
 
     public void reload() {
+        lastModified = file.lastModified();
         ComplexNode root = new ComplexNode();
         Properties properties = new Properties();
         FileInputStream fileInputStream = null;
