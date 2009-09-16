@@ -2,27 +2,27 @@ package org.openconfig.core;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.log4j.Logger;
+import static org.apache.log4j.Logger.getLogger;
+import static org.openconfig.core.Accessor.getAccessor;
+import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.core.bean.ProxyInvocationHandler;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static java.util.regex.Pattern.compile;
 
-import org.openconfig.core.bean.ProxyInvocationHandler;
-import org.openconfig.core.bean.PropertyNormalizer;
-import static org.openconfig.core.Accessor.getAccessor;
-import org.apache.log4j.Logger;
-import static org.apache.log4j.Logger.getLogger;
-
 /**
  * TODO: Should this class and ConfiguratorProxy extend a common base class? There's a lot of duplication of code here..
+ *
  * @author Dushyanth (Dee) Inguva
  */
-   public class DatatypeProxy implements MethodInterceptor {
+public class DatatypeProxy implements MethodInterceptor {
 
     private static final Logger LOGGER = getLogger(ConfiguratorProxy.class);
-    
-    private InvocationContext invocationContext;
+
+    private final InvocationContext invocationContext;
 
     private final ProxyInvocationHandler proxyInvocationHandler;
 
@@ -38,10 +38,10 @@ import static org.apache.log4j.Logger.getLogger;
         this.proxyInvocationHandler = proxyInvocationHandler;
         this.propertyNormalizer = propertyNormalizer;
         this.invocationContext = new InvocationContext(invocationContext);
-    } 
+    }
 
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy proxy) throws Throwable {
-        invocationContext = new InvocationContext(invocationContext);
+        InvocationContext newContext = new InvocationContext(invocationContext);
         String name = method.getName();
         String property;
         Matcher matcher;
@@ -63,11 +63,11 @@ import static org.apache.log4j.Logger.getLogger;
         if (matcher.find()) {
             property = matcher.group(PROPERTY_NAME_INDEX);
             property = propertyNormalizer.normalize(property);
-            invocationContext.addInvocation(new Invocation(method, property));
-            return proxyInvocationHandler.handle(invocationContext,method, arguments, accessor);
+            newContext.addInvocation(new Invocation(method, property));
+            return proxyInvocationHandler.handle(newContext, method, arguments, accessor);
         }
 
         throw new MethodInvocationException(source, method);
     }
-    
+
 }
