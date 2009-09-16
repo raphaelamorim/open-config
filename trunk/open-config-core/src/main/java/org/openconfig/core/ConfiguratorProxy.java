@@ -52,7 +52,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     private final boolean alias;
 
-    @Inject
     private DataProvider dataProvider;
 
     /**

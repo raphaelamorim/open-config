@@ -40,5 +40,4 @@ public abstract class AbstractReloadableDataProvider extends AbstractDataProvide
     public abstract boolean requiresReloading();
 
     public abstract void reload();
-
 }

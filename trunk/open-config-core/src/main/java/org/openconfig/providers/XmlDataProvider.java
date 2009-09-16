@@ -48,6 +48,7 @@ public class XmlDataProvider extends AbstractReloadableDataProvider {
     private long lastModified;
 
     public void reload() {
+        lastModified = file.lastModified();
         ComplexNode root = new ComplexNode();
         FileInputStream fileInputStream = null;
         try {

@@ -22,12 +22,13 @@ public class Assert {
     }
 
     /**
-     * TODO javadoc me
+     * Ensures that the nonNullObject parameter is not null.
      *
-     * @param nonNullObject
-     * @param message
-     * @param placeholderValues
-     * @return
+     * @param nonNullObject the object which will be checked
+     * @param message the message used to create the exception. This message can contain placeholders which should be
+     * passed as <param>placeholderValues</param>
+     * @param placeholderValues the place holder values which will be substituted
+     * @throws IllegalArgumentException if the nonNullObject parameter is null
      */
     public static void notNull(Object nonNullObject, String message, Object... placeholderValues) {
         if (nonNullObject == null) {
@@ -39,9 +40,9 @@ public class Assert {
      * Asserts that the passed String is not null and has non white space characters.
      *
      * @param aString the string to check
-     * @param message
-     * @param placeholderValues
-     * @return
+     * @param message the message used to create the exception. This message can contain placeholders which should be
+     * passed as <param>placeholderValues</param>
+     * @param placeholderValues the place holder values which will be substituted
      * @throws IllegalArgumentException if aString is null, empty or contains just white spaces
      */
     public static void hasLength(String aString, String message, Object... placeholderValues) {
