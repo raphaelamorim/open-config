@@ -26,6 +26,7 @@ public class ConfiguratorTest extends LocalTestCase {
         assertEquals("Richard", admin.getName());
         assertEquals(30, admin.getAge());
         assertEquals(DayOfWeek.Sun, admin.getDayOfWeek());
+        assertEquals("iPhone", admin.getPhone().getModel());
     }
 
     @Override

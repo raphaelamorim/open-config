@@ -11,6 +11,17 @@ public class Person {
 
     private DayOfWeek dayOfWeek;
 
+    private Phone phone;
+
+    public Phone getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Phone phone) {
+        this.phone = phone;
+    }
+
+
     public int getAge() {
         return age;
     }
