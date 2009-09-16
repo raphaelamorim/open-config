@@ -21,10 +21,9 @@ public interface ProxyInvocationHandler {
      *
      * @param invocationContext
      *@param method    The method being invoked.
-     * @param name      The normalized method name.
      * @param arguments The arguments passed to the method.
      * @param access    The type of method invoked.     @return The return value from the invoked method.
      */
-    Object handle(InvocationContext invocationContext, Method method, String name, Object[] arguments, Accessor access);
+    Object handle(InvocationContext invocationContext, Method method, Object[] arguments, Accessor access);
 
 }

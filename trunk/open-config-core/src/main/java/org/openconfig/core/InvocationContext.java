@@ -13,26 +13,46 @@ public class InvocationContext {
 
     private Class interfaceClass;
 
-    private List<Method> methods = new LinkedList<Method>();
+    private List<Invocation> invocations = new LinkedList<Invocation>();
+
+    private String configuratorName;
 
     public InvocationContext(Class interfaceClass) {
         this.interfaceClass = interfaceClass;
+        this.configuratorName =  interfaceClass.getSimpleName();
     }
 
-    public void addMethod(Method method){
-        methods.add(method);
+    public InvocationContext(InvocationContext invocationContext) {
+        this(invocationContext.getInterfaceClass());
+        this.invocations.addAll(invocationContext.getInvocations());
     }
 
-    public Iterator<Method> getIterator(){
-        return methods.iterator();
+    public void addInvocation(Invocation invocation){
+        invocations.add(invocation);
     }
 
-    public List<Method> getMethods() {
-        return Collections.unmodifiableList(methods);
+    public Iterator<Invocation> getIterator(){
+        return invocations.iterator();
+    }
+
+    public List<Invocation> getInvocations() {
+        return Collections.unmodifiableList(invocations);
+    }
+
+    public String getConfiguratorName() {
+        return configuratorName;
+    }
+
+    public Invocation getLastInvocation(){
+        if(invocations.size() > 0){
+            return invocations.get(invocations.size()-1);
+        }else{
+            throw new IllegalStateException("There are no invocations in this InvocationContext!");
+        }
     }
 
     public Class getInterfaceClass() {
         return interfaceClass;
     }
-
+    
 }

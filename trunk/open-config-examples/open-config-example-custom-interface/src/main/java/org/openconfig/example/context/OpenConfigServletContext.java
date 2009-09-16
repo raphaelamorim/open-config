@@ -11,7 +11,6 @@ import javax.servlet.ServletContextEvent;
 public class OpenConfigServletContext implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
-       System.setProperty(OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_MODE, "true");
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
