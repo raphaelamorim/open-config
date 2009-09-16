@@ -13,8 +13,6 @@ public class DataProviderToConfiguratorAdapter implements Configurator {
 
     private DataProvider dataProvider;
 
-    private final String configuratorName = Configurator.class.getSimpleName();
-
     public DataProviderToConfiguratorAdapter() {
 
     }
@@ -25,6 +23,8 @@ public class DataProviderToConfiguratorAdapter implements Configurator {
     }
 
     public Object getValue(String key) {
-        return dataProvider.getValue(configuratorName + "." + key);
+        InvocationContext invocationContext = new InvocationContext(Configurator.class);
+        invocationContext.addInvocation(new Invocation(null, key)); // TODO: Fix the Null for Method
+        return dataProvider.getValue(invocationContext);
     }
 }

@@ -48,8 +48,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     private final EventPublisher eventPublisher;
 
-    private String interfaceName;
-
     private final Class configuratorInterface;
 
     private final boolean alias;
@@ -67,10 +65,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         this.configuratorInterface = configuratorInterface;
         this.alias = alias;
         this.eventPublisher = eventPublisher;
-        
-        if (alias) {
-            interfaceName = configuratorInterface.getSimpleName();
-        }
     }
 
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
@@ -96,8 +90,8 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         if (matcher.find()) {
             property = matcher.group(PROPERTY_NAME_INDEX);
             property = propertyNormalizer.normalize(property);
-            invocationContext.addMethod(method);
-            return proxyInvocationHandler.handle(invocationContext, method, configuratorInterface.getSimpleName() + "." + property, arguments, accessor);
+            invocationContext.addInvocation(new Invocation(method, property));
+            return proxyInvocationHandler.handle(invocationContext, method, arguments, accessor);
         }
 
         throw new MethodInvocationException(source, method);

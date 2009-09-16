@@ -47,7 +47,8 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         return !Modifier.isFinal(clazz.getModifiers());
     }
 
-    public Object handle(InvocationContext invocationContext, Method method, String property, Object[] arguments, Accessor accessor) {
+    public Object handle(InvocationContext invocationContext, Method method, Object[] arguments, Accessor accessor) {
+        invocationContext = new InvocationContext(invocationContext);
         Class clazz = method.getReturnType();
         if (accessor == GETTER) {
             if (shouldProxy(method)) {
@@ -56,13 +57,13 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
                 }
                 Enhancer enhancer = new Enhancer();
                 enhancer.setSuperclass(clazz);
-                DatatypeProxy datatypeProxy = new DatatypeProxy(this, clazz, proxy.getPropertyNormalizer(), property);
+                DatatypeProxy datatypeProxy = new DatatypeProxy(this, proxy.getPropertyNormalizer(), invocationContext);
                 enhancer.setCallback(datatypeProxy);
                 return enhancer.create();
             } else {
                 // In the case of Enums, a wrapper EnumValue is created to
                 // encapsulate all the required data for the transformer.
-                Object returnvalue = proxy.getDataProvider().getValue(property);
+                Object returnvalue = proxy.getDataProvider().getValue(invocationContext);
                 if (clazz.isEnum()) {
                     returnvalue = new EnumValue(clazz, returnvalue);
                     clazz = EnumValue.class;

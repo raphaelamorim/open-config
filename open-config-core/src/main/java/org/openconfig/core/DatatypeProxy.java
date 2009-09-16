@@ -20,11 +20,11 @@ import static org.apache.log4j.Logger.getLogger;
  */
    public class DatatypeProxy implements MethodInterceptor {
 
+    private static final Logger LOGGER = getLogger(ConfiguratorProxy.class);
+    
     private InvocationContext invocationContext;
 
     private final ProxyInvocationHandler proxyInvocationHandler;
-
-    private static final Logger LOGGER = getLogger(ConfiguratorProxy.class);
 
     private static final int PROPERTY_NAME_INDEX = 2;
 
@@ -34,16 +34,14 @@ import static org.apache.log4j.Logger.getLogger;
 
     private final PropertyNormalizer propertyNormalizer;
 
-    private String parentContext;
-
-    public DatatypeProxy(ProxyInvocationHandler proxyInvocationHandler, Class proxiedClass, PropertyNormalizer propertyNormalizer, String parentContext) {
-        invocationContext = new InvocationContext(proxiedClass);
+    public DatatypeProxy(ProxyInvocationHandler proxyInvocationHandler, PropertyNormalizer propertyNormalizer, InvocationContext invocationContext) {
         this.proxyInvocationHandler = proxyInvocationHandler;
         this.propertyNormalizer = propertyNormalizer;
-        this.parentContext = parentContext;
+        this.invocationContext = new InvocationContext(invocationContext);
     } 
 
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy proxy) throws Throwable {
+        invocationContext = new InvocationContext(invocationContext);
         String name = method.getName();
         String property;
         Matcher matcher;
@@ -65,9 +63,11 @@ import static org.apache.log4j.Logger.getLogger;
         if (matcher.find()) {
             property = matcher.group(PROPERTY_NAME_INDEX);
             property = propertyNormalizer.normalize(property);
-            invocationContext.addMethod(method);
-            return proxyInvocationHandler.handle(invocationContext,method, parentContext + "." + property, arguments, accessor);
+            invocationContext.addInvocation(new Invocation(method, property));
+            return proxyInvocationHandler.handle(invocationContext,method, arguments, accessor);
         }
 
-        throw new MethodInvocationException(source, method);    }
+        throw new MethodInvocationException(source, method);
+    }
+    
 }

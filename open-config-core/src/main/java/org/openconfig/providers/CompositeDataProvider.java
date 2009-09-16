@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import org.apache.log4j.Logger;
 import org.openconfig.core.BasicOpenConfigContext;
 import org.openconfig.core.OpenConfigContext;
+import org.openconfig.core.InvocationContext;
 import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import static org.openconfig.util.Assert.notNull;
@@ -36,28 +37,26 @@ public class CompositeDataProvider implements DataProvider {
     @Inject
     private Injector injector;
 
-    public Object getValue(String property) {
-        String[] key = property.split("\\.", MAX_NUMBER_OF_ELEMENTS);
+    public Object getValue(InvocationContext invocationContext) {
+        String key = invocationContext.getConfiguratorName();
 
         ensureDataProviderExists(key);
 
-        String configurator = key[CONFIGURATOR_INDEX];
-        String path = key[PROPERTY_PATH_INDEX];
-        LOGGER.debug("Locating DataProvider for " + configurator + " and property " + property);
-        DataProvider provider = providers.get(configurator);
-        notNull(provider, "Unable to find provider for %s Configurator interface!", configurator);
+        LOGGER.debug("Locating DataProvider for " + key + " and property " + invocationContext.getLastInvocation().getProperty());
+        DataProvider provider = providers.get(key);
+        notNull(provider, "Unable to find provider for %s Configurator interface!", invocationContext.getConfiguratorName());
 
-        return provider.getValue(path);
+        return provider.getValue(invocationContext);
 
     }
 
     /**
      * Checks if the data provider exists. If not, creates it.
      *
-     * @param key the key which contains the interface name
+     * @param configuratorName the key which contains the interface name
      */
-    private void ensureDataProviderExists(String[] key) {
-        String interfaceName = key[0].trim();
+    private void ensureDataProviderExists(String configuratorName) {
+        String interfaceName = configuratorName.trim();
         if (missingDataProvider(interfaceName)) {
             addDataProvider(interfaceName, createDataProvider(interfaceName));
         }
