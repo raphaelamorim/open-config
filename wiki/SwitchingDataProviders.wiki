@@ -1,3 +1,4 @@
+#labels todo
 = How to use different DataProviders? =
 
 When developing locally, it's preferred to create a local configuration file that can be quickly modified in order to change the values while developing. In such a situation, OpenConfig allows for switching the DataProvider. Out of the box, OpenConfig supports the following DataProviders:
@@ -19,7 +20,7 @@ For detail information about the open-config.properties file, please see [http:/
  
 == How to use the XmlDataProvider ==
 
-When working with hierarchical data structures, it's preferred to use the XmlDataProvider over the PropertiesDataProvider for obvious reasons. The configuration file passed to the XmlDataProvider doesn't have any DTD or Scheme. Each node within the file maps to an object on the configuration interface. Let's example a simple configuration file.
+When working with hierarchical data structures, it's preferred to use the XmlDataProvider over the PropertiesDataProvider for obvious reasons. The configuration file passed to the XmlDataProvider doesn't have any DTD or Schema. Each node within the file maps to an object on the configuration interface. Let's example a simple configuration file.
 
 ConfiguratorInterface.xml
 
@@ -32,7 +33,7 @@ ConfiguratorInterface.xml
 </configuration>
 }}}
 
-The domain model for the above configuration looks as follows:
+*The domain model for the above configuration looks as follows:*
 
 {{{
 public class Person {
@@ -43,7 +44,7 @@ public class Person {
 }
 }}}
 
-ConfiguratorInterface.java
+*ConfiguratorInterface.java*
 
 {{{
 public interface ConfiguratorInterface {
@@ -51,7 +52,7 @@ public interface ConfiguratorInterface {
 }
 }}}
 
-Usage example:
+*Usage example:*
 
 {{{
 ConfiguratoryFactory cf = new ConfiguratorFactoryBuilder().build();
@@ -60,3 +61,40 @@ Person person = ci.getPerson();
 System.out.println("The person id is " + person.getId());
 System.out.println("The person name is " + person.getName());
 }}}
+
+== How to use the PropertiesDataProvider ==
+
+It's very common for a project to use a properties file to store configuration information since it's easy to manage when dealing with a small number of configuration values. When developing locally, developers may want to use a properties file to quickly get moving without having to deal with configuring the administrative service for OpenConfig. This is where the PropertiesDataProvider comes into the picture. We're going to take the above example and create a properties file that the PropertiesDataProvider can use to back the custom interface ConfiguratorInterface used in the prior example.
+
+In order to represent the above example in a properties file, we will have to use dot notation to express the invocation path done on the ConfiguratorInterface. When methods are invoked on the custom Configurator, the invocation path is passed down to the DataProvider to uniquely identify the value accessed in the configuration file. Let's take a simple example and break it down.
+
+{{{
+configuratorInterface.getPerson().getFriend().getName()
+}}}
+
+The above example would translate into the following dot notation:
+
+{{{
+person.friend.name
+}}}
+
+You can see how the method names are normalized into a single key that can be to locate the value within the properties file. So let's convert the prior XML file into a properties file!
+
+*ConfiguratorInterface.properties*
+
+{{{
+person.id=100
+person.name=Richard Burton
+person.friend.id=101
+person.friend.name=Dushyanth Inguva
+}}}
+
+The PropertiesDataProvider searches for the ConfiguratorInterface.properties by looking in the root of the classpath.
+
+Take notice how the 'person' namespace is repeated for each attribute and child node from the prior example to reflect the hierarchy. The last thing we need to do is tell OpenConfig to use the PropertiesDataProvider by editing the open-config.properties file.
+
+{{{
+DataProvider=org.openconfig.providers.PropertiesDataProvider
+}}}
+
+That's it! The code example that uses the ConfiguratorInterface doesn't have to be touched.
