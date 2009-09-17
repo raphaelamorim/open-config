@@ -1,5 +1,5 @@
 #labels todo
-= How to use different DataProviders? =
+= How to use different DataProviders =
 
 When developing locally, it's preferred to create a local configuration file that can be quickly modified in order to change the values while developing. In such a situation, OpenConfig allows for switching the DataProvider. Out of the box, OpenConfig supports the following DataProviders:
 
@@ -8,7 +8,7 @@ When developing locally, it's preferred to create a local configuration file tha
 
 Depending on the preference of the developer, either of these DataProviders can be used or a custom DataProvider written. In the following section, we're going to examine how to swap out different DataProviders.
 
-== How to swap out DataProviders? ==
+== How to swap out DataProviders ==
 
 All customization of OpenConfig is done by modifying the open-config.properties file. This file is a simple key/value file that defines the relationship between the pluggable 'component' with the implementation. The pluggable component that needs to be replace when working with DataProviders is the DataProvider component. The below example shows how to enable the usage of the XmlDataProvider packaged with OpenConfig.
 
@@ -17,12 +17,18 @@ DataProvider=org.openconfig.providers.XmlDataProvider
 }}}
 
 For detail information about the open-config.properties file, please see [http://code.google.com/p/open-config open-config.properties].
- 
+
+== Understanding how the 'default' DataProviders locate the configuration files ==
+
+When creating a configuration file that'll back a custom configuration interface, you must name the configuration file exactly the same as the configuration interface when using one of the default DataProviders (_XmlDataProvider and PropertiesDataProvider_).
+
+Let's take for a moment where we want to create a DatabaseConfiguration class/interface that we will used to represent the configuration information for our database access. The first thing we will do is save a DatabaseConfiguration.properties or DatabaseConfiguration.xml at the root level of the class-path. Note: the extension of the DataConfiguration will be dependent on the DataProvider selected.
+
 == How to use the XmlDataProvider ==
 
 When working with hierarchical data structures, it's preferred to use the XmlDataProvider over the PropertiesDataProvider for obvious reasons. The configuration file passed to the XmlDataProvider doesn't have any DTD or Schema. Each node within the file maps to an object on the configuration interface. Let's example a simple configuration file.
 
-ConfiguratorInterface.xml
+*ConfiguratorInterface.xml*
 
 {{{
 <?xml version='1.0'?>
