@@ -31,6 +31,7 @@
             * Create an EventListener
             * Pass in the EventListener into the ConfiguratorFactory#newInstance(..)
         * How to write a custom EnvironmentResolver?
+        * How to customize parts of openconfig?
         * How to write test cases?
         * Architecture overview
         * An overview of an invocation flow 
