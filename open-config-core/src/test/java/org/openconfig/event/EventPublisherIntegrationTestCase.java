@@ -44,6 +44,5 @@ public class EventPublisherIntegrationTestCase extends LocalTestCase {
         assertEquals(newName, configurator.getName());
         assertEquals(newAge, configurator.getAge());
         verify(eventListener);
-
     }
 }

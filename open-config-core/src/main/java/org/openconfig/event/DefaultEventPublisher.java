@@ -14,7 +14,6 @@ public class DefaultEventPublisher implements EventPublisher {
 
     private final List<EventListener> eventListeners = new LinkedList<EventListener>();
 
-    // TODO Temporary. Will be refactored after we define a proper event hierarchy
     public void publishEvent(ChangeStateEvent event) {
         for (EventListener listener : eventListeners) {
             listener.onEvent(event);
@@ -24,5 +23,4 @@ public class DefaultEventPublisher implements EventPublisher {
     public void addListeners(EventListener... listeners) {
         eventListeners.addAll(asList(listeners));
     }
-
 }

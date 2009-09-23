@@ -76,7 +76,6 @@ public class ConfigurationFactoryBuilder {
 
     /**
      * Creates the openconfig module that is used to configure guice.
-     * TODO do we need a guice builder?
      * @return the guice module
      */
     private OpenConfigModule createOpenConfigModule() {

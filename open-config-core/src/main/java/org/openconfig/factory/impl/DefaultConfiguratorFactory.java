@@ -84,7 +84,7 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
     }
 
     private ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventListener... eventListeners) {
-        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias, eventPublisher);
+        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias);
         ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
         dataProvider.registerEventListeners(configuratorInterface.getSimpleName(), eventListeners);
         proxy.setDataProvider(dataProvider);
