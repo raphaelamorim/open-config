@@ -6,30 +6,34 @@ import org.openconfig.providers.ast.NodeManager;
 import org.openconfig.providers.ast.SimpleNode;
 
 import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Richard L. Burton III
  */
 public abstract class AbstractDataProvider implements DataProvider {
 
-    private ComplexNode root;
+    private AtomicReference<ComplexNode> root;
 
     protected NodeManager nodeFinder = new NodeManager();
 
     protected EventPublisher eventPublisher = new DefaultEventPublisher();
 
+    public AbstractDataProvider () {
+        root = new AtomicReference<ComplexNode>();
+    }
+
     public Object getValue(String name) {
-        return ((SimpleNode) nodeFinder.find(name, root)).getValue();
+        return ((SimpleNode) nodeFinder.find(name, root.get())).getValue();
     }
 
     public ComplexNode getRoot() {
-        return root;
+        return root.get();
     }
 
     protected void setRoot(ComplexNode root) {
-        boolean wasRootNull = this.root == null;
-        // TODO use an AtomicReference here?
-        this.root = root;
+        boolean wasRootNull = this.root.get() == null;
+        this.root.set(root);
 
         if (!wasRootNull) {
             // TODO figure out the differnce between the trees and send it as the change

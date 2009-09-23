@@ -1,20 +1,18 @@
 package org.openconfig.core;
 
-import java.lang.reflect.Method;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import static java.util.regex.Pattern.compile;
-
-import static org.openconfig.core.Accessor.*;
-import org.openconfig.core.bean.PropertyNormalizer;
-import org.openconfig.core.bean.ProxyInvocationHandler;
-import org.openconfig.event.EventPublisher;
-import org.openconfig.providers.DataProvider;
-import org.apache.log4j.Logger;
-import static org.apache.log4j.Logger.getLogger;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import com.google.inject.Inject;
+import org.apache.log4j.Logger;
+import static org.apache.log4j.Logger.getLogger;
+import static org.openconfig.core.Accessor.getAccessor;
+import org.openconfig.core.bean.PropertyNormalizer;
+import org.openconfig.core.bean.ProxyInvocationHandler;
+import org.openconfig.providers.DataProvider;
+
+import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import static java.util.regex.Pattern.compile;
 
 /**
  * The ConfiguratorProxy class handles the interception of method invocations on the
@@ -46,8 +44,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
      */
     private ProxyInvocationHandler proxyInvocationHandler;
 
-    private final EventPublisher eventPublisher;
-
     private final Class configuratorInterface;
 
     private final boolean alias;
@@ -55,15 +51,13 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
     private DataProvider dataProvider;
 
     /**
-     * TODO: Implement logic to handle event publishing.
+     *
      * @param configuratorInterface
      * @param alias
-     * @param eventPublisher
      */
-    public ConfiguratorProxy(Class configuratorInterface, boolean alias, EventPublisher eventPublisher) {
+    public ConfiguratorProxy(Class configuratorInterface, boolean alias) {
         this.configuratorInterface = configuratorInterface;
         this.alias = alias;
-        this.eventPublisher = eventPublisher;
     }
 
     // TODO: hashCode() and equals(..)
