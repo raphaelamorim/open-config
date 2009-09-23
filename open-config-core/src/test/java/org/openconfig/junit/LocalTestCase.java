@@ -13,7 +13,7 @@ public abstract class LocalTestCase extends TestCase {
 
     @Override
     protected final void setUp() throws Exception {
-        System.setProperty(SystemPropertyEnvironmentResolver.DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE, Environment.LOCAL_ENVIRONMENT);
+        System.setProperty(SystemPropertyEnvironmentResolver.ENVIRONMENT_VARIABLE, Environment.LOCAL_ENVIRONMENT);
         doSetUp();
     }
 
@@ -22,7 +22,7 @@ public abstract class LocalTestCase extends TestCase {
 
     @Override
     protected final void tearDown() throws Exception {
-        System.setProperty(SystemPropertyEnvironmentResolver.DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE, "");
+        System.setProperty(SystemPropertyEnvironmentResolver.ENVIRONMENT_VARIABLE, "");
         doTearDown();
     }
 

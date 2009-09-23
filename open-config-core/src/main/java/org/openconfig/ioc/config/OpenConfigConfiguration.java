@@ -9,11 +9,8 @@ public interface OpenConfigConfiguration {
 
     boolean hasClass(String alias);
 
-    // TODO Add link to list of mapping names
     /**
      * Loads and gets the extension point with the corresponding mapping name. For a list of valid mapping names, look at TODO
-     *
-     *
      * @param name
      * @return returns null if the extension point could not be found
      */

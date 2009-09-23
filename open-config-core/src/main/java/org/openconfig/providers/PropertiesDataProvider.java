@@ -78,7 +78,6 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
         Assert.hasLength(configurationName, "Could not get parameter 'interface' from context");
         String configurationFileName = configurationName + '.' + FILE_TYPE;
         String customConfigFile = System.getProperty(OPEN_CONFIG_DEVELOPMENT_FILE);
-        // TODO check if we are in local development mode
         if (customConfigFile != null && customConfigFile.trim().length() != 0) {
             LOGGER.info("Using custom application configuration file specified by system property:" + OPEN_CONFIG_DEVELOPMENT_FILE + " config file name: " + customConfigFile);
             configurationFileName = customConfigFile;
