@@ -7,13 +7,12 @@ import org.openconfig.Environment;
  */
 public class SystemPropertyEnvironmentResolver implements EnvironmentResolver {
 
-    // TODO: Rename to a shorter more reasonable length.. ENVIRONMENT_PARAMTER?
-    public static final String DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE = "environment";
+    public static final String ENVIRONMENT_VARIABLE = "environment";
 
-    private String variable = DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE;
+    private String variable = ENVIRONMENT_VARIABLE;
 
     public Environment resolve(OpenConfigContext context) {
-        return new Environment(System.getProperty(DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE));
+        return new Environment(System.getProperty(ENVIRONMENT_VARIABLE));
     }
 
     public String getVariable() {

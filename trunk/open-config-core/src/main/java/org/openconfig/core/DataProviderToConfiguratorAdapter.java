@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import org.openconfig.Configurator;
 import org.openconfig.providers.DataProvider;
 
+import java.lang.reflect.Method;
+
 /**
  * Adapts a DataProvider to a Configurator.
  *
@@ -24,7 +26,15 @@ public class DataProviderToConfiguratorAdapter implements Configurator {
 
     public Object getValue(String key) {
         InvocationContext invocationContext = new InvocationContext(Configurator.class);
-        invocationContext.addInvocation(new Invocation(null, key)); // TODO: Fix the Null for Method
+        invocationContext.addInvocation(new Invocation(getMethod(), key));
         return dataProvider.getValue(invocationContext);
+    }
+
+    private Method getMethod() {
+        try {
+            return getClass().getMethod("getValue", String.class);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

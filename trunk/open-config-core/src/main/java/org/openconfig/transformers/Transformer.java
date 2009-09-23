@@ -5,6 +5,5 @@ package org.openconfig.transformers;
  */
 public interface Transformer<F, T> {
 
-    /** todo: This method shouldn't throw a checked exception! */
     T transform(F source);
 }

@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public class DataTypeManager {
 
-    // TODO: Fix me...
     private Transformer NO_MATCH_TRANSFORMER = new Transformer(){
         public Object transform(Object source) {
             return source;

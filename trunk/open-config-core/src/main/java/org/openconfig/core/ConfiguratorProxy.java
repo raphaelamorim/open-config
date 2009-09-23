@@ -66,6 +66,7 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         this.eventPublisher = eventPublisher;
     }
 
+    // TODO: hashCode() and equals(..)
     public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
         InvocationContext invocationContext = new InvocationContext(configuratorInterface);
         String name = method.getName();
