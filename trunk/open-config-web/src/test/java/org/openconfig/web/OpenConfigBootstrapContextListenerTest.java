@@ -31,7 +31,8 @@ public class OpenConfigBootstrapContextListenerTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        System.setProperty(SystemPropertyEnvironmentResolver.DEFAULT_SYSTEM_PROPERTY_ENVIRONMENT_VARIABLE, "local");
+        System.setProperty(SystemPropertyEnvironmentResolver.ENVIRONMENT_VARIABLE
+                , "local");
         servletContext = new MockServletContext();
         servletContextEvent = new ServletContextEvent(servletContext);
     }
