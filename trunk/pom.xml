@@ -12,9 +12,9 @@
     <name>OpenConfig Parent POM</name>
     <packaging>pom</packaging>
 
-    <modules>
+    <modules>                  
         <module>open-config-core</module>
-        <module>open-config-server</module>
+        <module>open-config-server-core</module>
         <module>open-config-client</module>
         <module>open-config-spring</module>
         <module>open-config-web</module>
