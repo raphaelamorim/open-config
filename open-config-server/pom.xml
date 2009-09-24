@@ -13,7 +13,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openconfig</groupId>
-    <artifactId>open-config-server</artifactId>
+    <artifactId>open-config-server-core</artifactId>
     <version>0.1</version>
 
     <name>OpenConfig Server</name>
