@@ -26,6 +26,40 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>exec-maven-plugin</artifactId>-->
+            <!--<version>1.1</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<goals>-->
+            <!--<goal>exec</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--<configuration>-->
+            <!--<executable>java</executable>-->
+            <!--<arguments>-->
+            <!--<argument>-classpath</argument>-->
+            <!--<classpath/>-->
+            <!--<argument>com.gorm.standalone.application.Main</argument>-->
+            <!--</arguments>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
@@ -38,6 +72,47 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.grails</groupId>
+            <artifactId>grails-bootstrap</artifactId>
+            <version>1.1-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.grails</groupId>
+            <artifactId>grails-gorm</artifactId>
+            <version>1.1-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.8.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>3.3.0.ga</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>3.3.0.ga</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy.maven.runtime</groupId>
+            <artifactId>gmaven-runtime-default</artifactId>
+            <version>1.0-rc-3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openconfig</groupId>
             <artifactId>open-config-core</artifactId>
@@ -82,4 +157,22 @@
             <version>1.5.4</version>
         </dependency>
     </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>codehaus-snapshots</id>
+            <name>codehaus-snapshots</name>
+            <url>http://snapshots.repository.codehaus.org</url>
+        </repository>
+    </repositories>
 </project>
