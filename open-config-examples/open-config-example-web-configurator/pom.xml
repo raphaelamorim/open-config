@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.openconfig</groupId>
             <artifactId>open-config-web</artifactId>
-            <version>0.1</version>
+            <version>${pom.version}</version>
         </dependency>
     </dependencies>
 </project>
