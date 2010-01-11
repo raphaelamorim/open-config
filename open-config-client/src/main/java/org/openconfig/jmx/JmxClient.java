@@ -1,6 +1,6 @@
 package org.openconfig.jmx;
 
-import javax.management.JMX;
+//import javax.management.JMX;
 import javax.management.ObjectName;
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -40,8 +40,10 @@ public class JmxClient {
     }
 
     public void jmx() throws IOException, MalformedObjectNameException {
-        OpenConfigMBean configurator = JMX.newMXBeanProxy(connection, objectName, OpenConfigMBean.class, true);
-        System.out.println("configurator.getValue(\"test\"); = " + configurator.getInitialState("test"));
+        // TODO Temporary - Dee
+        throw new UnsupportedOperationException();
+//        OpenConfigMBean configurator = JMX.newMXBeanProxy(connection, objectName, OpenConfigMBean.class, true);
+//        System.out.println("configurator.getValue(\"test\"); = " + configurator.getInitialState("test"));
     }
 
     public void setServiceURL(String serviceURL) {
