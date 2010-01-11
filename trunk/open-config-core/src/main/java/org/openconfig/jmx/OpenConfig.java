@@ -10,7 +10,7 @@ import javax.management.openmbean.CompositeData;
  */
 @ManagedResource(objectName = "org.openconfig:name=jmxConfigurator",
         description = "OpenConfig JMX-managed bean")
-public class OpenConfig implements OpenConfigMBean{
+public class OpenConfig {
 
     @ManagedAttribute
     public void setValue(String application, String name, Object value) {
