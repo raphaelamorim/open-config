@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
-@ManagedResource(objectName="bean:name=configuration", description="Provides access to all OpenConfig Configurations configured on this server.")
+@ManagedResource(objectName="org.openconfig:name=Configuration", description="Provides access to all OpenConfig Configurations configured on this server.")
 public class Configuration
 {
 
