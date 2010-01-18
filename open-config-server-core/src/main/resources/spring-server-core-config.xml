@@ -6,13 +6,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
+    <!-- TODO: Temporary: have to locate the correct mbean server. -->
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean"/>
+
     <bean id="exporter"
           class="org.springframework.jmx.export.MBeanExporter"
           lazy-init="false"
           p:assembler-ref="assembler"
           p:namingStrategy-ref="namingStrategy"
-          p:autodetect="true"
-            />
+          p:autodetect="true">
+        <property name="server" ref="mbeanServer"/>
+    </bean>
 
     <bean id="attributeSource"
           class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
@@ -38,6 +42,9 @@
         <property name="objectName" value="connector:name=rmi"/>
         <property name="serviceUrl"
                   value="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/openConfigConnector"/>
+    </bean>
+
+    <bean id="configurationMBean" class="org.openconfig.server.mbean.Configuration">
     </bean>
 
 </beans>
