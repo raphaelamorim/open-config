@@ -13,8 +13,9 @@ import javax.management.openmbean.CompositeData;
 public class OpenConfig {
 
     @ManagedAttribute
-    public void setValue(String application, String name, Object value) {
-    }
+//    public void setValue(String application, String name, Object value) {
+      public void setValue(String application) {
+      }
 
     @ManagedAttribute
     public CompositeData getInitialState(String application) {
