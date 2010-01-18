@@ -7,7 +7,10 @@
         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
     <!-- TODO: Temporary: have to locate the correct mbean server. -->
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean"/>
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+        <property name="locateExistingServerIfPossible" value="true"/>
+        <!-- TODO: Set the agentId property if present, take a null if not. -->
+    </bean>
 
     <bean id="exporter"
           class="org.springframework.jmx.export.MBeanExporter"
