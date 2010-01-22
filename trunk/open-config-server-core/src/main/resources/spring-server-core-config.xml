@@ -47,7 +47,7 @@
                   value="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/openConfigConnector"/>
     </bean>
 
-    <bean id="configurationMBean" class="org.openconfig.server.mbean.Configuration">
+    <bean id="configurationMBean" class="org.openconfig.server.mbean.ConfigurationService">
     </bean>
 
 </beans>

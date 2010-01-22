@@ -7,6 +7,7 @@ import org.openconfig.server.repository.ApplicationRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.Map;
 
 /**
  * @author Richard L. Burton III - SmartCode LLC
@@ -19,7 +20,7 @@ public class DefaultConfigurationService implements ConfigurationService {
         return applicationRepository.findByName(name);
     }
 
-    public Set<Configuration> findConfigurationsByApplication(String name) {
+    public Map<String, Configuration> findConfigurationsByApplication(String name) {
         Application application = applicationRepository.findByName(name);
         return application.getConfigurations();
     }

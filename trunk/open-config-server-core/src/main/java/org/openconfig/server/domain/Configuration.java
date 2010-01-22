@@ -1,20 +1,19 @@
 package org.openconfig.server.domain;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.LinkedList;
-import java.util.List;
-import java.io.Serializable;
-
-import javax.persistence.*;
 
 /**
  * @author Richard L. Burton III - SmartCode LLC
  */
+// TODO: Define ApplicationTemplate, ConfigurationTemplate so people can define a template and reuse them while creating
+// configuration and application. Also, think about defining department/company standards when coming to properties.
 @Entity
-@Table(name="oc_configuration")
+@Table(name = "oc_configuration")
 public class Configuration implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "configuration_id")
@@ -23,21 +22,21 @@ public class Configuration implements Serializable {
     @Column(name = "configuration_name", length = 255)
     private String name;
 
-    @OneToMany(cascade= CascadeType.ALL, targetEntity = ConfigurationValue.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = ConfigurationValue.class, fetch = FetchType.EAGER)
     private Set<ConfigurationValue> values = new HashSet<ConfigurationValue>();
 
-    public void addConfigurationValue(ConfigurationValue configurationValue){
+    public void addConfigurationValue(ConfigurationValue configurationValue) {
         values.add(configurationValue);
     }
-    
-    public Long getId(){
-    	return id;
+
+    public Long getId() {
+        return id;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
@@ -76,5 +75,5 @@ public class Configuration implements Serializable {
                 ", id=" + id +
                 '}';
     }
-    
+
 }
