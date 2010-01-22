@@ -45,9 +45,17 @@
         <property name="objectName" value="connector:name=rmi"/>
         <property name="serviceUrl"
                   value="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/openConfigConnector"/>
+        <property name="environmentMap">
+            <map>
+                <entry key="jmx.remote.authenticator" value-ref="jmxAuthenticator"/>
+            </map>
+        </property>
     </bean>
 
-    <bean id="configurationMBean" class="org.openconfig.server.mbean.ConfigurationService">
-    </bean>
+    <bean id="jmxAuthenticator"
+          class="org.openconfig.server.jmx.BasicJMXAuthenticator"/>
+
+    <bean id="configurationMBean"
+          class="org.openconfig.server.mbean.ConfigurationService"/>
 
 </beans>
