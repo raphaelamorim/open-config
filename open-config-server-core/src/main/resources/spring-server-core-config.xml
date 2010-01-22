@@ -6,56 +6,20 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <!-- TODO: Temporary: have to locate the correct mbean server. -->
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
-        <property name="locateExistingServerIfPossible" value="true"/>
-        <!-- TODO: Set the agentId property if present, take a null if not. -->
-    </bean>
 
-    <bean id="exporter"
-          class="org.springframework.jmx.export.MBeanExporter"
-          lazy-init="false"
-          p:assembler-ref="assembler"
-          p:namingStrategy-ref="namingStrategy"
-          p:autodetect="true">
-        <property name="server" ref="mbeanServer"/>
-    </bean>
+    <bean id="applicationRepository"
+          class="org.openconfig.server.repository.impl.HibernateApplicationRepository"
+          p:sessionFactory-ref="sessionFactory"/>
 
-    <bean id="attributeSource"
-          class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
+    <bean id="configurationRepository"
+          class="org.openconfig.server.repository.impl.HibernateConfigurationRepository"
+          p:sessionFactory-ref="sessionFactory"/>
 
-    <bean id="assembler"
-          class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler"
-          p:attributeSource-ref="attributeSource"/>
+    <bean id="applicationService"
+          class="org.openconfig.server.service.ApplicationService"
+          p:applicationRepository-ref="applicationRepository"/>
 
-
-    <bean id="namingStrategy"
-          class="org.springframework.jmx.export.naming.MetadataNamingStrategy"
-          p:attributeSource-ref="attributeSource"/>
-
-    <bean id="openConfig"
-          class="org.openconfig.jmx.OpenConfig"/>
-
-    <bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean">
-        <property name="port" value="1099"/>
-    </bean>
-
-    <bean id="serverConnector" depends-on="registry"
-          class="org.springframework.jmx.support.ConnectorServerFactoryBean">
-        <property name="objectName" value="connector:name=rmi"/>
-        <property name="serviceUrl"
-                  value="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/openConfigConnector"/>
-        <property name="environmentMap">
-            <map>
-                <entry key="jmx.remote.authenticator" value-ref="jmxAuthenticator"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="jmxAuthenticator"
-          class="org.openconfig.server.jmx.BasicJMXAuthenticator"/>
-
-    <bean id="configurationMBean"
-          class="org.openconfig.server.mbean.ConfigurationService"/>
-
+    <bean id="configurationService"
+          class="org.openconfig.server.service.ConfigurationService"
+          p:configurationRepository-ref="configurationRepository"/>
 </beans>
