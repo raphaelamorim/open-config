@@ -1,19 +1,16 @@
-package org.openconfig.server.service.impl;
+package org.openconfig.server.service;
 
-import org.openconfig.server.service.ConfigurationService;
 import org.openconfig.server.domain.Application;
 import org.openconfig.server.domain.Configuration;
 import org.openconfig.server.repository.ApplicationRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import java.util.Map;
 
 /**
- * @author Richard L. Burton III - SmartCode LLC
+ * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
-public class DefaultConfigurationService implements ConfigurationService {
-
+public class ApplicationService {
     private ApplicationRepository applicationRepository;
 
     public Application findApplication(String name) {
@@ -33,5 +30,4 @@ public class DefaultConfigurationService implements ConfigurationService {
     public void setApplicationRepository(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
     }
-
 }
