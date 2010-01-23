@@ -1,14 +1,19 @@
 package org.openconfig.server.integration;
 
 import static junit.framework.Assert.assertEquals;
+import org.hibernate.Session;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openconfig.server.domain.Application;
 import org.openconfig.server.domain.Configuration;
 import org.openconfig.server.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Creates an entire Application along with a Configuration, persists it and tests a round trip.
