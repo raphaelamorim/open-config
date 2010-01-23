@@ -30,12 +30,11 @@ public class Application implements Serializable {
 
     @Column(name = "created_dt")
     private Date created = new Date();
-   /*
+
     // TODO: Dee - Still have to test this
     @MapKey(name = "configuration_alias")
     @JoinTable(joinColumns = @JoinColumn(name = "application_id"), name = "application_configuration")
     @ManyToMany(cascade = CascadeType.ALL, targetEntity = Configuration.class, fetch = FetchType.LAZY, mappedBy = "configuration_id")
-    */
     transient
     private Map<String, Configuration> configurations = new HashMap<String, Configuration>();
 
