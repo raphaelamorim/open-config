@@ -1,6 +1,7 @@
 package org.openconfig.server.integration;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openconfig.server.domain.Configuration;
@@ -19,7 +20,7 @@ import java.util.Set;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring-test-config.xml")
-public class DefaultConfigurationServiceTest extends AbstractDatabaseIntegrationTest {
+public class ConfigurationServiceTest extends AbstractDatabaseIntegrationTest {
 
     @Autowired
     private ConfigurationService configurationService;
@@ -34,29 +35,23 @@ public class DefaultConfigurationServiceTest extends AbstractDatabaseIntegration
         assertEquals(configuration.getName(), persistedConfiguration.getName());
 
         Set<ConfigurationValue> afterSaving = persistedConfiguration.getValues();
-        assertEquals(7, afterSaving.size());
+        assertTrue(afterSaving.size() != 0);
+        assertEquals(beforeSaving.size(), afterSaving.size());
         assertEquals(beforeSaving, afterSaving);
     }
 
     static Configuration createConfiguration() {
         Configuration configuration = new Configuration();
         configuration.setName("MOOOO");
-        ConfigurationValue integerValue = newConfigurationValue("integerValue", 55, ValueType.INT);
-        ConfigurationValue doubleValue = newConfigurationValue("doubleValue", 33.0, ValueType.DOUBLE);
+        ConfigurationValue integerValue = newConfigurationValue("numericValue", "55", ValueType.NUMERIC);
+        ConfigurationValue doubleValue = newConfigurationValue("secureValue", "P@ssw0rd", ValueType.SECURE);
         ConfigurationValue stringValue = newConfigurationValue("stringValue", "test", ValueType.STRING);
         ConfigurationValue booleanValue = newConfigurationValue("booleanValue", true, ValueType.BOOLEAN);
-        ConfigurationValue floatValue = newConfigurationValue("floatValue", 22.0f, ValueType.FLOAT);
-        ConfigurationValue charValue = newConfigurationValue("charValue", 'k', ValueType.CHAR);
-        ConfigurationValue shortValue = newConfigurationValue("shortValue", (short) 8, ValueType.SHORT);
-
 
         configuration.addConfigurationValue(integerValue);
         configuration.addConfigurationValue(doubleValue);
         configuration.addConfigurationValue(stringValue);
         configuration.addConfigurationValue(booleanValue);
-        configuration.addConfigurationValue(floatValue);
-        configuration.addConfigurationValue(charValue);
-        configuration.addConfigurationValue(shortValue);
         return configuration;
     }
 }

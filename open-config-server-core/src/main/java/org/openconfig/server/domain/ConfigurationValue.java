@@ -33,11 +33,8 @@ public class ConfigurationValue implements Serializable {
     @Column(name = "config_type", length = 255)
     private String type;
 
-    @Column(name = "int_value")
-    private int intValue;
-
-    @Column(name = "double_value")
-    private double doubleValue;
+    @Column(name = "numeric_value")
+    private String numericValue;
 
     @Column(name = "string_value")
     private String stringValue;
@@ -45,14 +42,8 @@ public class ConfigurationValue implements Serializable {
     @Column(name = "boolean_value")
     private boolean booleanValue;
 
-    @Column(name = "float_value")
-    private float floatValue;
-
-    @Column(name = "char_value", length = 1)
-    private char charValue;
-
-    @Column(name = "short_value")
-    private short shortValue;
+    @Column(name = "secure_value")
+    private String secureValue;
 
     public ConfigurationValue() {
     }
@@ -72,7 +63,6 @@ public class ConfigurationValue implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-
     }
 
     public ConfigurationValue getParent() {
@@ -89,24 +79,6 @@ public class ConfigurationValue implements Serializable {
 
     public String getType() {
         return type;
-    }
-
-    public int getIntValue() {
-        return intValue;
-    }
-
-    public void setIntValue(int intValue) {
-        type = INT.toString();
-        this.intValue = intValue;
-    }
-
-    public double getDoubleValue() {
-        return doubleValue;
-    }
-
-    public void setDoubleValue(double doubleValue) {
-        type = DOUBLE.toString();
-        this.doubleValue = doubleValue;
     }
 
     public String getStringValue() {
@@ -127,30 +99,22 @@ public class ConfigurationValue implements Serializable {
         this.booleanValue = booleanValue;
     }
 
-    public float getFloatValue() {
-        return floatValue;
+    public String getNumericValue() {
+        return numericValue;
     }
 
-    public void setFloatValue(float floatValue) {
-        this.floatValue = floatValue;
+    public void setNumericValue(String numericValue) {
+        this.numericValue = numericValue;
+        type = NUMERIC.toString();
     }
 
-    public char getCharValue() {
-        return charValue;
+    public String getSecureValue() {
+        return secureValue;
     }
 
-    public void setCharValue(char charValue) {
-        type = CHAR.toString();
-        this.charValue = charValue;
-    }
-
-    public short getShortValue() {
-        return shortValue;
-    }
-
-    public void setShortValue(short shortValue) {
-        type = SHORT.toString();
-        this.shortValue = shortValue;
+    public void setSecureValue(String secureValue) {
+        this.secureValue = secureValue;
+        type = SECURE.toString();
     }
 
     @Override
@@ -177,8 +141,8 @@ public class ConfigurationValue implements Serializable {
      * Creates a child configuration value, adds it to the specified parent and returns the newly created child.
      *
      * @param parent
-     * @param name the name of the child
-     * @param value the value of the child
+     * @param name      the name of the child
+     * @param value     the value of the child
      * @param valueType the type of the value of the child
      * @return
      */
@@ -205,26 +169,17 @@ public class ConfigurationValue implements Serializable {
 
         switch (valueType) {
 
-            case INT:
-                configurationValue.setIntValue((Integer) value);
+            case NUMERIC:
+                configurationValue.setNumericValue((String) value);
                 break;
-            case DOUBLE:
-                configurationValue.setDoubleValue((Double) value);
+            case SECURE:
+                configurationValue.setSecureValue((String) value);
                 break;
             case STRING:
                 configurationValue.setStringValue((String) value);
                 break;
             case BOOLEAN:
                 configurationValue.setBooleanValue((Boolean) value);
-                break;
-            case FLOAT:
-                configurationValue.setFloatValue((Float) value);
-                break;
-            case CHAR:
-                configurationValue.setCharValue((Character) value);
-                break;
-            case SHORT:
-                configurationValue.setShortValue((Short) value);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown data type: " + value.getClass().getName() + " for value: " + value + ". It has to be one of: "

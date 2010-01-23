@@ -6,11 +6,8 @@ import javax.persistence.Column;
  * @author Richard L. Burton III - SmartCode LLC
  */
 public enum ValueType {
-    INT,
-    DOUBLE,
+    NUMERIC,
     STRING,
     BOOLEAN,
-    FLOAT,
-    CHAR,
-    SHORT
+    SECURE
 }
