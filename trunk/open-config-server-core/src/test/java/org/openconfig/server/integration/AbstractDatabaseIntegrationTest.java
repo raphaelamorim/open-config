@@ -2,8 +2,8 @@ package org.openconfig.server.integration;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.SessionHolder;
@@ -19,14 +19,14 @@ public class AbstractDatabaseIntegrationTest {
     @Autowired
     private SessionFactory sessionFactory;
 
-    @BeforeClass
-    public final void setup() {
+    @Before
+    public final void setupSession() {
         Session session = SessionFactoryUtils.getSession(sessionFactory, true);
         TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
     }
 
-    @AfterClass
-    public final void teardown() {
+    @After
+    public final void tearDownSession() {
         SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
         SessionFactoryUtils.closeSession(sessionHolder.getSession());
     }
