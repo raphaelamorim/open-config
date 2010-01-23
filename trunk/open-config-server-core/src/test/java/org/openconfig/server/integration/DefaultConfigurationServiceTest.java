@@ -19,13 +19,26 @@ import java.util.Set;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring-test-config.xml")
-public class DefaultConfigurationServiceTest {
+public class DefaultConfigurationServiceTest extends AbstractDatabaseIntegrationTest {
 
     @Autowired
     private ConfigurationService configurationService;
 
     @Test
     public void testSaveConfiguration() {
+        Configuration configuration = createConfiguration();
+        Set<ConfigurationValue> beforeSaving = configuration.getValues();
+        configurationService.saveConfiguration(configuration);
+
+        Configuration persistedConfiguration = configurationService.findConfiguration("MOOOO");
+        assertEquals(configuration.getName(), persistedConfiguration.getName());
+
+        Set<ConfigurationValue> afterSaving = persistedConfiguration.getValues();
+        assertEquals(7, afterSaving.size());
+        assertEquals(beforeSaving, afterSaving);
+    }
+
+    static Configuration createConfiguration() {
         Configuration configuration = new Configuration();
         configuration.setName("MOOOO");
         ConfigurationValue integerValue = newConfigurationValue("integerValue", 55, ValueType.INT);
@@ -44,14 +57,6 @@ public class DefaultConfigurationServiceTest {
         configuration.addConfigurationValue(floatValue);
         configuration.addConfigurationValue(charValue);
         configuration.addConfigurationValue(shortValue);
-        Set<ConfigurationValue> beforeSaving = configuration.getValues();
-        configurationService.saveConfiguration(configuration);
-
-        Configuration persistedConfiguration = configurationService.findConfiguration("MOOOO");
-        assertEquals(configuration.getName(), persistedConfiguration.getName());
-
-        Set<ConfigurationValue> afterSaving = persistedConfiguration.getValues();
-        assertEquals(7, afterSaving.size());
-        assertEquals(beforeSaving, afterSaving);
+        return configuration;
     }
 }

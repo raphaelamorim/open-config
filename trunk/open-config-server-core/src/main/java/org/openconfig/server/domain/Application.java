@@ -1,5 +1,9 @@
 package org.openconfig.server.domain;
 
+import org.hibernate.annotations.MapKeyManyToMany;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -31,14 +35,21 @@ public class Application implements Serializable {
     @Column(name = "created_dt")
     private Date created = new Date();
 
-    // TODO: Dee - Still have to test this
-    @MapKey(name = "configuration_alias")
-    @JoinTable(joinColumns = @JoinColumn(name = "application_id"), name = "application_configuration")
-    @ManyToMany(cascade = CascadeType.ALL, targetEntity = Configuration.class, fetch = FetchType.LAZY, mappedBy = "configuration_id")
-    transient
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @MapKeyManyToMany(joinColumns = @JoinColumn(name = "configuration_alias"))
+    @JoinTable(name = "application_configurations", joinColumns = @JoinColumn(name = "application_id"),
+            inverseJoinColumns = @JoinColumn(name = "configuration_id"))
     private Map<String, Configuration> configurations = new HashMap<String, Configuration>();
 
+    /**
+     * Adds a configuration with an alias to this application. If there is already a configuration with this alias,
+     * it gets replaced.
+     *
+     * @param name          The local alias for this configuration.
+     * @param configuration
+     */
     public void addConfiguration(String name, Configuration configuration) {
+        notNull(name);
         configurations.put(name, configuration);
     }
 
@@ -60,6 +71,18 @@ public class Application implements Serializable {
 
     public Map<String, Configuration> getConfigurations() {
         return configurations;
+    }
+
+    /**
+     * Gets the configuration with the given alias.
+     *
+     * @param alias
+     * @return
+     * @throws IllegalArgumentException if the
+     */
+    public Configuration getConfiguration(String alias) {
+        isTrue(configurations.containsKey(alias));
+        return configurations.get(alias);
     }
 
     public void setConfigurations(Map<String, Configuration> configurations) {
