@@ -6,7 +6,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <import resource="spring-server-core-config.xml"/>
-    <import resource="spring-server-jmx-config.xml"/>
+    <bean id="applicationService"
+          class="org.openconfig.server.service.ApplicationService"
+          p:applicationRepository-ref="applicationRepository"/>
 
+    <bean id="configurationService"
+          class="org.openconfig.server.service.ConfigurationService"
+          p:configurationRepository-ref="configurationRepository"/>
 </beans>
