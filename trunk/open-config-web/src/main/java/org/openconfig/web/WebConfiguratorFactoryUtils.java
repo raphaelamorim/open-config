@@ -9,7 +9,7 @@ import javax.servlet.ServletContext;
  */
 public final class WebConfiguratorFactoryUtils {
 
-    public static String CONFIGURATOR_FACTORY_KEY = WebConfiguratorFactoryUtils.class.getPackage().getName();
+    public static final String CONFIGURATOR_FACTORY_KEY = WebConfiguratorFactoryUtils.class.getPackage().getName();
 
     public static ConfiguratorFactory getConfiguratorFactory(ServletContext context) {
         ConfiguratorFactory instance = (ConfiguratorFactory) context.getAttribute(CONFIGURATOR_FACTORY_KEY);
