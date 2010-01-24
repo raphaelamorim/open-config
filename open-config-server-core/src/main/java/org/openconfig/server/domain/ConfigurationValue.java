@@ -1,6 +1,7 @@
 package org.openconfig.server.domain;
 
 import static org.openconfig.server.domain.ValueType.*;
+import static org.openconfig.util.Assert.isTrue;
 import static org.openconfig.util.Assert.notNull;
 
 import javax.persistence.*;
@@ -30,8 +31,11 @@ public class ConfigurationValue implements Serializable {
     @Column(name = "config_name", length = 255)
     private String name;
 
+    @Column(name = "descripton", length = 255)
+    private String description;
+
     @Column(name = "config_type", length = 255)
-    private String type;
+    private ValueType valueType;
 
     @Column(name = "numeric_value")
     private String numericValue;
@@ -77,16 +81,12 @@ public class ConfigurationValue implements Serializable {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public String getStringValue() {
         return stringValue;
     }
 
     public void setStringValue(String stringValue) {
-        type = STRING.toString();
+        valueType = STRING;
         this.stringValue = stringValue;
     }
 
@@ -95,7 +95,7 @@ public class ConfigurationValue implements Serializable {
     }
 
     public void setBooleanValue(boolean booleanValue) {
-        type = BOOLEAN.toString();
+        valueType = BOOLEAN;
         this.booleanValue = booleanValue;
     }
 
@@ -105,7 +105,7 @@ public class ConfigurationValue implements Serializable {
 
     public void setNumericValue(String numericValue) {
         this.numericValue = numericValue;
-        type = NUMERIC.toString();
+        valueType = NUMERIC;
     }
 
     public String getSecureValue() {
@@ -114,7 +114,23 @@ public class ConfigurationValue implements Serializable {
 
     public void setSecureValue(String secureValue) {
         this.secureValue = secureValue;
-        type = SECURE.toString();
+        valueType = SECURE;
+    }
+
+    public ValueType getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(ValueType valueType) {
+        this.valueType = valueType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -163,6 +179,7 @@ public class ConfigurationValue implements Serializable {
      */
     public static ConfigurationValue newConfigurationValue(String name, Object value, ValueType valueType) {
         notNull(name, "Value with name %s and of type %s cannot be null", name, valueType);
+        isTrue(valueType != PARENT, "Cannot assign value %s to key as the key is defined as a parent node", name, value);
 
         ConfigurationValue configurationValue = new ConfigurationValue();
         configurationValue.setName(name);

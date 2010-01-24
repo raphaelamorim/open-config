@@ -1,5 +1,8 @@
 package org.openconfig.jmx.builder;
 
+import org.springframework.util.Assert;
+import static org.springframework.util.Assert.notNull;
+
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.CompositeType;
@@ -13,6 +16,8 @@ import java.util.Map;
 public class CompositeDataBuilder {
 
     private CompositeTypeBuilder compositeTypeBuilder;
+
+    private CompositeType compositeType;
 
     private Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -30,6 +35,11 @@ public class CompositeDataBuilder {
             compositeTypeBuilder.addType(name, openType);
         }
         return this;
+    }
+    
+    public CompositeType getCompositeType() {
+        notNull(compositeType, "CompositeType unavailable before build() is invoked.");
+        return compositeType;
     }
 
     public CompositeDataBuilder addChildCompositeData(String name, String description) {
@@ -55,7 +65,7 @@ public class CompositeDataBuilder {
     public CompositeData build() {
         try {
             addInternalCompositeData();
-            CompositeType compositeType = compositeTypeBuilder.build();
+            compositeType = compositeTypeBuilder.build();
             return new CompositeDataSupport(compositeType, attributes);
         } catch (Exception e) {
             throw new RuntimeException(e); // TODO: Find something better throw.

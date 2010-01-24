@@ -9,5 +9,6 @@ public enum ValueType {
     NUMERIC,
     STRING,
     BOOLEAN,
-    SECURE
+    SECURE,
+    PARENT
 }
