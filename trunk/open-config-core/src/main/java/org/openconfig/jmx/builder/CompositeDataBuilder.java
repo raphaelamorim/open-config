@@ -16,17 +16,45 @@ public class CompositeDataBuilder {
 
     private Map<String, Object> attributes = new HashMap<String, Object>();
 
+    private CompositeDataBuilder compositeDataBuilder;
+
     public CompositeDataBuilder(String name, String description) {
         compositeTypeBuilder = new CompositeTypeBuilder(name, description);
     }
 
-    public void addAttribute(String name, Object value, OpenType openType) {
-        attributes.put(name, value);
-        compositeTypeBuilder.addType(name, openType);
+    public CompositeDataBuilder addAttribute(String name, Object value, OpenType openType) {
+        if (compositeDataBuilder != null) {
+            compositeDataBuilder.addAttribute(name, value, openType);
+        } else {
+            attributes.put(name, value);
+            compositeTypeBuilder.addType(name, openType);
+        }
+        return this;
+    }
+
+    public CompositeDataBuilder addChildCompositeData(String name, String description) {
+        if (compositeDataBuilder != null) {
+            addInternalCompositeData();
+        }
+        compositeDataBuilder = new CompositeDataBuilder(name, description);
+        return this;
+    }
+
+    private void addInternalCompositeData() {
+        if (compositeDataBuilder != null) {
+            CompositeData compositeData = compositeDataBuilder.build();
+            attributes.put(compositeDataBuilder.getCompositeTypeBuilder().getName(), compositeData);
+            compositeTypeBuilder.addType(compositeDataBuilder.getCompositeTypeBuilder().getName(), compositeData.getCompositeType());
+        }
+    }
+
+    public CompositeTypeBuilder getCompositeTypeBuilder() {
+        return compositeTypeBuilder;
     }
 
     public CompositeData build() {
         try {
+            addInternalCompositeData();
             CompositeType compositeType = compositeTypeBuilder.build();
             return new CompositeDataSupport(compositeType, attributes);
         } catch (Exception e) {

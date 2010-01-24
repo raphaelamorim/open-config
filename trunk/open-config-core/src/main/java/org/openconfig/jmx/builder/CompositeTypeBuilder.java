@@ -28,6 +28,14 @@ public class CompositeTypeBuilder {
         return this;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public CompositeType build() {
         try {
             return new CompositeType(name
