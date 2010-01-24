@@ -13,9 +13,9 @@ public interface Authenticator {
     /**
      * Authenticates the client based upon the Credentials that were submitted
      * in the request.
-     * @param creditenals The clients credentials used for authentication.
+     * @param credentials The clients credentials used for authentication.
      * @return The JAAS Subject reflecting a successful authentication.
      */
-    Subject authenticate(Credentials creditenals);
+    Subject authenticate(Credentials credentials);
     
 }

@@ -16,12 +16,22 @@ import javax.security.auth.Subject;
  */
 public class DelegateJMXAuthenticator implements JMXAuthenticator {
 
+    /** The index of the username in the String array. */
     private static final int USERNAME = 0;
 
+    /** The index of the password in the String array. */
     private static final int PASSWORD = 1;
 
+    /** The Authenticator used to authenticate the request. */
     private Authenticator authenticator;
 
+    /**
+     * This method will validate the user credentials and then delegate the authentication
+     * process to the supplied Authenticator.
+     * @param userCredentials The credentials used to authenticate the client for.
+     * @return The subject representing a successful login.
+     * @throws IllegalArgumentException When the credentials are null or not of the right type.
+     */
     public Subject authenticate(Object userCredentials) {
         notNull(userCredentials, "The provided credentials must not be null.");
         isTrue(userCredentials instanceof String[], "Expected type of String[] for parameter 'userCredentials'");

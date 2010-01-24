@@ -1,11 +1,18 @@
 package org.openconfig.server.authentication;
 
+import java.io.Serializable;
+
 /**
+ * Defines the value object used to represent the clients
+ * credentials when authenticating.
  * @author Richard L. Burton III - SmartCode LLC
  */
-public class Credentials {
+public class Credentials implements Serializable {
 
+    /** The username of the account to authenticate. */
     private String username;
+
+    /** The passord of the account to authenticate. */
     private String password;
 
     public Credentials(String username, String password) {
@@ -21,7 +28,6 @@ public class Credentials {
         return password;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -34,7 +40,6 @@ public class Credentials {
         return true;
     }
 
-    @Override
     public int hashCode() {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
