@@ -28,11 +28,15 @@ public class CompositeTypeBuilder {
         return this;
     }
 
-    public CompositeType build() throws OpenDataException {
-        return new CompositeType(name
-                , description
-                , attributeNames.toArray(new String[]{})
-                , attributeNames.toArray(new String[]{})
-                , attributeOpenType.toArray(new OpenType[]{}));
+    public CompositeType build() {
+        try {
+            return new CompositeType(name
+                    , description
+                    , attributeNames.toArray(new String[]{})
+                    , attributeNames.toArray(new String[]{})
+                    , attributeOpenType.toArray(new OpenType[]{}));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
