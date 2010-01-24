@@ -32,6 +32,9 @@ public class Application implements Serializable {
     @Column(name = "application_name", length = 255, unique = true)
     private String name;
 
+    @Column(name = "description", length = 255)
+    private String description;
+
     @Column(name = "created_dt")
     private Date created = new Date();
 
@@ -63,6 +66,14 @@ public class Application implements Serializable {
 
     public Date getCreated() {
         return created;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setCreated(Date created) {

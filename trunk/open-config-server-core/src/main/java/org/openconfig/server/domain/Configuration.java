@@ -16,11 +16,14 @@ public class Configuration implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "configuration_id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "configuration_name", length = 255)
+    @Column(name = "name", length = 255)
     private String name;
+
+    @Column(name = "description", length = 255)
+    private String description;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = ConfigurationValue.class, fetch = FetchType.EAGER)
     private Set<ConfigurationValue> values = new HashSet<ConfigurationValue>();
@@ -39,6 +42,14 @@ public class Configuration implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Set<ConfigurationValue> getValues() {

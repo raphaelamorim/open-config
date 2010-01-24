@@ -43,8 +43,8 @@ public class CompositeTypeBuilder {
                     , attributeNames.toArray(new String[]{})
                     , attributeNames.toArray(new String[]{})
                     , attributeOpenType.toArray(new OpenType[]{}));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (OpenDataException e) {
+            throw new RuntimeException("Unable to construct a CompositeType with name: " + name + " and attribute names: " + attributeNames, e);
         }
     }
 }
