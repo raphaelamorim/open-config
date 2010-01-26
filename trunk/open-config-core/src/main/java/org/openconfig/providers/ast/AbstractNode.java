@@ -2,10 +2,12 @@ package org.openconfig.providers.ast;
 
 import org.openconfig.providers.NodeVisitorContext;
 
+import java.io.Serializable;
+
 /**
  * @author Richard L. Burton III
  */
-public abstract class AbstractNode<T> {
+public abstract class AbstractNode<T> implements Serializable {
 
     protected String name;
 

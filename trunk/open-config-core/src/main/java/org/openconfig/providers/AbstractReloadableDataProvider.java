@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Iterator;
 
 /**
- * @author Richard L. Burton III
+ * @author Richard L. Burton III, SmartCode LLC
  */
 public abstract class AbstractReloadableDataProvider extends AbstractDataProvider {
 
