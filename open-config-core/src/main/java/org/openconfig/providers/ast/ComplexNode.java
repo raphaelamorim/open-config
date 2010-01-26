@@ -7,14 +7,36 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * This class models a JavaBean.
+ * A ComplexNode is an internal representation of an object in a very loose structure. To see
+ * how an object is represented using a ComplexNode, the below class is used as an example.
  *
- * @author Richard L. Burton III
+ * <pre>public class Person {
+ *      private String name;
+ *      private int age;
+ * }
+ *
+ * new Person("richard", 30);
+ * </pre>
+ *
+ * The above class and creation would be represented using the following internal AST.
+ *
+ * <pre>ComplexNode person = new ComplexNode("person");
+ *
+ * SimpleNode nameAttribute = new SimpleNode("name", "richard");
+ * person.addChild(nameAttribute);
+ *
+ * SimpleNode ageAttribute = new SimpleNode("name", 30);
+ * person.addChild(ageAttribute);
+ * </pre>
+ * 
+ * @author Richard L. Burton III, SmartCode LLC
  */
 public class ComplexNode extends AbstractNode<Object> {
 
+    /** The Attributes which belong to the ComplexNode. */
     private Map<String, AbstractNode> children = new HashMap<String, AbstractNode>();
 
+    /** The name of all root nodes. */
     public static final String ROOT_NAME = "root";
 
     public ComplexNode() {

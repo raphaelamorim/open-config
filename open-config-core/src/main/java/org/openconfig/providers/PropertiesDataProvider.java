@@ -1,54 +1,57 @@
 package org.openconfig.providers;
 
 import org.apache.log4j.Logger;
-import org.openconfig.core.OpenConfigContext;
-import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_FILE;
+
 import org.openconfig.providers.ast.ComplexNode;
 import org.openconfig.providers.ast.NodeManager;
-import org.openconfig.util.Assert;
 
 import java.io.*;
-import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author Richard L. Burton III
+ * A PropertiesDataProvider is backed by a simple properties file which allows developers to quickly define
+ * key/value configurations. The following shows how to define a simple bean using the PropertiesDataProvider.
+ * <br/>
+ * <b>Java Bean</b>
+ * <br/>
+ * <pre>
+ * public class Person{
+ *      private String name = "Richard";
+ *      private int age = 30;
+ *
+ * }
+ * </pre>
+ *
+ * <b>Properties file</b>
+ * <br>
+ * <pre>
+ * person.name=Richard
+ * person.age=30
+ * </pre>
+ * <br/>
+ * <br/>
+ * Note: If a complex object graph is required, then it's recommend that you use either the <tt>YamlDataProvider</tt>
+ * or the <tt>XmlDataProvider</tt> since they're better suited for representing hierarchical graphs.
+ * @author Richard L. Burton III, SmartCode LLC
  */
-public class PropertiesDataProvider extends AbstractReloadableDataProvider {
+public class PropertiesDataProvider extends FileDataProvider {
 
     private Logger LOGGER = Logger.getLogger(PropertiesDataProvider.class);
 
+    /** The extension of the Properties file. */
     public static final String FILE_TYPE = "properties";
 
-    private File file;
-
-    private long lastModified;
-
-    protected OpenConfigContext openConfigContext;
-
-    public PropertiesDataProvider() {
-    }
-
-    public boolean requiresReloading() {
-        Assert.isTrue(file.lastModified() != 0, "Could not locate file: " + file.getAbsolutePath());
-        return lastModified != file.lastModified();
-    }
-
-    public void reload() {
-        lastModified = file.lastModified();
-        ComplexNode root = new ComplexNode();
+    /**
+     * @see org.openconfig.providers.FileDataProvider#load(org.openconfig.providers.ast.ComplexNode, java.io.InputStream)
+     */
+    public void load(ComplexNode root, InputStream input) throws Exception {
         Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
         BufferedInputStream bufferedInputStream = null;
         try {
-            fileInputStream     = new FileInputStream(file);
-            bufferedInputStream = new BufferedInputStream(fileInputStream);
+            bufferedInputStream = new BufferedInputStream(input);
             properties.load(bufferedInputStream);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to access properties file: " + file.getAbsolutePath());
-        }finally{
-            close(fileInputStream);
+        } finally {
             close(bufferedInputStream);
         }
 
@@ -60,47 +63,16 @@ public class PropertiesDataProvider extends AbstractReloadableDataProvider {
                 value = value.trim();
             }
 
+            LOGGER.debug("Setting property '" + key + "' equal to '" +  value + "'.");
             nodeManager.setValue(root, key, value, true);
         }
-
-        setRoot(root);
     }
 
     /**
-     * Uses the classpath to load the configuration file
-     *
-     * @param context
+     * @see FileDataProvider#getFileType() 
      */
-    public void initialize(OpenConfigContext context) {
-        openConfigContext = context;
-        String configurationName = context.getParameter("interface");
-
-        Assert.hasLength(configurationName, "Could not get parameter 'interface' from context");
-        String configurationFileName = configurationName + '.' + FILE_TYPE;
-        String customConfigFile = System.getProperty(OPEN_CONFIG_DEVELOPMENT_FILE);
-        if (customConfigFile != null && customConfigFile.trim().length() != 0) {
-            LOGGER.info("Using custom application configuration file specified by system property:" + OPEN_CONFIG_DEVELOPMENT_FILE + " config file name: " + customConfigFile);
-            configurationFileName = customConfigFile;
-        }
-        URL configurationFileURL = getClass().getClassLoader().getResource(configurationFileName);
-        Assert.notNull(configurationFileURL, "Cannot find the properties file: %s in the classpath", configurationFileName);
-        file = new File(configurationFileURL.getFile());
+    protected String getFileType() {
+        return FILE_TYPE;
     }
 
-    protected void close(Closeable closeable) {
-        try {
-            if (closeable != null)
-                closeable.close();
-        } catch (IOException ioe) {
-            LOGGER.warn("Failed to close FileInputStream.");
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "PropertiesDataProvider{" +
-                "file=" + file +
-                ", lastModified=" + lastModified +
-                '}';
-    }
 }
