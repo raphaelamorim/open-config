@@ -68,6 +68,9 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         Matcher matcher;
         Accessor accessor = getAccessor(name);
 
+        if(LOGGER.isDebugEnabled())
+            LOGGER.debug("Extracting the property name from method " + name + " with accessor of " + accessor);
+
         switch (accessor) {
             case GETTER:
                 matcher = GET_PROPERTY_REGEX.matcher(name);

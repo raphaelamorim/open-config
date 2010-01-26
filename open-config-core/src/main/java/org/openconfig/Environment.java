@@ -3,6 +3,8 @@ package org.openconfig;
 import org.apache.log4j.Logger;
 import org.openconfig.util.Assert;
 
+import static org.openconfig.util.Assert.hasLength;
+
 /**
  * This class models the environment in which OpenConfig is running in.
  *
@@ -19,7 +21,7 @@ public class Environment implements java.io.Serializable {
     private final String name;
 
     public Environment(String name) {
-        Assert.hasLength(name, "Unable to determine openconfig environment");
+        hasLength(name, "Unable to determine openconfig environment");
         this.name = name;
         LOGGER.info("The active environment for OpenConfig is " + name);
     }
