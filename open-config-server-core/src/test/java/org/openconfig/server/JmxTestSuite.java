@@ -1,6 +1,6 @@
 package org.openconfig.server;
 
-import integration.org.openconfig.server.authentication.JmxAuthenticationTest;
+import org.openconfig.server.authentication.JmxAuthenticationTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.test.context.ContextConfiguration;

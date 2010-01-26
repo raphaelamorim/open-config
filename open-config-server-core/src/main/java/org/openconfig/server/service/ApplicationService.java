@@ -32,6 +32,7 @@ public class ApplicationService {
 
     @Transactional
     public void saveApplication(Application application) {
+        notNull(application, "The application can not be null.");
         applicationRepository.save(application);
     }
 

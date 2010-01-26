@@ -41,5 +41,6 @@ public class CompositeDataTransformerTest {
     @Before
     public void setup() {
         compositeDataTransformer = new CompositeDataTransformer();
+        compositeDataTransformer.setSimpleTypeTransformer(new SimpleTypeTransformer());
     }
 }

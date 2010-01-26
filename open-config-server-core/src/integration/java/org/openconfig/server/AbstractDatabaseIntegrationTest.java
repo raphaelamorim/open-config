@@ -1,4 +1,4 @@
-package org.openconfig.server.integration;
+package org.openconfig.server;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

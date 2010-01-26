@@ -1,69 +1,69 @@
 package org.openconfig.jmx;
 
-//import javax.management.JMX;
-import javax.management.ObjectName;
-import javax.management.MBeanServerConnection;
-import javax.management.MalformedObjectNameException;
-import javax.management.remote.JMXServiceURL;
-import javax.management.remote.JMXConnectorFactory;
+import javax.management.*;
 import javax.management.remote.JMXConnector;
+
+import static javax.management.remote.JMXConnector.CREDENTIALS;
+import static org.openconfig.util.Assert.notNull;
+
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @author Richard L. Burton III
+ * @author Richard L. Burton III - SmartCode LLC
  */
 public class JmxClient {
 
-    private String serviceURL = "service:jmx:rmi:///jndi/rmi://:9999/jmxrmi";
+    private static final String OPENCONFIG_OBJECTNAME = "org.openconfig:name=ConfigurationService";
 
-    private String jmxObjectName = "org.openconfig:name=jmxConfigurator";
+    private JMXConnector connector = null;
 
-    private JMXConnector jmxConnector;
-    private MBeanServerConnection connection;
-    private ObjectName objectName;
+    private JMXServiceURL jmxServiceURL;
 
-    public JmxClient(String serviceURL, String jmxObjectName) {
-        this.serviceURL = serviceURL;
-        this.jmxObjectName = jmxObjectName;
+    private String serviceURL;
+
+    private String username;
+
+    private String password;
+
+    public void connect() throws IOException {
+        notNull(serviceURL, "The 'serviceURL' property can not be null.");
+        notNull(username, "The 'username' property can not be null.");
+        notNull(password, "The 'password' property can not be null.");
+
+        Map<String, Object> environment = new HashMap<String, Object>();
+        environment.put(CREDENTIALS, new String[]{username, password});
+        jmxServiceURL = new JMXServiceURL(serviceURL);
+        connector = JMXConnectorFactory.connect(jmxServiceURL, environment);
     }
 
-    public void connect() {
+    public MBeanInfo getOpenConfigMBean() throws MalformedObjectNameException, IOException, IntrospectionException, InstanceNotFoundException, ReflectionException {
+        ObjectName object = new ObjectName(OPENCONFIG_OBJECTNAME);
+        MBeanServerConnection connection = connector.getMBeanServerConnection();
+        return connection.getMBeanInfo(object);
+    }
+
+    public void close() {
         try {
-            JMXServiceURL jmxServiceURL = new JMXServiceURL(serviceURL);
-            jmxConnector = JMXConnectorFactory.connect(jmxServiceURL, null);
-            connection = jmxConnector.getMBeanServerConnection();
-            objectName = new ObjectName(jmxObjectName);
+            if (connector != null)
+                connector.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    public void jmx() throws IOException, MalformedObjectNameException {
-        // TODO Temporary - Dee
-        throw new UnsupportedOperationException();
-//        OpenConfigMBean configurator = JMX.newMXBeanProxy(connection, objectName, OpenConfigMBean.class, true);
-//        System.out.println("configurator.getValue(\"test\"); = " + configurator.getInitialState("test"));
     }
 
     public void setServiceURL(String serviceURL) {
         this.serviceURL = serviceURL;
     }
 
-    public String getServiceURL() {
-        return serviceURL;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getJmxObjectName() {
-        return jmxObjectName;
-    }
-
-    public void setJmxObjectName(String jmxObjectName) {
-        this.jmxObjectName = jmxObjectName;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        jmxConnector.close();
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -27,10 +27,9 @@ public class OpenMBeanConfigurationValueTransformer {
     public void transform(ConfigurationValue configurationValue, CompositeDataBuilder parentDataBuilder) {
         if (configurationValue.getValueType() == PARENT) {
             transform(configurationValue.getName(), configurationValue.getDescription(), configurationValue.getChildren(), parentDataBuilder);
-            return;
+        }else{
+            transformSimpleType(configurationValue, parentDataBuilder);
         }
-
-        transformSimpleType(configurationValue, parentDataBuilder);
     }
 
     /**
@@ -77,7 +76,7 @@ public class OpenMBeanConfigurationValueTransformer {
                 type = STRING;
                 break;
             default:
-                throw new UnsupportedOperationException(format("Unknown Configuration Value type: %s for configuration ",
+                throw new UnsupportedOperationException(format("Unknown Configuration Value type: %s for configuration %s",
                         configurationValue.getValueType(), configurationValue));
 
         }

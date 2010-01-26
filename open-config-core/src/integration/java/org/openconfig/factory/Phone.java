@@ -1,4 +1,4 @@
-package org.openconfig.integration.configurators;
+package org.openconfig.factory;
 
 /**
  * @author Dushyanth (Dee) Inguva

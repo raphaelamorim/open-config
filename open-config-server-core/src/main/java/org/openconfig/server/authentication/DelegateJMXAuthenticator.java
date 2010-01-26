@@ -1,7 +1,5 @@
 package org.openconfig.server.authentication;
 
-import org.springframework.beans.factory.annotation.Required;
-
 import static org.springframework.util.Assert.*;
 
 import javax.management.remote.JMXAuthenticator;
@@ -43,7 +41,6 @@ public class DelegateJMXAuthenticator implements JMXAuthenticator {
         return authenticator.authenticate(credentials);
     }
 
-    @Required
     public void setAuthenticator(Authenticator authenticator) {
         this.authenticator = authenticator;
     }

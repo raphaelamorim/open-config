@@ -17,11 +17,20 @@
     <version>0.1</version>
 
     <name>OpenConfig Web</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <description>
         This project contains all useful classes for web related applications looking to use OpenConfig.
     </description>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -37,21 +46,26 @@
         </dependency>
         <dependency>
             <groupId>org.openconfig</groupId>
-            <artifactId>open-config-core</artifactId>        
+            <artifactId>open-config-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
-        <dependency>                                                  
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>    
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>                
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-mock</artifactId>
+            <version>2.0-rc3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -59,5 +73,44 @@
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+            <version>2.1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-spring-plugin</artifactId>
+            <version>2.1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-tiles-plugin</artifactId>
+            <version>2.1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-rest-plugin</artifactId>
+            <version>2.1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-convention-plugin</artifactId>
+            <version>2.1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-sitemesh-plugin</artifactId>
+            <version>2.1.8</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>openqa-releases</id>
+            <url>http://nexus.openqa.org/content/repositories/releases
+            </url>
+        </repository>
+    </repositories>
+
 </project>

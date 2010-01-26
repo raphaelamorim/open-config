@@ -18,11 +18,6 @@ public class OpenMBeanApplicationTransformerTest {
     private OpenMBeanApplicationTransformer transformer = new OpenMBeanApplicationTransformer();
     private OpenMBeanConfigurationValueTransformer valueTransformer = new OpenMBeanConfigurationValueTransformer();
 
-    @Before
-    public void setup() {
-        transformer.setTransformer(valueTransformer);
-    }
-
     @Test
     public void verifyTransform() {
         Application application = createApplication();
@@ -66,6 +61,11 @@ public class OpenMBeanApplicationTransformerTest {
         application.setName("MOOO");
         application.setDescription("a description");
         return application;
+    }
+
+    @Before
+    public void setup() {
+        transformer.setTransformer(valueTransformer);
     }
 
 }
