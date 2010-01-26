@@ -65,7 +65,7 @@ public class OpenMBeanApplicationTransformerTest {
 
     @Before
     public void setup() {
-        transformer.setTransformer(valueTransformer);
+        transformer.setValueTransformer(valueTransformer);
     }
 
 }
