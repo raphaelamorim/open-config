@@ -87,4 +87,37 @@ public class Configuration implements Serializable {
                 '}';
     }
 
+    /**
+     * Convenience method to create a configuration.
+     *
+     * @param name
+     * @param description
+     * @return
+     */
+    public static Configuration newConfiguration(String name, String description) {
+        Configuration configuration = new Configuration();
+        configuration.setName(name);
+        configuration.setDescription(description);
+
+        return configuration;
+    }
+
+    /**
+     * Convenience method to create a configuration.
+     *
+     * @param name
+     * @param description
+     * @param configurationValues
+     * @return
+     */
+    public static Configuration newConfiguration(String name, String description, ConfigurationValue... configurationValues) {
+        Configuration configuration = newConfiguration(name, description);
+
+        for (ConfigurationValue value : configurationValues) {
+            configuration.addConfigurationValue(value);
+        }
+
+        return configuration;
+    }
+
 }

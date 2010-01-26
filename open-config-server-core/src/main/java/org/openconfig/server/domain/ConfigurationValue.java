@@ -205,4 +205,23 @@ public class ConfigurationValue implements Serializable {
         }
         return configurationValue;
     }
+
+    /**
+     * Convenience method that takes a value and a valueType(hint) and creates a ConfigurationValue object.
+     *
+     * @param name
+     * @param value
+     * @param children  the children configuration values that will be added to this configuration value.
+     * @param valueType the corresponding value type
+     * @return
+     * @see #newConfigurationValue(String, Object, ValueType)
+     */
+    public static ConfigurationValue newConfigurationValue(String name, Object value, ValueType valueType, ConfigurationValue... children) {
+        ConfigurationValue configurationValue = newConfigurationValue(name, value, valueType);
+
+        for (ConfigurationValue child : children) {
+            configurationValue.addChild(child);
+        }
+        return configurationValue;
+    }
 }

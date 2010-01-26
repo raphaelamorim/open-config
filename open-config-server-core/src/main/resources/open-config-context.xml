@@ -7,11 +7,14 @@
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
           p:searchSystemEnvironment="true"
-          p:location="open-config-init.properties"/>
+          p:location="classpath:open-config-init.properties"/>
 
-    <import resource="open-config-repository.xml"/>
-    <import resource="open-config-service.xml"/>
-    <import resource="open-config-authentication.xml"/>
-    <import resource="open-config-jmx.xml"/>
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <import resource="classpath:open-config-repository.xml"/>
+    <import resource="classpath:open-config-service.xml"/>
+    <import resource="classpath:open-config-authentication.xml"/>
+    <import resource="classpath:open-config-jmx.xml"/>
+    <import resource="classpath:open-config-database.xml"/>
 
 </beans>

@@ -12,11 +12,10 @@ import java.util.Map;
  */
 public class OpenMBeanApplicationTransformer {
 
+    private OpenMBeanConfigurationValueTransformer valueTransformer;
 
-    private OpenMBeanConfigurationValueTransformer transformer;
-
-    public void setTransformer(OpenMBeanConfigurationValueTransformer transformer) {
-        this.transformer = transformer;
+    public void setValueTransformer(OpenMBeanConfigurationValueTransformer valueTransformer) {
+        this.valueTransformer = valueTransformer;
     }
 
     /**
@@ -32,7 +31,7 @@ public class OpenMBeanApplicationTransformer {
 
             // Just because OpenMBeans doesn't seem to let us create an empty CompositeData object.
             if (entry.getValue().getValues().size() > 0) {
-                transformer.transform(entry.getKey(), entry.getValue().getDescription(), entry.getValue().getValues(),
+                valueTransformer.transform(entry.getKey(), entry.getValue().getDescription(), entry.getValue().getValues(),
                         compositeDataBuilder);
             }
         }

@@ -6,13 +6,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <bean id="jmxAuthenticator"
-          class="org.openconfig.server.authentication.DelegateJMXAuthenticator"
-          p:authenticator-ref="authenticator"/>
-
-    <bean id="authenticator"
-          class="org.openconfig.server.authentication.impl.SingleUserAuthenticator"
-          p:username="homer"
-          p:password="donut"/>
+    <import resource="classpath:open-config-context.xml"/>
 
 </beans>
