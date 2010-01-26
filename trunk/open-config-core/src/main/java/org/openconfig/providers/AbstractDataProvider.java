@@ -13,15 +13,11 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public abstract class AbstractDataProvider implements DataProvider {
 
-    private AtomicReference<ComplexNode> root;
+    private AtomicReference<ComplexNode> root = new AtomicReference<ComplexNode>();
 
     protected NodeManager nodeFinder = new NodeManager();
 
     protected EventPublisher eventPublisher = new DefaultEventPublisher();
-
-    public AbstractDataProvider () {
-        root = new AtomicReference<ComplexNode>();
-    }
 
     public Object getValue(String name) {
         return ((SimpleNode) nodeFinder.find(name, root.get())).getValue();

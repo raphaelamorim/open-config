@@ -11,6 +11,7 @@ import static org.openconfig.util.Assert.notNull;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
+
 import static java.util.Collections.singletonMap;
 
 /**
@@ -40,7 +41,8 @@ public class JmxClient {
 
     /**
      * Connects the client the the JMX server.
-     * @throws IllegalStateException If the client is already connected to the server.
+     *
+     * @throws IllegalStateException    If the client is already connected to the server.
      * @throws IllegalArgumentException If the service url, username or password are null.
      */
     public void connect() {
@@ -48,20 +50,16 @@ public class JmxClient {
         notNull(username, "The 'username' property can not be null.");
         notNull(password, "The 'password' property can not be null.");
 
-        if(connection != null){
-            String[] credentials = {username, password};
-            try {
-                JMXServiceURL jmxServiceURL = new JMXServiceURL(serviceURL);
-                LOGGER.debug("Preparing to connect to '" + serviceURL + "' server.");
-                connector = JMXConnectorFactory.connect(jmxServiceURL, singletonMap(CREDENTIALS, credentials));
-                objectName = new ObjectName(OPENCONFIG_OBJECTNAME);
-                connection = connector.getMBeanServerConnection();
-                registerListeners();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }else{
-            throw new IllegalStateException("The JmxClient is already connected to the server!");
+        String[] credentials = {username, password};
+        try {
+            JMXServiceURL jmxServiceURL = new JMXServiceURL(serviceURL);
+            LOGGER.debug("Preparing to connect to '" + serviceURL + "' server.");
+            connector = JMXConnectorFactory.connect(jmxServiceURL, singletonMap(CREDENTIALS, credentials));
+            objectName = new ObjectName(OPENCONFIG_OBJECTNAME);
+            connection = connector.getMBeanServerConnection();
+            registerListeners();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -60,6 +60,7 @@ public class ComplexNode extends AbstractNode<Object> {
         StringBuilder builder = new StringBuilder("ComplexNode(name: \'")
                 .append(getName()).append("\')\n\t");
         builder.append("attributes: (\n\t");
+        builder.append(children);
         builder.append("\t)");
         return builder.toString();
     }

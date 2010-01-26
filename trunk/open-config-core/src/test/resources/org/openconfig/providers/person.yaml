@@ -1,0 +1,8 @@
+person:
+  age: 30
+  name: Burton
+  company:
+      name: SmartCode
+      person:
+        age: 30
+        name: Dushy
