@@ -46,6 +46,15 @@
     </bean>
 
     <bean id="configurationMBean"
-          class="org.openconfig.server.mbean.ConfigurationService"/>
+          class="org.openconfig.server.mbean.ConfigurationService"
+          p:applicationService-ref="applicationService"
+          p:applicationTransformer-ref="openMBeanApplicationTransformer"
+          p:sessionFactory-ref="sessionFactory"/>
+
+    <bean id="openMBeanApplicationTransformer" class="org.openconfig.server.transformer.OpenMBeanApplicationTransformer"
+          p:valueTransformer-ref="openMBeanConfigurationValueTransformer"/>
+
+    <bean id="openMBeanConfigurationValueTransformer"
+          class="org.openconfig.server.transformer.OpenMBeanConfigurationValueTransformer"/>
 
 </beans>

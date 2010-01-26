@@ -1,48 +1,71 @@
 package org.openconfig.server.mbean;
 
-import org.springframework.jmx.export.annotation.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.openconfig.server.domain.Application;
+import org.openconfig.server.repository.NoSuchApplicationFoundException;
+import org.openconfig.server.service.ApplicationService;
+import org.openconfig.server.transformer.OpenMBeanApplicationTransformer;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
+import org.springframework.jmx.export.annotation.ManagedOperationParameters;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.management.openmbean.CompositeData;
 
 /**
+ * Exposes the configuration information for a given application.
+ *
  * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
 @ManagedResource(objectName = "org.openconfig:name=ConfigurationService", description = "Provides access to all OpenConfig Configurations configured on this server.")
 public class ConfigurationService {
 
-    private String[] configurationNames;
-    //  private ConfigurationRepository configurationRepository;
+    private SessionFactory sessionFactory;
+    private ApplicationService applicationService;
+    private OpenMBeanApplicationTransformer applicationTransformer;
 
-    public ConfigurationService() {
-        configurationNames = new String[]{"Twitter Web", "Twitter API", "Twitter Mobile", "Twitter HR"};
+    @Required
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    @ManagedAttribute(description = "Number of configurations defined on this openconfig server.")
-    public int getNumberOfConfigurations() {
-        return configurationNames.length;
+    @Required
+    public void setApplicationTransformer(OpenMBeanApplicationTransformer applicationTransformer) {
+        this.applicationTransformer = applicationTransformer;
     }
 
-    @ManagedAttribute(description = "All the configuration names defined on this openconfig server.")
-    public String[] getConfigurationNames() {
-        return configurationNames;
+    @Required
+    public void setApplicationService(ApplicationService applicationService) {
+        this.applicationService = applicationService;
     }
 
     /**
-     * Gets the configuration with the given name.
+     * Gets the configurations for a given application.
      *
-     * @throws IllegalArgumentException If the configuration is not present
+     * @param applicationName the name of the application to lookup the configurations with
+     * @return All of the configurations for this application
+     * @throws NoSuchApplicationFoundException
+     *          If the application with the given name is not present
      */
     @ManagedOperation(description = "Gets the configuration with the given name.")
     @ManagedOperationParameters({
             @ManagedOperationParameter(name = "name", description = "The name of the configuration.")})
-    public CompositeData getConfiguration(String name) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
-    }
+    public CompositeData getConfigurations(String applicationName) throws NoSuchApplicationFoundException {
 
-    @ManagedOperation(description = "Determines if the configuration with the given name is present.")
-    @ManagedOperationParameter(name = "name", description = "The name of the configuration.")
-    public boolean isConfigurationPresent(String name) {
-        return true;
-    }
+        // TODO Dee - Temporary stuff. Adding an aspect to handle session management
+        Session session = SessionFactoryUtils.getSession(sessionFactory, true);
+        TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+        Application application = applicationService.findApplication(applicationName);
+        CompositeData compositeData = applicationTransformer.transform(application);
 
+        SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+        SessionFactoryUtils.closeSession(sessionHolder.getSession());
+        return compositeData;
+
+    }
 }
