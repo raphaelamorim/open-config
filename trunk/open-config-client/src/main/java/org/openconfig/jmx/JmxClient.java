@@ -1,5 +1,7 @@
 package org.openconfig.jmx;
 
+import org.apache.log4j.Logger;
+
 import javax.management.*;
 import javax.management.remote.JMXConnector;
 
@@ -9,19 +11,22 @@ import static org.openconfig.util.Assert.notNull;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import static java.util.Collections.singletonMap;
 
 /**
  * @author Richard L. Burton III - SmartCode LLC
  */
 public class JmxClient {
 
+    private static Logger LOGGER = Logger.getLogger(JmxClient.class);
+
     private static final String OPENCONFIG_OBJECTNAME = "org.openconfig:name=ConfigurationService";
 
-    private JMXConnector connector = null;
+    private static final String GETCONFIGURATION_METHOD = "getConfigurations";
 
-    private JMXServiceURL jmxServiceURL;
+    private ObjectName objectName;
+
+    private JMXConnector connector;
 
     private String serviceURL;
 
@@ -29,27 +34,69 @@ public class JmxClient {
 
     private String password;
 
-    public void connect() throws IOException {
+    private MBeanServerConnection connection;
+
+    private String[] GET_CONFIGURATION_TYPES = {String.class.getName()};
+
+    /**
+     * Connects the client the the JMX server.
+     * @throws IllegalStateException If the client is already connected to the server.
+     * @throws IllegalArgumentException If the service url, username or password are null.
+     */
+    public void connect() {
         notNull(serviceURL, "The 'serviceURL' property can not be null.");
         notNull(username, "The 'username' property can not be null.");
         notNull(password, "The 'password' property can not be null.");
 
-        Map<String, Object> environment = new HashMap<String, Object>();
-        environment.put(CREDENTIALS, new String[]{username, password});
-        jmxServiceURL = new JMXServiceURL(serviceURL);
-        connector = JMXConnectorFactory.connect(jmxServiceURL, environment);
+        if(connection != null){
+            String[] credentials = {username, password};
+            try {
+                JMXServiceURL jmxServiceURL = new JMXServiceURL(serviceURL);
+                LOGGER.debug("Preparing to connect to '" + serviceURL + "' server.");
+                connector = JMXConnectorFactory.connect(jmxServiceURL, singletonMap(CREDENTIALS, credentials));
+                objectName = new ObjectName(OPENCONFIG_OBJECTNAME);
+                connection = connector.getMBeanServerConnection();
+                registerListeners();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            throw new IllegalStateException("The JmxClient is already connected to the server!");
+        }
     }
 
     public MBeanInfo getOpenConfigMBean() throws MalformedObjectNameException, IOException, IntrospectionException, InstanceNotFoundException, ReflectionException {
-        ObjectName object = new ObjectName(OPENCONFIG_OBJECTNAME);
-        MBeanServerConnection connection = connector.getMBeanServerConnection();
-        return connection.getMBeanInfo(object);
+        return connection.getMBeanInfo(objectName);
+    }
+
+    public Object getConfigurations(String application) throws Exception {
+        Object[] arguments = {application};
+        LOGGER.debug("Obtaining the Configuration information for application '" + application + "'");
+        return connection.invoke(objectName, GETCONFIGURATION_METHOD, arguments, GET_CONFIGURATION_TYPES);
+    }
+
+    /**
+     * Registers the JMX Notification listener for changes from the server.
+     */
+    protected void registerListeners() {
+        NotificationFilterSupport filter = new NotificationFilterSupport();
+        ChangeStateNotificationListener listener = new ChangeStateNotificationListener();
+        try {
+            LOGGER.debug("Registering the ChangeStateNotificationListener listener.");
+            connection.addNotificationListener(objectName, listener, filter, null);
+        } catch (InstanceNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void close() {
         try {
-            if (connector != null)
+            if (connector != null) {
+                LOGGER.debug("Closing the JmxClient off.");
                 connector.close();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

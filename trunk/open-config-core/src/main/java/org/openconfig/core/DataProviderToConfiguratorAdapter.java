@@ -20,7 +20,6 @@ public class DataProviderToConfiguratorAdapter implements Configurator {
     }
 
     public DataProviderToConfiguratorAdapter(DataProvider dataProvider) {
-        this();
         this.dataProvider = dataProvider;
     }
 
