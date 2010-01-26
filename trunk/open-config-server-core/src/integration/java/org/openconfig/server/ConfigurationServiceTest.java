@@ -1,4 +1,4 @@
-package org.openconfig.server.integration;
+package org.openconfig.server;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

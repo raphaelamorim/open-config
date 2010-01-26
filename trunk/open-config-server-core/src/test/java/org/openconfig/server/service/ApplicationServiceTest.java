@@ -2,8 +2,10 @@ package org.openconfig.server.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.openconfig.server.domain.Application;
 import org.openconfig.server.domain.Configuration;
 import org.openconfig.server.repository.ApplicationRepository;
@@ -15,14 +17,14 @@ import java.util.HashMap;
  */
 public class ApplicationServiceTest {
 
-    private ApplicationService applicationService = new ApplicationService();
-    private ApplicationRepository applicationRepository = mock(ApplicationRepository.class);
-    private Application application = mock(Application.class);
+    @Mock
+    private ApplicationService applicationService;
 
-    @Before
-    public void setup() {
-        applicationService.setApplicationRepository(applicationRepository);
-    }
+    @Mock
+    private ApplicationRepository applicationRepository;
+
+    @Mock
+    private Application application;
 
     @Test
     public void testFindConfigurations() {
@@ -32,4 +34,11 @@ public class ApplicationServiceTest {
 
         applicationService.findConfigurationsByApplication(appName);
     }
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        applicationService.setApplicationRepository(applicationRepository);
+    }
+     
 }

@@ -20,6 +20,7 @@ public class ConfigurationService {
 
     @Transactional
     public void saveConfiguration(Configuration configuration) {
+        notNull(configuration, "The configuration can not be null.");
         configurationRepository.save(configuration);
     }
 

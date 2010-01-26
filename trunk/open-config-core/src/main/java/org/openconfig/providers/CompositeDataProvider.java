@@ -10,6 +10,8 @@ import org.openconfig.event.ChangeStateEvent;
 import org.openconfig.event.EventListener;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
 import org.openconfig.util.Assert;
+
+import static org.openconfig.util.Assert.isTrue;
 import static org.openconfig.util.Assert.notNull;
 
 import java.util.HashMap;
@@ -115,7 +117,7 @@ public class CompositeDataProvider implements DataProvider {
     }
 
     public void registerEventListeners(String configurator, EventListener... eventListeners) {
-        Assert.isTrue(!configuratorToEventListenerMap.containsKey(configurator), "EventListeners are already configured for the " +
+        isTrue(!configuratorToEventListenerMap.containsKey(configurator), "EventListeners are already configured for the " +
                 "configurator: %s");
         configuratorToEventListenerMap.put(configurator, eventListeners);
     }
