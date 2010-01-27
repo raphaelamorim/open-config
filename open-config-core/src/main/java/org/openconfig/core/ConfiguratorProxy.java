@@ -71,7 +71,7 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
         if(LOGGER.isDebugEnabled())
             LOGGER.debug("Extracting the property name from method " + name + " with accessor of " + accessor);
 
-        switch (accessor) {
+        switch (accessor) { // TODO: Escape logic should be in place for toString(...) and hashCode(...) that take parameters.
             case GETTER:
                 matcher = GET_PROPERTY_REGEX.matcher(name);
                 break;
@@ -80,6 +80,8 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
                 break;
             case TOSTRING:
                 return dataProvider.toString();
+            case HASHCODE:
+                return dataProvider.hashCode();
             default:
                 throw new MethodInvocationException(source, method);
         }

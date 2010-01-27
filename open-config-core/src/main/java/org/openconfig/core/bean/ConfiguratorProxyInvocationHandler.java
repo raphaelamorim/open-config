@@ -11,12 +11,9 @@ import org.openconfig.transformers.EnumValue;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.Arrays;
 
 import net.sf.cglib.proxy.Enhancer;
+import static org.openconfig.util.Assert.*;
 
 /**
  * This class is the invocation handler for method calls. Depending on the return type,
@@ -51,6 +48,7 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         invocationContext = new InvocationContext(invocationContext);
         Class clazz = method.getReturnType();
         if (accessor == GETTER) {
+            isTrue(arguments.length == 0, "The getter method should not access an argument. Method " + method.toString());
             if (shouldProxy(method)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Enhancing complex type of " + clazz.toString());

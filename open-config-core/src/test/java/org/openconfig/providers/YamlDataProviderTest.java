@@ -17,6 +17,7 @@ public class YamlDataProviderTest extends TestCase {
 
     public void testComplexPerson() {
         ComplexNode root = yamlDataProvider.getRoot();
+        assertEquals("Richard", "name", root);
         assertEquals("Burton", "person.name", root);
         assertEquals(30, "person.age", root);
         assertEquals("SmartCode", "person.company.name", root);
