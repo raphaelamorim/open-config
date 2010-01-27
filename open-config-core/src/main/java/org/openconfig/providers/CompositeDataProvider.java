@@ -118,7 +118,7 @@ public class CompositeDataProvider implements DataProvider {
 
     public void registerEventListeners(String configurator, EventListener... eventListeners) {
         isTrue(!configuratorToEventListenerMap.containsKey(configurator), "EventListeners are already configured for the " +
-                "configurator: %s");
+                "configurator: %s", configurator);
         configuratorToEventListenerMap.put(configurator, eventListeners);
     }
 
