@@ -40,4 +40,9 @@
           class="org.openconfig.server.repository.DatabaseSeeder"
           p:applicationService-ref="applicationService"/>
 
+
+    <bean id="decorateWithSessionAdvice"
+          class="org.openconfig.server.hibernate.DecorateWithSessionAdvice"
+          p:sessionFactory-ref="sessionFactory"/>
+
 </beans>
