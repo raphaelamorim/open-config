@@ -6,6 +6,7 @@ import org.openconfig.server.domain.Application;
 import org.openconfig.server.repository.NoSuchApplicationFoundException;
 import org.openconfig.server.service.ApplicationService;
 import org.openconfig.server.transformer.OpenMBeanApplicationTransformer;
+import org.openconfig.server.hibernate.DecorateWithSession;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
@@ -55,16 +56,12 @@ public class ConfigurationService {
     @ManagedOperation(description = "Gets the configuration with the given name.")
     @ManagedOperationParameters({
             @ManagedOperationParameter(name = "name", description = "The name of the configuration.")})
+    @DecorateWithSession
     public CompositeData getConfigurations(String applicationName) throws NoSuchApplicationFoundException {
 
-        // TODO Dee - Temporary stuff. Adding an aspect to handle session management
-        Session session = SessionFactoryUtils.getSession(sessionFactory, true);
-        TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
         Application application = applicationService.findApplication(applicationName);
         CompositeData compositeData = applicationTransformer.transform(application);
 
-        SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
-        SessionFactoryUtils.closeSession(sessionHolder.getSession());
         return compositeData;
 
     }
