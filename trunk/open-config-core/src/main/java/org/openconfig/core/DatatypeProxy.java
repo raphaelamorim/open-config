@@ -55,6 +55,7 @@ public class DatatypeProxy implements MethodInterceptor {
                 matcher = SET_PROPERTY_REGEX.matcher(name);
                 break;
             case TOSTRING:
+            case HASHCODE:
                 return proxy.invokeSuper(source, arguments);
             default:
                 throw new MethodInvocationException(source, method);

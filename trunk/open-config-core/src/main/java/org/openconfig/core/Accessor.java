@@ -9,6 +9,8 @@ public enum Accessor {
     SETTER,
     GETTER,
     TOSTRING,
+    EQUALS,
+    HASHCODE,
     UNKNOWN;
 
     public static Accessor getAccessor(String property) {
@@ -18,6 +20,10 @@ public enum Accessor {
             return SETTER;
         } else if (property.equals("toString")){
             return TOSTRING;
+        } else if (property.equals("equals")){
+            return EQUALS;
+        } else if (property.equals("hashCode")){
+            return HASHCODE;
         } else {
             return UNKNOWN;
         }
