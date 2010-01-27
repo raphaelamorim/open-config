@@ -12,8 +12,6 @@ import com.google.inject.Singleton;
  */
 public class LowercasePropertyNormalizer implements PropertyNormalizer {
 
-    private Logger LOGGER = Logger.getLogger(LowercasePropertyNormalizer.class);
-
     public String normalize(String name) {
         if (name.length() > 1) {
             return toLowerCase(name.charAt(0)) + name.substring(1);

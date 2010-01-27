@@ -21,7 +21,7 @@ public class Environment implements java.io.Serializable {
     private final String name;
 
     public Environment(String name) {
-        hasLength(name, "Unable to determine openconfig environment");
+        hasLength(name, "The 'name' parameter was not provided.");
         this.name = name;
         LOGGER.info("The active environment for OpenConfig is " + name);
     }
