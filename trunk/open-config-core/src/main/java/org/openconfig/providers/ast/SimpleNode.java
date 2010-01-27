@@ -32,9 +32,7 @@ public class SimpleNode extends AbstractNode<Object> {
 
     @Override
     public String toString() {
-        return "SimpleNode{" + super.toString() + ", " +
-                "value=" + value +
-                '}';
+        return getName() + "='" + value + "'";
     }
 
     public  <J> J accept(NodeVisitor<J, NodeVisitorContext> visitor, NodeVisitorContext nodeVisitorContext) {

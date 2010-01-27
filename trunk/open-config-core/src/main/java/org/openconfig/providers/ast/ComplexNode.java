@@ -79,11 +79,14 @@ public class ComplexNode extends AbstractNode<Object> {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("ComplexNode(name: \'")
-                .append(getName()).append("\')\n\t");
-        builder.append("attributes: (\n\t");
-        builder.append(children);
-        builder.append("\t)");
-        return builder.toString();
+        StringBuilder builder = new StringBuilder(getName())
+                .append('{');
+        for(Map.Entry<String, AbstractNode> child : children.entrySet()){
+            builder.append(child.getValue())
+                    .append(", ");
+        }
+        builder.delete(builder.length()-2, builder.length()); // Temporary fix.
+        return builder.append('}').toString();
     }
+    
 }

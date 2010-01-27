@@ -3,6 +3,7 @@ package org.openconfig.factory;
 import org.openconfig.Configurator;
 import org.openconfig.factory.ConfigurationFactoryBuilder;
 import org.openconfig.factory.ConfiguratorFactory;
+
 import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_FILE;
 
 import org.openconfig.factory.DayOfWeek;
@@ -11,6 +12,8 @@ import org.openconfig.factory.PrimitiveConfiguration;
 import org.openconfig.junit.LocalTestCase;
 
 /**
+ * TODO: Test all edge cases for asserts.
+ *
  * @author Richard L. Burton III
  * @author Dushyanth (Dee) Inguva
  */
@@ -24,7 +27,7 @@ public class ConfigurationFactoryIntegrationTestCase extends LocalTestCase {
     }
 
 
-    public void testConfiguratorInterfacedBackedByProperties(){
+    public void testConfiguratorInterfacedBackedByProperties() {
         PrimitiveConfiguration configurator = configurationFactory.newInstance(PrimitiveConfiguration.class);
         assertEquals("Richard", configurator.getName());
         assertEquals(30, configurator.getAge());

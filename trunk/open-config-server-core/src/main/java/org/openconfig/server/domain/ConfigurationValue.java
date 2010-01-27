@@ -154,6 +154,7 @@ public class ConfigurationValue implements Serializable {
     }
 
     /**
+     * TODO: Move this logic into it's own class.
      * Creates a child configuration value, adds it to the specified parent and returns the newly created child.
      *
      * @param parent
