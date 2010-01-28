@@ -20,6 +20,12 @@
         <module>open-config-examples</module>
     </modules>
 
+    <scm>
+        <url>http://open-config.googlecode.com/svn/trunk/</url>
+        <connection>scm:svn:http://open-config.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://open-config.googlecode.com/svn/trunk/</developerConnection>
+    </scm>
+    
     <developers>
         <developer>
             <name>Richard L. Burton III</name>
