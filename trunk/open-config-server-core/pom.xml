@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
-            <version>${hibernate.version}</version>
+            <version>3.3.0.ga</version>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
