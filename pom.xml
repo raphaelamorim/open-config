@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openconfig</groupId>
     <artifactId>open-config-pom</artifactId>
-    <version>0.1</version>
+    <version>0.1-SNAPSHOT</version>
 
     <name>OpenConfig Parent POM</name>
     <packaging>pom</packaging>
