@@ -8,13 +8,13 @@
         <groupId>org.openconfig</groupId>
         <artifactId>open-config-pom</artifactId>
         <relativePath>../pom.xml</relativePath>
-        <version>0.1</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openconfig</groupId>
     <artifactId>open-config-client</artifactId>
-    <version>0.1</version>
+    <version>0.1-SNAPSHOT</version>
 
     <name>OpenConfig Client</name>
     <packaging>jar</packaging>

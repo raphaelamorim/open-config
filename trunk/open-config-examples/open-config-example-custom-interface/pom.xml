@@ -7,14 +7,14 @@
     <parent>
         <groupId>org.openconfig</groupId>
         <artifactId>open-config-examples</artifactId>
-        <version>0.1</version>
+        <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openconfig</groupId>
     <artifactId>open-config-example-custom-interface</artifactId>
-    <version>0.1</version>
+    <version>0.1-SNAPSHOT</version>
 
     <name>OpenConfig Example Web</name>
     <packaging>war</packaging>
