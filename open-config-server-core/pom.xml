@@ -82,11 +82,6 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openconfig</groupId>
-            <artifactId>open-config-client</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.8.0.GA</version>
