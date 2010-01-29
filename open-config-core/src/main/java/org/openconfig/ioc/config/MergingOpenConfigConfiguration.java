@@ -1,5 +1,7 @@
 package org.openconfig.ioc.config;
 
+import java.net.URL;
+
 /**
  * This class uses a fallback strategy to locate the implementation classes. The first configuration and then the second
  * configuration are checked in order. 
@@ -16,7 +18,7 @@ public class MergingOpenConfigConfiguration implements OpenConfigConfiguration {
     	this.secondaryOpenConfigConfigurations = defaultOpenConfigConfigurations;
     }
 
-    public void process(String file) {
+    public void process(URL file) {
     	throw new UnsupportedOperationException();
     }
 

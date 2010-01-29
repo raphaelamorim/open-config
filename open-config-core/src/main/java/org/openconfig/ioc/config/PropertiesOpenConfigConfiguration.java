@@ -2,6 +2,7 @@ package org.openconfig.ioc.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -16,10 +17,10 @@ public class PropertiesOpenConfigConfiguration extends AbstractOpenConfigConfigu
     }
 
     @SuppressWarnings("unchecked")
-	public void process(String file) {
+	public void process(URL file) {
         Properties properties = new Properties();
         try {
-			InputStream stream = getClass().getClassLoader().getResourceAsStream(file);
+			InputStream stream = file.openStream();
 			if(stream == null) {
 				throw new RuntimeException("Could not load the file: "+file + " from the classpath");
 			}
