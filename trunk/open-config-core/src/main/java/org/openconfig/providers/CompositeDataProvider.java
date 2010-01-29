@@ -75,7 +75,7 @@ public class CompositeDataProvider implements DataProvider {
      * @return an initialized data provider
      */
     private DataProvider createDataProvider(String interfaceName) {
-        // TODO change openConfigConfiguration to be strongly typed
+        // TODO: change openConfigConfiguration to be strongly typed
         Class<? extends DataProvider> dataProviderClass = (Class<? extends DataProvider>) openConfigConfiguration.getClass("DataProvider");
         DataProvider dataProvider = injector.getInstance(dataProviderClass);
         Map<String, String> temp = new HashMap<String, String>();

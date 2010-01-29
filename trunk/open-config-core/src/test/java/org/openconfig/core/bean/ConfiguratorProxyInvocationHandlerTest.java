@@ -94,7 +94,7 @@ public class ConfiguratorProxyInvocationHandlerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         invocationContext = new InvocationContext(MyConfigurator.class);
-        ConfiguratorProxy proxy = new ConfiguratorProxy(MyConfigurator.class, false);
+        ConfiguratorProxy proxy = new ConfiguratorProxy(MyConfigurator.class);
         proxy.setDataProvider(dataProvider);
         handler = new ConfiguratorProxyInvocationHandler(proxy);
     }

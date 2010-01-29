@@ -19,7 +19,7 @@ import java.util.Set;
  * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/spring-test-config.xml")
+@ContextConfiguration(locations = "/open-config-test-context.xml")
 public class ConfigurationServiceTest extends AbstractDatabaseIntegrationTest {
 
     @Autowired
