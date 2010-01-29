@@ -30,6 +30,5 @@ public class ClasspathConfigurationLocator implements ConfigurationLocator {
             }
         }
         throw new NoConfigurationFileFoundException(CONFIGURATION_NAME, ACCEPTABLE_EXTENSIONS);
-    }
-    
+    }    
 }
