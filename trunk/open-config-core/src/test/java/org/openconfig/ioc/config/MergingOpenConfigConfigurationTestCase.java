@@ -3,6 +3,7 @@ package org.openconfig.ioc.config;
 import static org.easymock.EasyMock.*;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.junit.Test;
 
@@ -56,6 +57,6 @@ public class MergingOpenConfigConfigurationTestCase {
     
     @Test(expected=UnsupportedOperationException.class) 
     public void testProcess() throws Exception {
-    	mergingOpenConfigConfiguration.process("");
+    	mergingOpenConfigConfiguration.process(new URL("http://www.smartcodellc.com"));
     }
 }

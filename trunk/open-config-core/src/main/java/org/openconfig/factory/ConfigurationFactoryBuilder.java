@@ -2,35 +2,43 @@ package org.openconfig.factory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.apache.log4j.Logger;
 import org.openconfig.Environment;
 import org.openconfig.core.EnvironmentResolver;
 import org.openconfig.core.OpenConfigContext;
 import org.openconfig.core.SystemPropertyEnvironmentResolver;
 import org.openconfig.core.bean.PropertyNormalizer;
 import org.openconfig.event.EventPublisher;
-import org.openconfig.ioc.ConfigurationLocator;
-import static org.openconfig.ioc.ConfigurationLocator.PROPERTIES_FILE;
-import static org.openconfig.ioc.ConfigurationLocator.XML_FILE;
+import org.openconfig.factory.impl.ClasspathConfigurationLocator;
+import org.openconfig.factory.impl.InternalConfigurationLocator;
+import org.openconfig.ioc.ConfigurationFileProcessor;
+
 import org.openconfig.ioc.OpenConfigModule;
 import org.openconfig.ioc.config.OpenConfigConfiguration;
-import org.openconfig.ioc.config.PropertiesOpenConfigConfiguration;
-import org.openconfig.ioc.config.XmlOpenConfigConfiguration;
 import org.openconfig.providers.CompositeDataProvider;
 import org.openconfig.providers.DataProvider;
 
-import java.util.LinkedHashMap;
+import java.net.URL;
+
+import static org.openconfig.util.Assert.notNull;
 
 /**
  * TODO: Refactor this to ConfiguratorFactoryBuilder
+ * TODO: Verify the parameters...
+ *
  * @author Dushyanth (Dee) Inguva
  */
 public class ConfigurationFactoryBuilder {
+
+    private Logger LOGGER = Logger.getLogger(ConfigurationFactoryBuilder.class);
 
     private Class<? extends EnvironmentResolver> environmentResolverClass = SystemPropertyEnvironmentResolver.class;
 
     private OpenConfigContext openConfigContext;
 
-    private ConfigurationLocator configurationLocator;
+    private final ConfigurationLocator internalConfigurationLocator = new InternalConfigurationLocator();
+
+    private ConfigurationLocator configurationLocator = new ClasspathConfigurationLocator();
 
     private OpenConfigConfiguration openConfigConfiguration;
 
@@ -63,19 +71,31 @@ public class ConfigurationFactoryBuilder {
     /**
      * @return the created ConfiguratorFactory
      */
-    public ConfiguratorFactory build() {
-        processConfigurationFiles();
-        configurationLocator.locate();
-        openConfigConfiguration = configurationLocator.getOpenConfigConfiguration();
+    public final ConfiguratorFactory build() {
+        ConfigurationFileProcessor processor;
+        try {
+            URL internalConfigurationFile = internalConfigurationLocator.locate();
+            processor = new ConfigurationFileProcessor(internalConfigurationFile);
+        } catch (NoConfigurationFileFoundException ncfe) {
+            throw new RuntimeException("Oops! No internal configuration file was found!");
+        }
+
+        URL custonConfigurationFile = null;
+        try {
+            custonConfigurationFile = configurationLocator.locate();
+        } catch (NoConfigurationFileFoundException e) {
+            LOGGER.debug("No configuration file for ConfigurationLocator of type " + configurationLocator.getClass().getName());
+        }
+        openConfigConfiguration = processor.process(custonConfigurationFile);
 
         OpenConfigModule openConfigModule = createOpenConfigModule();
-
         Injector injector = Guice.createInjector(openConfigModule);
         return injector.getInstance(ConfiguratorFactory.class);
     }
 
     /**
      * Creates the openconfig module that is used to configure guice.
+     *
      * @return the guice module
      */
     private OpenConfigModule createOpenConfigModule() {
@@ -99,6 +119,11 @@ public class ConfigurationFactoryBuilder {
         return openConfigModule;
     }
 
+    public void setConfigurationLocator(ConfigurationLocator configurationLocator) {
+        notNull(configurationLocator, "The parameter 'configurationLocator' was null.");
+        this.configurationLocator = configurationLocator;
+    }
+
     private <T> T createInstance(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -107,16 +132,6 @@ public class ConfigurationFactoryBuilder {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Could not instantiate class: " + clazz, e);
         }
-    }
-
-    /**
-     * Builds the OpenConfigConfiguration consumers.
-     */
-    private void processConfigurationFiles() {
-        LinkedHashMap<String, OpenConfigConfiguration> configurationManagers = new LinkedHashMap<String, OpenConfigConfiguration>();
-        configurationManagers.put(PROPERTIES_FILE, new PropertiesOpenConfigConfiguration());
-        configurationManagers.put(XML_FILE, new XmlOpenConfigConfiguration());
-        configurationLocator = new ConfigurationLocator(configurationManagers);
     }
 
     protected <T> Class<? extends T> getProviderClass(Class<T> clazz) {
@@ -140,4 +155,5 @@ public class ConfigurationFactoryBuilder {
 
         return dataProviderClass;
     }
+
 }

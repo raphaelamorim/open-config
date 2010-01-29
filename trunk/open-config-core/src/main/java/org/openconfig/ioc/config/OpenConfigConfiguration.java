@@ -1,11 +1,13 @@
 package org.openconfig.ioc.config;
 
+import java.net.URL;
+
 /**
  * @author Richard L. Burton III
  */
 public interface OpenConfigConfiguration {
 
-    void process(String file);
+    void process(URL file);
 
     boolean hasClass(String alias);
 
