@@ -43,11 +43,31 @@ public class XmlDataProvider extends FileDataProvider {
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         LOGGER.debug("Now parsing the input stream.");
         Document xmlDoc = builder.parse(input);
-        build(root, xmlDoc.getDocumentElement().getChildNodes());
+        Element rootNode = xmlDoc.getDocumentElement();
+        processRootAttributes(root, rootNode);
+        build(root, rootNode.getChildNodes());
     }
 
     protected String getFileType() {
         return FILE_TYPE;
+    }
+
+    /**
+     * This function handles the processing of top level nodes on the root of the class.
+     * @param root The root of the ASt
+     * @param element The root node.
+     */
+    private void processRootAttributes(ComplexNode root, Element element){
+        if(element.hasAttributes()){
+            NamedNodeMap attributes = element.getAttributes();
+            for (int i = 0; i < attributes.getLength(); i++) {
+                Attr attribute = (Attr) attributes.item(i);
+                if(LOGGER.isDebugEnabled()){
+                    LOGGER.debug("Adding an attribute '" +attribute.getName() + "' value='" + attribute.getValue() + "'.");
+                }
+                root.addChild(new SimpleNode(attribute.getName(), attribute.getValue()));
+            }
+        }
     }
 
     private void build(ComplexNode root, NodeList nodes) {

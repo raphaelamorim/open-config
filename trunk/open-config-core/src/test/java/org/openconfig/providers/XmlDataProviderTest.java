@@ -28,6 +28,7 @@ public class XmlDataProviderTest extends TestCase {
 
     public void testComplexPerson() {
         ComplexNode root = configure("person");
+        assertEquals("8080", "port", root);
         assertEquals("Burton", "person.name", root);
         assertEquals("30", "person.age", root);
         assertEquals("SmartCode", "person.company.name", root);
