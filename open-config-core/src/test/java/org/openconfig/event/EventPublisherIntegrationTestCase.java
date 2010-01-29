@@ -4,7 +4,11 @@ import org.easymock.EasyMock;
 import static org.easymock.EasyMock.*;
 import org.openconfig.factory.ConfigurationFactoryBuilder;
 import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.factory.NullConfiguratorLocator;
 import org.openconfig.junit.LocalTestCase;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,9 +20,10 @@ import java.util.Properties;
  * @author Dushyanth (Dee) Inguva
  */
 public class EventPublisherIntegrationTestCase extends LocalTestCase {
+    private ConfiguratorFactory factory;
 
+    @Test
     public void testEventFiredOnReload() throws Exception {
-        ConfiguratorFactory factory = new ConfigurationFactoryBuilder().build();
         EventListener eventListener = createMock(EventListener.class);
 
         eventListener.onEvent((ChangeStateEvent)anyObject());
@@ -44,5 +49,12 @@ public class EventPublisherIntegrationTestCase extends LocalTestCase {
         assertEquals(newName, configurator.getName());
         assertEquals(newAge, configurator.getAge());
         verify(eventListener);
+    }
+
+    @Before
+    public void doSetUp() {
+        ConfigurationFactoryBuilder configurationFactoryBuilder = new ConfigurationFactoryBuilder();
+        configurationFactoryBuilder.setConfigurationLocator(new NullConfiguratorLocator());
+        factory = configurationFactoryBuilder.build();
     }
 }

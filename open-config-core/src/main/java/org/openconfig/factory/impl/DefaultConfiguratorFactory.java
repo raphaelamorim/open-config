@@ -16,7 +16,6 @@ import org.openconfig.event.EventListener;
 import org.openconfig.event.EventPublisher;
 import org.openconfig.factory.ConfiguratorFactory;
 import org.openconfig.providers.DataProvider;
-import org.openconfig.util.Assert;
 
 import java.lang.reflect.Method;
 
@@ -44,7 +43,7 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
     /**
      * @see ConfiguratorFactory#(Class, boolean, EventListener)
      */
-    public <T> T newInstance(final Class clazz, final boolean prefix, EventListener... eventListeners) {
+    public <T> T newInstance(final Class clazz, EventListener... eventListeners) {
         Enhancer enhancer = new Enhancer();
 
         if (clazz.isInterface()) {
@@ -61,7 +60,7 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
         }
 
 
-        final ConfiguratorProxy proxy = newConfiguratorProxy(clazz, prefix, eventListeners);
+        final ConfiguratorProxy proxy = newConfiguratorProxy(clazz, eventListeners);
 
         enhancer.setCallback(new MethodInterceptor() {
             public Object intercept(Object source, Method method, Object[] arguments, MethodProxy methodProxy) throws Throwable {
@@ -75,16 +74,8 @@ public class DefaultConfiguratorFactory implements ConfiguratorFactory {
         return new DataProviderToConfiguratorAdapter(dataProvider);
     }
 
-    /**
-     *
-     */
-    public <T> T newInstance(final Class clazz, EventListener... eventListeners) {
-        Assert.isTrue(clazz != Configurator.class, "Use the method newInstance(EventListener... eventListeners) to obtain a configurator based on OpenConfig's Configurator");
-        return (T) newInstance(clazz, true, eventListeners);
-    }
-
-    private ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, boolean alias, EventListener... eventListeners) {
-        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface, alias);
+    private ConfiguratorProxy newConfiguratorProxy(Class configuratorInterface, EventListener... eventListeners) {
+        ConfiguratorProxy proxy = new ConfiguratorProxy(configuratorInterface);
         ProxyInvocationHandler returnHandler = new ConfiguratorProxyInvocationHandler(proxy);
         dataProvider.registerEventListeners(configuratorInterface.getSimpleName(), eventListeners);
         proxy.setDataProvider(dataProvider);

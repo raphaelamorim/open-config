@@ -46,18 +46,14 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     private final Class configuratorInterface;
 
-    private final boolean alias;
-
     private DataProvider dataProvider;
 
     /**
      *
      * @param configuratorInterface
-     * @param alias
      */
-    public ConfiguratorProxy(Class configuratorInterface, boolean alias) {
+    public ConfiguratorProxy(Class configuratorInterface) {
         this.configuratorInterface = configuratorInterface;
-        this.alias = alias;
     }
 
     // TODO: hashCode() and equals(..)
@@ -106,10 +102,6 @@ public class ConfiguratorProxy implements PropertyNormalizerable, MethodIntercep
 
     public Class getConfiguratorInterface() {
         return configuratorInterface;
-    }
-
-    public boolean isAliased() {
-        return alias;
     }
 
     public void setDataProvider(DataProvider dataProvider) {

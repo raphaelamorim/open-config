@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="spring-test-database-config.xml"/>
+    <import resource="open-config-test-database.xml"/>
+    <import resource="open-config-test-authenticator.xml"/>    
     <import resource="classpath*:open-config-context.xml"/>
 </beans>

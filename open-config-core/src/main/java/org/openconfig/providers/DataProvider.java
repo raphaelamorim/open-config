@@ -17,6 +17,7 @@ import org.openconfig.core.InvocationContext;
  * TODO: Create a DataProvider that will search for the right DataProvider to use by extension.
  * @author Richard L. Burton III, SmartCode LLC
  */
+// TODO: Extract out the file locating aspects into a FileLocator
 public interface DataProvider extends Initializable {
 
     /**

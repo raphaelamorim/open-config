@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/spring-test-config.xml")
+@ContextConfiguration(locations = "/open-config-test-context.xml")
 public class ApplicationServiceTest extends AbstractDatabaseIntegrationTest {
 
     @Autowired
