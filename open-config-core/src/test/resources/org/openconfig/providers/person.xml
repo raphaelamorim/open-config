@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<configurator>
+<configurator port="8080">
     <person age="30" name="Burton">
         <company name="SmartCode">
             <person age="30" name="Dushy"/>

@@ -11,6 +11,10 @@ import org.openconfig.core.InvocationContext;
  * information. Implementations of this interface are used to back the Configurators with the data
  * used to answer the method invocations. For more information, see the already existing DataProviders
  * such as XmlDataProvider.
+ *
+ * TODO: The requiresReloading and reload method should not be defined in this interface.
+ * TODO: There needs to be a destroy method on the DataProvider that will notify it of a shutdown.
+ * TODO: Create a DataProvider that will search for the right DataProvider to use by extension.
  * @author Richard L. Burton III, SmartCode LLC
  */
 public interface DataProvider extends Initializable {
