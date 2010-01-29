@@ -4,11 +4,10 @@
 
 The purpose of this section is to identify classes which need to be documented for a particular task.
 
-
 = Details =
 
 Developer Development - Client Side
-  * How to create a custom DataProvider - DataProvider, FileDataProvider, AbstractDataProvider, AbstractReloadableDataProvider
+  * [HowtocreateacustomDataProvider  How to create a custom DataProvider] - DataProvider, FileDataProvider, AbstractDataProvider, AbstractReloadableDataProvider
   * Understanding the prebuilt DataProvider - XmlDataProvider, YamlDataProvider, JsonDataProvider, JmxDataProvider, PropertiesDataProvider
   * Client to Server Communication - JMX, ComplexNode, SimpleNode, CompositeData, CompositeDataTransformer, OpenMBeanTranformer, SimpleTypeTransformer
   * Internal Object Graph Structure - ComplexNode, SimpleNode, NodeManager
