@@ -1,14 +1,13 @@
 package org.openconfig.event;
 
-import org.easymock.EasyMock;
 import static org.easymock.EasyMock.*;
-import org.openconfig.factory.ConfigurationFactoryBuilder;
-import org.openconfig.factory.ConfiguratorFactory;
-import org.openconfig.factory.NullConfiguratorLocator;
-import org.openconfig.junit.LocalTestCase;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import org.openconfig.factory.ConfigurationFactoryBuilder;
+import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.factory.NoOpConfiguratorLocator;
+import org.openconfig.junit.LocalTestCase;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -26,7 +25,7 @@ public class EventPublisherIntegrationTestCase extends LocalTestCase {
     public void testEventFiredOnReload() throws Exception {
         EventListener eventListener = createMock(EventListener.class);
 
-        eventListener.onEvent((ChangeStateEvent)anyObject());
+        eventListener.onEvent((ChangeStateEvent) anyObject());
         replay(eventListener);
 
         StubConfigurator configurator = factory.newInstance(StubConfigurator.class, eventListener);
@@ -54,7 +53,7 @@ public class EventPublisherIntegrationTestCase extends LocalTestCase {
     @Before
     public void doSetUp() {
         ConfigurationFactoryBuilder configurationFactoryBuilder = new ConfigurationFactoryBuilder();
-        configurationFactoryBuilder.setConfigurationLocator(new NullConfiguratorLocator());
+        configurationFactoryBuilder.setConfigurationLocator(new NoOpConfiguratorLocator());
         factory = configurationFactoryBuilder.build();
     }
 }

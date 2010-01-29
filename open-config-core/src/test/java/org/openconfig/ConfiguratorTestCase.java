@@ -1,13 +1,12 @@
 package org.openconfig;
 
-import org.openconfig.factory.ConfigurationFactoryBuilder;
-import org.openconfig.factory.ConfiguratorFactory;
-import org.openconfig.factory.NullConfiguratorLocator;
-import static org.openconfig.ioc.OpenConfigModule.OPEN_CONFIG_DEVELOPMENT_FILE;
-import org.openconfig.junit.LocalTestCase;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import org.openconfig.factory.ConfigurationFactoryBuilder;
+import org.openconfig.factory.ConfiguratorFactory;
+import org.openconfig.factory.NoOpConfiguratorLocator;
+import org.openconfig.junit.LocalTestCase;
 
 /**
  * @author Richard L. Burton III
@@ -21,7 +20,7 @@ public class ConfiguratorTestCase extends LocalTestCase {
     @Before
     public void setUp() {
         ConfigurationFactoryBuilder configurationFactoryBuilder = new ConfigurationFactoryBuilder();
-        configurationFactoryBuilder.setConfigurationLocator(new NullConfiguratorLocator());
+        configurationFactoryBuilder.setConfigurationLocator(new NoOpConfiguratorLocator());
         factory = configurationFactoryBuilder.build();
     }
 

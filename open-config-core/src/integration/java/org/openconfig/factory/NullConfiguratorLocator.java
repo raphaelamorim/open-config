@@ -8,7 +8,7 @@ import java.net.URL;
  * @author Dushyanth (Dee) Inguva - SmartCode LLC
  */
 public class NullConfiguratorLocator implements ConfigurationLocator {
-    
+
     public URL locate() {
         return null;
     }
