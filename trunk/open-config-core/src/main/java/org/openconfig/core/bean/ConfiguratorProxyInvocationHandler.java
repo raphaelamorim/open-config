@@ -11,6 +11,10 @@ import org.openconfig.transformers.EnumValue;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import net.sf.cglib.proxy.Enhancer;
 import static org.openconfig.util.Assert.*;
@@ -76,13 +80,47 @@ public class ConfiguratorProxyInvocationHandler implements ProxyInvocationHandle
         }
     }
 
+    /**
+     * TODO: We don't support Iterator, etc..
+     * @param clazz
+     * @return
+     */
     protected boolean isSupported(Class clazz) {
         if (clazz.isArray()) {
-            throw new UnsupportedOperationException("Returning an Array isn't unsupported.");
+            throw new UnsupportedOperationException("Returning an Array isn't unsupported. The class is " + clazz.getName());
         } else if (clazz.isAnnotation()) {
-            throw new UnsupportedOperationException("Returning an Annotation isn't unsupported.");
+            throw new UnsupportedOperationException("Returning an Annotation isn't unsupported. The class is " + clazz.getName());
+        } else if (clazz.isAssignableFrom(Collection.class)){
+            throw new UnsupportedOperationException("Returning an instance of Collection isn't unsupported. The class is " + clazz.getName());
+        } else if (clazz.isAssignableFrom(List.class)){
+            throw new UnsupportedOperationException("Returning an instance of List isn't unsupported. The class is " + clazz.getName());
+        } else if (clazz.isAssignableFrom(Set.class)){
+            throw new UnsupportedOperationException("Returning an instance of Set isn't unsupported. The class is " + clazz.getName());
+        } else if (clazz.isAssignableFrom(Map.class)){
+            throw new UnsupportedOperationException("Returning an Map isn't unsupported. The class is " + clazz.getName());
+        } else if (Modifier.isFinal(clazz.getModifiers()) && isNotAWrapper(clazz)){
+            throw new UnsupportedOperationException("Returning a class that's final isn't unsupported. The class is " + clazz.getName());
         }
         return true;
     }
 
+    protected boolean isNotAWrapper(Class clazz){
+        return !(clazz == String.class  ||
+               clazz == Boolean.class   ||
+               clazz == Integer.class   ||
+               clazz == Character.class ||
+               clazz == Short.class     ||
+               clazz == Byte.class      ||
+               clazz == Long.class      ||
+               clazz == Float.class     ||
+               clazz == Double.class    ||
+               clazz == boolean.class   ||
+               clazz == int.class       ||
+               clazz == char.class      ||
+               clazz == short.class     ||
+               clazz == byte.class      ||
+               clazz == long.class      ||
+               clazz == float.class     ||
+               clazz == double.class);
+    }
 }

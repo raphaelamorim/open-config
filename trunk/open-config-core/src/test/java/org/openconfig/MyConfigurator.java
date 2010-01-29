@@ -12,5 +12,5 @@ public interface MyConfigurator {
     int getAge2();
     void setName(String name);
     Person getPerson();
-
+    AbstractObject getAbstractObject();
 }
