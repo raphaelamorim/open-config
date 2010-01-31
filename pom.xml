@@ -16,7 +16,6 @@
         <module>open-config-server-core</module>
         <module>open-config-client</module>
         <module>open-config-spring</module>
-        <module>open-config-web</module>
         <module>open-config-examples</module>
     </modules>
 
