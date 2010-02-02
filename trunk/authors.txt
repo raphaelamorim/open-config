@@ -1,2 +1,2 @@
-Richard L. Burton III <mrburton@gmail.com>
-Dushyanth Inguva <dushyanth.inguva@gmail.com>
+mrburton = Richard L. Burton III <mrburton@gmail.com>
+dushyanth.inguva = Dushyanth Inguva <dushyanth.inguva@gmail.com>
